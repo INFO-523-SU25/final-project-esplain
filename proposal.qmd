@@ -40,8 +40,6 @@ from sklearn.decomposition import PCA
 
 ## Dataset
 
-
-
 ```{python}
 #| label: load-dataset
 #| message: false
@@ -73,12 +71,9 @@ print("\nFirst 5 rows:")
 wnba_data.head()
 ```
 
-
 The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extrenious effort due to limitations on API data requests per game for play-by-play details.
 
-The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy.
-The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.
-
+The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.
 
 ## Research Questions
 
@@ -96,7 +91,6 @@ This question focuses on foul differential as a key indicator of officiating sty
 
 This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.
 
-
 ## Analysis plan
 
 ### Problem Introduction
@@ -107,94 +101,90 @@ The Women’s National Basketball Association (WNBA) has experienced significant
 
 This study will examine potential officiating bias in WNBA games by analyzing referee assignment data, foul differentials, and game outcomes across multiple seasons. The analysis will proceed in the following stages:
 
-
 #### 1. Data Collection and Preprocessing
 
-- **Data Sources:**
-  Collecting data from <https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data> which is a play-by-play datasets with referee assignments.
+-   **Data Sources:** Collecting data from <https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data> which is a play-by-play datasets with referee assignments.
 
-- **Variables of Interest:**  
-  - Game metadata: date, teams, location (home/away), final scores  
-  - Referee assignments (names or IDs, crew combinations)  
-  - Team foul counts
-  - Game outcomes (win/loss, point differential)
+-   **Variables of Interest:**
 
-- **Data Cleaning:**  
-  - Normalize referee names across games  
-  - Merge datasets to associate referee crews with game-level statistics  
-  - Handle missing or inconsistent values  
-  - Feature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers  
+    -   Game metadata: date, teams, location (home/away), final scores\
+    -   Referee assignments (names or IDs, crew combinations)\
+    -   Team foul counts
+    -   Game outcomes (win/loss, point differential)
 
+-   **Data Cleaning:**
+
+    -   Normalize referee names across games\
+    -   Merge datasets to associate referee crews with game-level statistics\
+    -   Handle missing or inconsistent values\
+    -   Feature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers
 
 #### 2. Descriptive Statistics
 
-- Summarize foul counts by team and referee  
-- Visualize average foul differential by referee and referee crew  
-- Compute home vs. away win rates across different referee combinations 
-- Generate pairwise correlations to identify potentially relevant feature groupings  
+-   Summarize foul counts by team and referee\
+-   Visualize average foul differential by referee and referee crew\
+-   Compute home vs. away win rates across different referee combinations
+-   Generate pairwise correlations to identify potentially relevant feature groupings
 
 #### 3. Unsupervised Learning (Pattern Discovery)
 
-- **K-Means Clustering:**  
+-   **K-Means Clustering:**
 
-  Use K-means clustering to group:
-  - Referee crew based on game-level foul and outcome patterns
-  - Individual referees based on their aggregated officiating behavior across multiple games
+    Use K-means clustering to group:
 
-- **Dimensionality Reduction:**  
-  Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)  
+    -   Referee crew based on game-level foul and outcome patterns
+    -   Individual referees based on their aggregated officiating behavior across multiple games
+
+-   **Dimensionality Reduction:**\
+    Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)
 
 #### 4. Cluster Interpretation
 
-- Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)
-- Label clusters based on behavioral tendencies (such as "neutral crews", "home-favoring referees", "high-caller crews")
-- Identify any outlier referees or crews with extreme values
-
+-   Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)
+-   Label clusters based on behavioral tendencies (such as "neutral crews", "home-favoring referees", "high-caller crews")
+-   Identify any outlier referees or crews with extreme values
 
 #### 5. Reporting and Visualization
 
-- Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings  
-- Plot clustered referee data to visualize separation and cohesion  
-- Discuss implications of findings in the context of WNBA officiating policy and fairness
-- Provide future recommendations to improve the analysis  
-
+-   Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\
+-   Plot clustered referee data to visualize separation and cohesion\
+-   Discuss implications of findings in the context of WNBA officiating policy and fairness
+-   Provide future recommendations to improve the analysis
 
 ## Plan of Attack
 
-
-| Milestone                         | Task                                                                                                            | Due Date   |
-|----------------------------------|------------------------------------------------------------------------------------------------------------------|------------|
-| Submit Proposal                  | Finalize and submit initial proposal for others to provide feedback                                             | 8/3/2025   |
-| Revise Proposal                  | Address all peer feedback as needed                                                                             | 8/6/2025   |
-| Submit Revised Proposal          | Incorporate and address all feedback for instructor review                                                      | 8/8/2025   |
-| Data Collection & Cleaning       | - Gather and clean WNBA game logs, referee assignments, and team stats  <br> - Merge datasets and ensure consistent formatting | 8/10/2025  |
-| Feature Engineering & EDA        | - Create variables such as foul differential, crew IDs, and home/away indicators  <br> - Visualize trends and explore feature distributions | 8/12/2025  |
-| Pattern Discovery with K-means   | - Standardize features and apply K-means clustering  | 8/14/2025  |
-| Cluster Interpretation           | - Interpret each cluster’s characteristics (e.g., home bias, foul disparity)  <br> - Identify and analyze outlier referees or crews | 8/16/2025  |
-| Visual & Storytelling            | Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps        | 8/17/2025  |
-| Final Write-Up & Presentation    | - Create, refine, and finalize the report, code, and presentation  <br> - Ensure all results are well-documented and reproducible | 8/19/2025  |
-| Final Submission                 | - Submit final report, code, and presentation  <br> - Back up to GitHub (or drive)                              | 8/20/2025  |
+| Milestone | Task | Due Date |
+|----------------|-----------------------------------------|----------------|
+| Submit Proposal | Finalize and submit initial proposal for others to provide feedback | 8/3/2025 |
+| Revise Proposal | Address all peer feedback as needed | 8/6/2025 |
+| Submit Revised Proposal | Incorporate and address all feedback for instructor review | 8/8/2025 |
+| Data Collection & Cleaning | \- Gather and clean WNBA game logs, referee assignments, and team stats <br> - Merge datasets and ensure consistent formatting | 8/10/2025 |
+| Feature Engineering & EDA | \- Create variables such as foul differential, crew IDs, and home/away indicators <br> - Visualize trends and explore feature distributions | 8/12/2025 |
+| Pattern Discovery with K-means | \- Standardize features and apply K-means clustering | 8/14/2025 |
+| Cluster Interpretation | \- Interpret each cluster’s characteristics (e.g., home bias, foul disparity) <br> - Identify and analyze outlier referees or crews | 8/16/2025 |
+| Visual & Storytelling | Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps | 8/17/2025 |
+| Final Write-Up & Presentation | \- Create, refine, and finalize the report, code, and presentation <br> - Ensure all results are well-documented and reproducible | 8/19/2025 |
+| Final Submission | \- Submit final report, code, and presentation <br> - Back up to GitHub (or drive) | 8/20/2025 |
 
 ### Repo Organization
 
-| Path / File              | Description |
-|-----------|---------------------------------------------|
-| `.github/`               | Contains GitHub-specific files, including workflows, actions, and issue management templates. |
-| `_extra/`                | Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. |
-| `_freeze/`               | Houses frozen environment files detailing the project’s setup and dependencies. |
-| `data/`                  | Directory for all essential data files, including input datasets and resources required for analysis. |
-| `images/`                | Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. |
-| `.gitignore`             | Specifies files and directories to exclude from Git version control. |
-| `README.md`              | Central documentation file providing project overview, setup instructions, and usage guidelines. |
-| `_quarto.yml`            | Configuration file for Quarto, specifying rendering options and document settings. |
-| `about.qmd`              | Provides contextual information about the project and introduces team members and their roles. |
-| `index.qmd`              | Main page of the project write-up, including code, visualizations, and final results. |
-| `presentation.qmd`       | Quarto file used to create a slideshow of the final project presentation. |
-| `project-final.Rproj`    | RStudio project file that defines project-level settings for R-based workflows. |
-| `proposal.qmd`           | Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. |
-| `requirements.txt`       | Lists required Python packages and versions necessary for reproducing the project environment. |
-
+| Path / File | Description |
+|------------------|------------------------------------------------------|
+| `.github/` | Contains GitHub-specific files, including workflows, actions, and issue management templates. |
+| `_extra/` | Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. |
+| `_freeze/` | Houses frozen environment files detailing the project’s setup and dependencies. |
+| `data/` | Directory for all essential data files, including input datasets and resources required for analysis. |
+| `images/` | Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. |
+| `.gitignore` | Specifies files and directories to exclude from Git version control. |
+| `README.md` | Central documentation file providing project overview, setup instructions, and usage guidelines. |
+| `_quarto.yml` | Configuration file for Quarto, specifying rendering options and document settings. |
+| `about.qmd` | Provides contextual information about the project and introduces team members and their roles. |
+| `index.qmd` | Main page of the project write-up, including code, visualizations, and final results. |
+| `presentation.qmd` | Quarto file used to create a slideshow of the final project presentation. |
+| `project-final.Rproj` | RStudio project file that defines project-level settings for R-based workflows. |
+| `proposal.qmd` | Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. |
+| `requirements.txt` | Lists required Python packages and versions necessary for reproducing the project environment. |
 
 ### References
 
-[1] WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project
+\[1\] WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project

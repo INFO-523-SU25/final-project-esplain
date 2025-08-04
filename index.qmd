@@ -1,11 +1,12 @@
 ---
-title: "Project Title"
+title: "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes Using Data Mining"
+
 subtitle: "INFO 523 - Final Project"
 author: 
-  - name: "Team name - Team member 1, Team member 2,..."
+  - name: "Amy Esplain"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "Project description"
+description: "This project aims to investigate potential officiating bias in WNBA games by analyzing referee crew assignments, foul distributions, and game outcomes. The primary objective is to determine whether certain referee combinations disproportionately favor home teams or exhibit consistent patterns of foul disparities."
 format:
    html:
     code-tools: true
