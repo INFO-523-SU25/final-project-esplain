@@ -1,0 +1,121 @@
+[
+  {
+    "objectID": "proposal.html",
+    "href": "proposal.html",
+    "title": "Whistle Bias?",
+    "section": "",
+    "text": "# For data handling\nimport pandas as pd\nimport numpy as np\n\n# For clustering\nfrom sklearn.cluster import KMeans\nfrom sklearn.preprocessing import StandardScaler\n\n# For visualization\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.decomposition import PCA"
+  },
+  {
+    "objectID": "proposal.html#dataset",
+    "href": "proposal.html#dataset",
+    "title": "Whistle Bias?",
+    "section": "Dataset",
+    "text": "Dataset\n\n# Import WNBA data from the data folder\nimport os\n\n# Define the data folder path\ndata_folder = \"data\"\n\n# Load individual season data\nwnba_2022 = pd.read_csv(os.path.join(data_folder, \"wnba_2022.csv\"))\nwnba_2023 = pd.read_csv(os.path.join(data_folder, \"wnba_2023.csv\"))\nwnba_2024 = pd.read_csv(os.path.join(data_folder, \"wnba_2024.csv\"))\n\n# Combine all seasons into one dataset\nwnba_data = pd.concat([wnba_2022, wnba_2023, wnba_2024], ignore_index=True)\n\n# Display basic information about the dataset\nprint(f\"Total records across all seasons: {len(wnba_data):,}\")\nprint(f\"Columns in dataset: {wnba_data.shape[1]}\")\nprint(f\"Dataset shape: {wnba_data.shape}\")\n\n# Show first few rows and column names\nprint(\"\\nDataset columns:\")\nprint(wnba_data.columns.tolist())\n\nprint(\"\\nFirst 5 rows:\")\nwnba_data.head()\n\nTotal records across all seasons: 28,103\nColumns in dataset: 57\nDataset shape: (28103, 57)\n\nDataset columns:\n['actionNumber', 'clock', 'timeActual', 'period', 'periodType', 'actionType', 'subType', 'qualifiers', 'personId', 'x', 'y', 'possession', 'scoreHome', 'scoreAway', 'edited', 'orderNumber', 'xLegacy', 'yLegacy', 'isFieldGoal', 'side', 'description', 'personIdsFilter', 'teamId', 'teamTricode', 'descriptor', 'jumpBallRecoveredName', 'jumpBallRecoverdPersonId', 'playerName', 'playerNameI', 'jumpBallWonPlayerName', 'jumpBallWonPersonId', 'jumpBallLostPlayerName', 'jumpBallLostPersonId', 'shotDistance', 'shotResult', 'shotActionNumber', 'reboundTotal', 'reboundDefensiveTotal', 'reboundOffensiveTotal', 'pointsTotal', 'assistPlayerNameInitial', 'assistPersonId', 'assistTotal', 'turnoverTotal', 'stealPlayerName', 'stealPersonId', 'officialId', 'foulPersonalTotal', 'foulTechnicalTotal', 'foulDrawnPlayerName', 'foulDrawnPersonId', 'blockPlayerName', 'blockPersonId', 'gameId', 'isTargetScoreLastPeriod', 'area', 'areaDetail']\n\nFirst 5 rows:\n\n\n\n\n\n\n\n\n\nactionNumber\nclock\ntimeActual\nperiod\nperiodType\nactionType\nsubType\nqualifiers\npersonId\nx\n...\nfoulPersonalTotal\nfoulTechnicalTotal\nfoulDrawnPlayerName\nfoulDrawnPersonId\nblockPlayerName\nblockPersonId\ngameId\nisTargetScoreLastPeriod\narea\nareaDetail\n\n\n\n\n0\n2\nPT10M00.00S\n2022-08-18T02:10:38.900Z\n1\nREGULAR\nperiod\nstart\nNaN\n0\nNaN\n...\nNaN\nNaN\nNaN\nNaN\nNaN\nNaN\n1042200101\nNaN\nNaN\nNaN\n\n\n1\n4\nPT09M57.00S\n2022-08-18T02:10:40.900Z\n1\nREGULAR\njumpball\nrecovered\nNaN\n1628932\nNaN\n...\nNaN\nNaN\nNaN\nNaN\nNaN\nNaN\n1042200101\nNaN\nNaN\nNaN\n\n\n2\n7\nPT09M43.00S\n2022-08-18T02:10:55.300Z\n1\nREGULAR\n2pt\nJump Shot\npointsinthepaint\n1628932\n90.676062\n...\nNaN\nNaN\nNaN\nNaN\nNaN\nNaN\n1042200101\nNaN\nNaN\nNaN\n\n\n3\n8\nPT09M40.00S\n2022-08-18T02:10:57.800Z\n1\nREGULAR\nrebound\ndefensive\nNaN\n1629488\nNaN\n...\nNaN\nNaN\nNaN\nNaN\nNaN\nNaN\n1042200101\nNaN\nNaN\nNaN\n\n\n4\n9\nPT09M32.00S\n2022-08-18T02:11:06.500Z\n1\nREGULAR\n3pt\nJump Shot\nNaN\n1628890\n25.316585\n...\nNaN\nNaN\nNaN\nNaN\nNaN\nNaN\n1042200101\nNaN\nNaN\nNaN\n\n\n\n\n5 rows × 57 columns\n\n\n\nThe dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extrenious effort due to limitations on API data requests per game for play-by-play details.\nThe dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis."
+  },
+  {
+    "objectID": "proposal.html#research-questions",
+    "href": "proposal.html#research-questions",
+    "title": "Whistle Bias?",
+    "section": "Research Questions",
+    "text": "Research Questions\nThe research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.\n\n1. Do home teams have significantly higher win rates under specific referee crews?\nThis question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.\n\n\n2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?\nThis question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.\n\n\n3. Do certain referees call more fouls on away teams?\nThis question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal."
+  },
+  {
+    "objectID": "proposal.html#analysis-plan",
+    "href": "proposal.html#analysis-plan",
+    "title": "Whistle Bias?",
+    "section": "Analysis plan",
+    "text": "Analysis plan\n\nProblem Introduction\nThe Women’s National Basketball Association (WNBA) has experienced significant growth in recent years, accompanied by an increasing emphasis on data analytics to enhance forecasting and anomaly detection capabilities. This project seeks to evaluate the fairness of officiating in the WNBA by applying machine learning techniques to referee assignment data, foul differentials, and game outcomes. The primary objective is to identify potential officiating bias and assess the extent to which individual referees may contribute to a home-court advantage.\n\n\nProblem Formulation\nThis study will examine potential officiating bias in WNBA games by analyzing referee assignment data, foul differentials, and game outcomes across multiple seasons. The analysis will proceed in the following stages:\n\n1. Data Collection and Preprocessing\n\nData Sources: Collecting data from https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data which is a play-by-play datasets with referee assignments.\nVariables of Interest:\n\nGame metadata: date, teams, location (home/away), final scores\n\nReferee assignments (names or IDs, crew combinations)\n\nTeam foul counts\nGame outcomes (win/loss, point differential)\n\nData Cleaning:\n\nNormalize referee names across games\n\nMerge datasets to associate referee crews with game-level statistics\n\nHandle missing or inconsistent values\n\nFeature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers\n\n\n\n\n2. Descriptive Statistics\n\nSummarize foul counts by team and referee\n\nVisualize average foul differential by referee and referee crew\n\nCompute home vs. away win rates across different referee combinations\nGenerate pairwise correlations to identify potentially relevant feature groupings\n\n\n\n3. Unsupervised Learning (Pattern Discovery)\n\nK-Means Clustering:\nUse K-means clustering to group:\n\nReferee crew based on game-level foul and outcome patterns\nIndividual referees based on their aggregated officiating behavior across multiple games\n\nDimensionality Reduction:\nApply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)\n\n\n\n4. Cluster Interpretation\n\nAnalyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)\nLabel clusters based on behavioral tendencies (such as “neutral crews”, “home-favoring referees”, “high-caller crews”)\nIdentify any outlier referees or crews with extreme values\n\n\n\n5. Reporting and Visualization\n\nCreate visualizations including heatmaps, bar charts, and PCA plot to articulate findings\n\nPlot clustered referee data to visualize separation and cohesion\n\nDiscuss implications of findings in the context of WNBA officiating policy and fairness\nProvide future recommendations to improve the analysis"
+  },
+  {
+    "objectID": "proposal.html#plan-of-attack",
+    "href": "proposal.html#plan-of-attack",
+    "title": "Whistle Bias?",
+    "section": "Plan of Attack",
+    "text": "Plan of Attack\n\n\n\n\n\n\n\n\nMilestone\nTask\nDue Date\n\n\n\n\nSubmit Proposal\nFinalize and submit initial proposal for others to provide feedback\n8/3/2025\n\n\nRevise Proposal\nAddress all peer feedback as needed\n8/6/2025\n\n\nSubmit Revised Proposal\nIncorporate and address all feedback for instructor review\n8/8/2025\n\n\nData Collection & Cleaning\n- Gather and clean WNBA game logs, referee assignments, and team stats  - Merge datasets and ensure consistent formatting\n8/10/2025\n\n\nFeature Engineering & EDA\n- Create variables such as foul differential, crew IDs, and home/away indicators  - Visualize trends and explore feature distributions\n8/12/2025\n\n\nPattern Discovery with K-means\n- Standardize features and apply K-means clustering\n8/14/2025\n\n\nCluster Interpretation\n- Interpret each cluster’s characteristics (e.g., home bias, foul disparity)  - Identify and analyze outlier referees or crews\n8/16/2025\n\n\nVisual & Storytelling\nCreate and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps\n8/17/2025\n\n\nFinal Write-Up & Presentation\n- Create, refine, and finalize the report, code, and presentation  - Ensure all results are well-documented and reproducible\n8/19/2025\n\n\nFinal Submission\n- Submit final report, code, and presentation  - Back up to GitHub (or drive)\n8/20/2025\n\n\n\n\nRepo Organization\n\n\n\n\n\n\n\nPath / File\nDescription\n\n\n\n\n.github/\nContains GitHub-specific files, including workflows, actions, and issue management templates.\n\n\n_extra/\nStores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents.\n\n\n_freeze/\nHouses frozen environment files detailing the project’s setup and dependencies.\n\n\ndata/\nDirectory for all essential data files, including input datasets and resources required for analysis.\n\n\nimages/\nCentral repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations.\n\n\n.gitignore\nSpecifies files and directories to exclude from Git version control.\n\n\nREADME.md\nCentral documentation file providing project overview, setup instructions, and usage guidelines.\n\n\n_quarto.yml\nConfiguration file for Quarto, specifying rendering options and document settings.\n\n\nabout.qmd\nProvides contextual information about the project and introduces team members and their roles.\n\n\nindex.qmd\nMain page of the project write-up, including code, visualizations, and final results.\n\n\npresentation.qmd\nQuarto file used to create a slideshow of the final project presentation.\n\n\nproject-final.Rproj\nRStudio project file that defines project-level settings for R-based workflows.\n\n\nproposal.qmd\nContains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan.\n\n\nrequirements.txt\nLists required Python packages and versions necessary for reproducing the project environment.\n\n\n\n\n\nReferences\n[1] WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes",
+    "section": "",
+    "text": "Add project abstract here."
+  },
+  {
+    "objectID": "index.html#abstract",
+    "href": "index.html#abstract",
+    "title": "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes",
+    "section": "",
+    "text": "Add project abstract here."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This project was developed by [Team Name] For INFO 523 - Data Mining and Discovery at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\nTeam member 1: One sentence description of Team member 1 (e.g., year, major, etc.).\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.)."
+  },
+  {
+    "objectID": "presentation.html#quarto",
+    "href": "presentation.html#quarto",
+    "title": "Project title",
+    "section": "Quarto",
+    "text": "Quarto\n\nThe presentation is created using the Quarto CLI\n## sets the start of a new slide"
+  },
+  {
+    "objectID": "presentation.html#layouts",
+    "href": "presentation.html#layouts",
+    "title": "Project title",
+    "section": "Layouts",
+    "text": "Layouts\nYou can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\nlike\nthis\n\nAnd add footnotes"
+  },
+  {
+    "objectID": "presentation.html#code",
+    "href": "presentation.html#code",
+    "title": "Project title",
+    "section": "Code",
+    "text": "Code\n\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.073\nModel:                            OLS   Adj. R-squared:                  0.070\nMethod:                 Least Squares   F-statistic:                     30.59\nDate:                Sun, 03 Aug 2025   Prob (F-statistic):           5.84e-08\nTime:                        20:25:25   Log-Likelihood:                -1346.4\nNo. Observations:                 392   AIC:                             2697.\nDf Residuals:                     390   BIC:                             2705.\nDf Model:                           1                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         35.8015      2.266     15.800      0.000      31.347      40.257\nspeed       -354.7055     64.129     -5.531      0.000    -480.788    -228.623\n==============================================================================\nOmnibus:                       27.687   Durbin-Watson:                   0.589\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               18.976\nSkew:                           0.420   Prob(JB):                     7.57e-05\nKurtosis:                       2.323   Cond. No.                         169.\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+  },
+  {
+    "objectID": "presentation.html#plots",
+    "href": "presentation.html#plots",
+    "title": "Project title",
+    "section": "Plots",
+    "text": "Plots"
+  },
+  {
+    "objectID": "presentation.html#plot-and-text",
+    "href": "presentation.html#plot-and-text",
+    "title": "Project title",
+    "section": "Plot and text",
+    "text": "Plot and text\n\n\n\nSome text\ngoes here"
+  },
+  {
+    "objectID": "presentation.html#tables",
+    "href": "presentation.html#tables",
+    "title": "Project title",
+    "section": "Tables",
+    "text": "Tables\nIf you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,\n\n\n\n\n\n\n\n\n\n\n\n\nspecies\n\n\n\nisland\n\n\n\nbill_length_mm\n\n\n\nbill_depth_mm\n\n\n\nflipper_length_mm\n\n\n\nbody_mass_g\n\n\n\nsex\n\n\n\n\n\n\n\n\n\n\n\n0\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.1\n\n\n\n18.7\n\n\n\n181.0\n\n\n\n3750.0\n\n\n\nMale\n\n\n\n\n\n\n\n1\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.5\n\n\n\n17.4\n\n\n\n186.0\n\n\n\n3800.0\n\n\n\nFemale\n\n\n\n\n\n\n\n2\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n40.3\n\n\n\n18.0\n\n\n\n195.0\n\n\n\n3250.0\n\n\n\nFemale\n\n\n\n\n\n\n\n4\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n36.7\n\n\n\n19.3\n\n\n\n193.0\n\n\n\n3450.0\n\n\n\nFemale\n\n\n\n\n\n\n\n5\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.3\n\n\n\n20.6\n\n\n\n190.0\n\n\n\n3650.0\n\n\n\nMale"
+  },
+  {
+    "objectID": "presentation.html#images",
+    "href": "presentation.html#images",
+    "title": "Project title",
+    "section": "Images",
+    "text": "Images\n\nImage credit: Danielle Navarro, Percolate."
+  },
+  {
+    "objectID": "presentation.html#math-expressions",
+    "href": "presentation.html#math-expressions",
+    "title": "Project title",
+    "section": "Math Expressions",
+    "text": "Math Expressions\nYou can write LaTeX math expressions inside a pair of dollar signs, e.g. $\\alpha+\\beta$ renders \\(\\alpha + \\beta\\). You can use the display style with double dollar signs:\n$$\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i$$\n\\[\n\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i\n\\]\nLimitations:\n\nThe source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting $$ must appear in the very beginning of a line, followed immediately by a non-space character, and the ending $$ must be at the end of a line, led by a non-space character;\nThere should not be spaces after the opening $ or before the closing $."
+  },
+  {
+    "objectID": "presentation.html#feeling-adventurous",
+    "href": "presentation.html#feeling-adventurous",
+    "title": "Project title",
+    "section": "Feeling adventurous?",
+    "text": "Feeling adventurous?\n\nYou are welcomed to use the default styling of the slides. In fact, that’s what I expect majority of you will do. You will differentiate yourself with the content of your presentation.\nBut some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs."
+  }
+]
