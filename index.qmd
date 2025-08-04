@@ -1,5 +1,5 @@
 ---
-title: "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes Using Data Mining"
+title: "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes"
 
 subtitle: "INFO 523 - Final Project"
 author: 

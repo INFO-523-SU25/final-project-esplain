@@ -154,7 +154,7 @@ This study will examine potential officiating bias in WNBA games by analyzing re
 ## Plan of Attack
 
 | Milestone | Task | Due Date |
-|----------------|-----------------------------------------|----------------|
+|------------------|-------------------------------------|------------------|
 | Submit Proposal | Finalize and submit initial proposal for others to provide feedback | 8/3/2025 |
 | Revise Proposal | Address all peer feedback as needed | 8/6/2025 |
 | Submit Revised Proposal | Incorporate and address all feedback for instructor review | 8/8/2025 |
@@ -169,7 +169,7 @@ This study will examine potential officiating bias in WNBA games by analyzing re
 ### Repo Organization
 
 | Path / File | Description |
-|------------------|------------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | `.github/` | Contains GitHub-specific files, including workflows, actions, and issue management templates. |
 | `_extra/` | Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. |
 | `_freeze/` | Houses frozen environment files detailing the project’s setup and dependencies. |

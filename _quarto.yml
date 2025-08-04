@@ -17,7 +17,7 @@ website:
       - text: Presentation
         href: presentation.qmd
       - text: About
-        href: about.qmd 
+        href: about.qmd
 
 format:
   html:
