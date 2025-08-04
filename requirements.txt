@@ -1,2 +1,16 @@
 jupyter
 nbformat
+pandas
+numpy
+requests
+beautifulsoup4
+matplotlib
+seaborn
+plotly
+scikit-learn
+xgboost
+tqdm
+black
+pytest
+
+nba_on_court

@@ -1,12 +1,14 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: Project Title
+  title: "WNBA Referee Bias Analysis"
+  description: "An analysis of WNBA referee bias using machine learning techniques."
   navbar:
     right:
       - icon: github
-        href: https://github.com/INFO-523-SU24/final-project # Need to change to your project repo
+        href: https://github.com/INFO-523-SU25/final-project-esplain
     left:
       - text: Project
         href: index.qmd
@@ -15,14 +17,4 @@ website:
       - text: Presentation
         href: presentation.qmd
       - text: About
-        href: about.qmd
-
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    toc: true
-
-execute:
-  freeze: auto
+        href: about.qmd 
