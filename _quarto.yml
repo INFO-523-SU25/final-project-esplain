@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    -"!README.md"
 
 website:
   title: "WNBA Referee Bias Analysis"
@@ -22,7 +24,7 @@ website:
 format:
   html:
     theme:
-      light: flatly
+      light: flatlyqu
       dark: darkly
     toc: true
 
