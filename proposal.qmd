@@ -40,6 +40,10 @@ from sklearn.decomposition import PCA
 
 ## Dataset
 
+The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy ([dataset link](https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data)) who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extraneous effort due to limitations on API data requests per game for play-by-play details.
+
+The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season that was webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.
+
 ```{python}
 #| label: load-dataset
 #| message: false
@@ -71,23 +75,19 @@ print("\nFirst 5 rows:")
 wnba_data.head()
 ```
 
-The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extrenious effort due to limitations on API data requests per game for play-by-play details.
-
-The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.
-
 ## Research Questions
 
 The research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.
 
-### 1. Do home teams have significantly higher win rates under specific referee crews?
+#### 1. Do home teams have significantly higher win rates under specific referee crews?
 
 This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.
 
-### 2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
+#### 2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
 
 This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.
 
-### 3. Do certain referees call more fouls on away teams?
+#### 3.  Do certain referees call more fouls on away teams?
 
 This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.
 
@@ -107,44 +107,72 @@ This study will examine potential officiating bias in WNBA games by analyzing re
 
 -   **Variables of Interest:**
 
-    -   Game metadata: date, teams, location (home/away), final scores\
-    -   Referee assignments (names or IDs, crew combinations)\
+    -   Game metadata: date, teams, location (home/away), final scores
+    -   Referee assignments (names or IDs, crew combinations)
     -   Team foul counts
     -   Game outcomes (win/loss, point differential)
 
 -   **Data Cleaning:**
 
-    -   Normalize referee names across games\
-    -   Merge datasets to associate referee crews with game-level statistics\
-    -   Handle missing or inconsistent values\
-    -   Feature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers
+    -   Normalize referee names across games
+    -   Merge datasets to associate referee crews with game-level statistics
+    -   Handle missing or inconsistent values
 
-#### 2. Descriptive Statistics
+#### 2. Exploratory Data Analysis
 
--   Summarize foul counts by team and referee\
--   Visualize average foul differential by referee and referee crew\
--   Compute home vs. away win rates across different referee combinations
--   Generate pairwise correlations to identify potentially relevant feature groupings
+To validate that the data supports our research questions, key features were explored using distributions and summary statistics:
 
-#### 3. Unsupervised Learning (Pattern Discovery)
+-   Summarize foul counts by team and referee to understand Foul Differential Distribution.
+-   Visualize average foul differential by referee and referee crew to see if there is skewness which could suggest certain crews favor one side.
+-   Compute home vs. away win rates across different referee combinations Crews with consistently higher home win rates may indicate officiating bias regardless of foul disparities.
+-   Generate pairwise correlations to identify potentially relevant feature groupings. Specific investigation will look at whether foul differential has a meaningful impact on scoring.
 
--   **K-Means Clustering:**
+#### 3. Feature Engineering
 
-    Use K-means clustering to group:
+The goal is to construct a comprehensive set of quantitative features that can characterize officiating tendencies and enable meaningful clustering. Below are several features that I plan to create:
+
+-   **Foul Differential:** The difference in total fouls called on the home team versus the away team. This feature serves as a proxy for imbalance in foul calls and is a central indicator of potential bias.
+
+-   **Total Fouls Per Game:**\
+    The sum of fouls called on both teams, capturing referees’ strictness or leniency in foul calling. Calculated as fouls called on the away team minus fouls called on the home team.
+
+-   **Average Fouls Per Team:**\
+    Computed as total fouls divided by the number of games officiated by a referee or crew. This helps normalize foul volume across varying sample sizes.
+
+-   **Free Throw Differential:**\
+    The difference in free throw attempts between the home and away teams, which may reflect the practical consequences of foul calls.
+
+-   **Home Win Indicator:**\
+    A binary variable denoting whether the home team won the game (1 = home team won, 0 = home team loss). Used to explore relationships between crew assignments and home-court advantage.
+
+-   **Referee and Crew Identifiers:**\
+    Encoded categorical identifiers for individual referees and three-person crew combinations to enable grouping and aggregation across games. Referee names will be normalized and mapped to a consistent ID to support aggregation. A composite key will be created for the three referees per game to analyze group effects.
+
+-   **Normalization and Scaling:**
+
+    To prepare for K-means clustering, all continuous features will be standardized (e.g., z-score normalization) to ensure that variables are on the same scale and contribute equally to distance calculations in the clustering algorithm
+
+-   **Aggregation Strategy:**
+
+    Referee-level features will be aggregated across games to create a per-referee profile. Similarly, crew-level statistics will be generated by grouping games officiated by the same three-referee combinations. This aggregation supports both individual and crew-based cluster analysis.
+
+#### 4. Unsupervised Learning (Pattern Discovery)
+
+-   **K-Means Clustering:** Use K-means clustering to group:
 
     -   Referee crew based on game-level foul and outcome patterns
+
     -   Individual referees based on their aggregated officiating behavior across multiple games
 
--   **Dimensionality Reduction:**\
-    Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)
+-   **Dimensionality Reduction:** Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)
 
-#### 4. Cluster Interpretation
+#### 5. Cluster Interpretation
 
 -   Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)
 -   Label clusters based on behavioral tendencies (such as "neutral crews", "home-favoring referees", "high-caller crews")
 -   Identify any outlier referees or crews with extreme values
 
-#### 5. Reporting and Visualization
+#### 6. Reporting and Visualization
 
 -   Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\
 -   Plot clustered referee data to visualize separation and cohesion\
@@ -154,7 +182,7 @@ This study will examine potential officiating bias in WNBA games by analyzing re
 ## Plan of Attack
 
 | Milestone | Task | Due Date |
-|-------------------|-----------------------------------|-------------------|
+|-------------------|------------------------------------------|----------|
 | Submit Proposal | Finalize and submit initial proposal for others to provide feedback | 8/3/2025 |
 | Revise Proposal | Address all peer feedback as needed | 8/6/2025 |
 | Submit Revised Proposal | Incorporate and address all feedback for instructor review | 8/8/2025 |
@@ -169,7 +197,7 @@ This study will examine potential officiating bias in WNBA games by analyzing re
 ### Repo Organization
 
 | Path / File | Description |
-|-----------------------|-------------------------------------------------|
+|---------------|--------------------------------------------------------|
 | `.github/` | Contains GitHub-specific files, including workflows, actions, and issue management templates. |
 | `_extra/` | Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. |
 | `_freeze/` | Houses frozen environment files detailing the project’s setup and dependencies. |

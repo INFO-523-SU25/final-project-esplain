@@ -4070,12 +4070,7 @@ vertical-align: -.125em;
    
   <ul>
   <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
-  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions">Research Questions</a>
-  <ul class="collapse">
-  <li><a href="#do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews" id="toc-do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews" class="nav-link" data-scroll-target="#do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews">1. Do home teams have significantly higher win rates under specific referee crews?</a></li>
-  <li><a href="#when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity" id="toc-when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity" class="nav-link" data-scroll-target="#when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity">2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</a></li>
-  <li><a href="#do-certain-referees-call-more-fouls-on-away-teams" id="toc-do-certain-referees-call-more-fouls-on-away-teams" class="nav-link" data-scroll-target="#do-certain-referees-call-more-fouls-on-away-teams">3. Do certain referees call more fouls on away teams?</a></li>
-  </ul></li>
+  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions">Research Questions</a></li>
   <li><a href="#analysis-plan" id="toc-analysis-plan" class="nav-link" data-scroll-target="#analysis-plan">Analysis plan</a>
   <ul class="collapse">
   <li><a href="#problem-introduction" id="toc-problem-introduction" class="nav-link" data-scroll-target="#problem-introduction">Problem Introduction</a></li>
@@ -4147,6 +4142,8 @@ vertical-align: -.125em;
 </div>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy (<a href="https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data">dataset link</a>) who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extraneous effort due to limitations on API data requests per game for play-by-play details.</p>
+<p>The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season that was webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.</p>
 <div id="cell-load-dataset" class="cell" data-message="false" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Import WNBA data from the data folder</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> os</span>
@@ -4183,7 +4180,7 @@ Dataset columns:
 
 First 5 rows:</code></pre>
 </div>
-<div id="load-dataset" class="cell-output cell-output-display" data-execution_count="2">
+<div id="load-dataset" class="cell-output cell-output-display" data-execution_count="26">
 <div>
 
 
@@ -4342,22 +4339,20 @@ First 5 rows:</code></pre>
 </div>
 </div>
 </div>
-<p>The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extrenious effort due to limitations on API data requests per game for play-by-play details.</p>
-<p>The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.</p>
 </section>
 <section id="research-questions" class="level2">
 <h2 class="anchored" data-anchor-id="research-questions">Research Questions</h2>
 <p>The research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.</p>
-<section id="do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews" class="level3">
-<h3 class="anchored" data-anchor-id="do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews">1. Do home teams have significantly higher win rates under specific referee crews?</h3>
+<section id="do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews" class="level4">
+<h4 class="anchored" data-anchor-id="do-home-teams-have-significantly-higher-win-rates-under-specific-referee-crews">1. Do home teams have significantly higher win rates under specific referee crews?</h4>
 <p>This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.</p>
 </section>
-<section id="when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity" class="level3">
-<h3 class="anchored" data-anchor-id="when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity">2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</h3>
+<section id="when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity" class="level4">
+<h4 class="anchored" data-anchor-id="when-games-are-officiated-by-certain-referee-combinations-do-they-have-higher-or-lower-foul-disparity">2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</h4>
 <p>This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.</p>
 </section>
-<section id="do-certain-referees-call-more-fouls-on-away-teams" class="level3">
-<h3 class="anchored" data-anchor-id="do-certain-referees-call-more-fouls-on-away-teams">3. Do certain referees call more fouls on away teams?</h3>
+<section id="do-certain-referees-call-more-fouls-on-away-teams" class="level4">
+<h4 class="anchored" data-anchor-id="do-certain-referees-call-more-fouls-on-away-teams">3. Do certain referees call more fouls on away teams?</h4>
 <p>This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.</p>
 </section>
 </section>
@@ -4376,51 +4371,63 @@ First 5 rows:</code></pre>
 <li><p><strong>Data Sources:</strong> Collecting data from <a href="https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data" class="uri">https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data</a> which is a play-by-play datasets with referee assignments.</p></li>
 <li><p><strong>Variables of Interest:</strong></p>
 <ul>
-<li>Game metadata: date, teams, location (home/away), final scores<br>
-</li>
-<li>Referee assignments (names or IDs, crew combinations)<br>
-</li>
+<li>Game metadata: date, teams, location (home/away), final scores</li>
+<li>Referee assignments (names or IDs, crew combinations)</li>
 <li>Team foul counts</li>
 <li>Game outcomes (win/loss, point differential)</li>
 </ul></li>
 <li><p><strong>Data Cleaning:</strong></p>
 <ul>
-<li>Normalize referee names across games<br>
-</li>
-<li>Merge datasets to associate referee crews with game-level statistics<br>
-</li>
-<li>Handle missing or inconsistent values<br>
-</li>
-<li>Feature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers</li>
+<li>Normalize referee names across games</li>
+<li>Merge datasets to associate referee crews with game-level statistics</li>
+<li>Handle missing or inconsistent values</li>
 </ul></li>
 </ul>
 </section>
-<section id="descriptive-statistics" class="level4">
-<h4 class="anchored" data-anchor-id="descriptive-statistics">2. Descriptive Statistics</h4>
+<section id="exploratory-data-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="exploratory-data-analysis">2. Exploratory Data Analysis</h4>
+<p>To validate that the data supports our research questions, key features were explored using distributions and summary statistics:</p>
 <ul>
-<li>Summarize foul counts by team and referee<br>
-</li>
-<li>Visualize average foul differential by referee and referee crew<br>
-</li>
-<li>Compute home vs. away win rates across different referee combinations</li>
-<li>Generate pairwise correlations to identify potentially relevant feature groupings</li>
+<li>Summarize foul counts by team and referee to understand Foul Differential Distribution.</li>
+<li>Visualize average foul differential by referee and referee crew to see if there is skewness which could suggest certain crews favor one side.</li>
+<li>Compute home vs. away win rates across different referee combinations Crews with consistently higher home win rates may indicate officiating bias regardless of foul disparities.</li>
+<li>Generate pairwise correlations to identify potentially relevant feature groupings. Specific investigation will look at whether foul differential has a meaningful impact on scoring.</li>
+</ul>
+</section>
+<section id="feature-engineering" class="level4">
+<h4 class="anchored" data-anchor-id="feature-engineering">3. Feature Engineering</h4>
+<p>The goal is to construct a comprehensive set of quantitative features that can characterize officiating tendencies and enable meaningful clustering. Below are several features that I plan to create:</p>
+<ul>
+<li><p><strong>Foul Differential:</strong> The difference in total fouls called on the home team versus the away team. This feature serves as a proxy for imbalance in foul calls and is a central indicator of potential bias.</p></li>
+<li><p><strong>Total Fouls Per Game:</strong><br>
+The sum of fouls called on both teams, capturing referees’ strictness or leniency in foul calling. Calculated as fouls called on the away team minus fouls called on the home team.</p></li>
+<li><p><strong>Average Fouls Per Team:</strong><br>
+Computed as total fouls divided by the number of games officiated by a referee or crew. This helps normalize foul volume across varying sample sizes.</p></li>
+<li><p><strong>Free Throw Differential:</strong><br>
+The difference in free throw attempts between the home and away teams, which may reflect the practical consequences of foul calls.</p></li>
+<li><p><strong>Home Win Indicator:</strong><br>
+A binary variable denoting whether the home team won the game (1 = home team won, 0 = home team loss). Used to explore relationships between crew assignments and home-court advantage.</p></li>
+<li><p><strong>Referee and Crew Identifiers:</strong><br>
+Encoded categorical identifiers for individual referees and three-person crew combinations to enable grouping and aggregation across games. Referee names will be normalized and mapped to a consistent ID to support aggregation. A composite key will be created for the three referees per game to analyze group effects.</p></li>
+<li><p><strong>Normalization and Scaling:</strong></p>
+<p>To prepare for K-means clustering, all continuous features will be standardized (e.g., z-score normalization) to ensure that variables are on the same scale and contribute equally to distance calculations in the clustering algorithm</p></li>
+<li><p><strong>Aggregation Strategy:</strong></p>
+<p>Referee-level features will be aggregated across games to create a per-referee profile. Similarly, crew-level statistics will be generated by grouping games officiated by the same three-referee combinations. This aggregation supports both individual and crew-based cluster analysis.</p></li>
 </ul>
 </section>
 <section id="unsupervised-learning-pattern-discovery" class="level4">
-<h4 class="anchored" data-anchor-id="unsupervised-learning-pattern-discovery">3. Unsupervised Learning (Pattern Discovery)</h4>
+<h4 class="anchored" data-anchor-id="unsupervised-learning-pattern-discovery">4. Unsupervised Learning (Pattern Discovery)</h4>
 <ul>
-<li><p><strong>K-Means Clustering:</strong></p>
-<p>Use K-means clustering to group:</p>
+<li><p><strong>K-Means Clustering:</strong> Use K-means clustering to group:</p>
 <ul>
-<li>Referee crew based on game-level foul and outcome patterns</li>
-<li>Individual referees based on their aggregated officiating behavior across multiple games</li>
+<li><p>Referee crew based on game-level foul and outcome patterns</p></li>
+<li><p>Individual referees based on their aggregated officiating behavior across multiple games</p></li>
 </ul></li>
-<li><p><strong>Dimensionality Reduction:</strong><br>
-Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</p></li>
+<li><p><strong>Dimensionality Reduction:</strong> Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</p></li>
 </ul>
 </section>
 <section id="cluster-interpretation" class="level4">
-<h4 class="anchored" data-anchor-id="cluster-interpretation">4. Cluster Interpretation</h4>
+<h4 class="anchored" data-anchor-id="cluster-interpretation">5. Cluster Interpretation</h4>
 <ul>
 <li>Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)</li>
 <li>Label clusters based on behavioral tendencies (such as “neutral crews”, “home-favoring referees”, “high-caller crews”)</li>
@@ -4428,7 +4435,7 @@ Apply Principal Component Analysis (PCA) to identify latent components in offici
 </ul>
 </section>
 <section id="reporting-and-visualization" class="level4">
-<h4 class="anchored" data-anchor-id="reporting-and-visualization">5. Reporting and Visualization</h4>
+<h4 class="anchored" data-anchor-id="reporting-and-visualization">6. Reporting and Visualization</h4>
 <ul>
 <li>Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings<br>
 </li>
@@ -4445,8 +4452,8 @@ Apply Principal Component Analysis (PCA) to identify latent components in offici
 <table class="caption-top table">
 <colgroup>
 <col style="width: 26%">
-<col style="width: 47%">
-<col style="width: 26%">
+<col style="width: 59%">
+<col style="width: 14%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -4512,8 +4519,8 @@ Apply Principal Component Analysis (PCA) to identify latent components in offici
 <h3 class="anchored" data-anchor-id="repo-organization">Repo Organization</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 31%">
-<col style="width: 68%">
+<col style="width: 21%">
+<col style="width: 78%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -5136,54 +5143,54 @@ Apply Principal Component Analysis (PCA) to identify latent components in offici
 <span id="cb4-42"><a href="#cb4-42"></a></span>
 <span id="cb4-43"><a href="#cb4-43"></a><span class="fu">## Dataset</span></span>
 <span id="cb4-44"><a href="#cb4-44"></a></span>
-<span id="cb4-47"><a href="#cb4-47"></a><span class="in">```{python}</span></span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="co">#| label: load-dataset</span></span>
-<span id="cb4-49"><a href="#cb4-49"></a><span class="co">#| message: false</span></span>
-<span id="cb4-50"><a href="#cb4-50"></a></span>
-<span id="cb4-51"><a href="#cb4-51"></a><span class="co"># Import WNBA data from the data folder</span></span>
-<span id="cb4-52"><a href="#cb4-52"></a><span class="im">import</span> os</span>
-<span id="cb4-53"><a href="#cb4-53"></a></span>
-<span id="cb4-54"><a href="#cb4-54"></a><span class="co"># Define the data folder path</span></span>
-<span id="cb4-55"><a href="#cb4-55"></a>data_folder <span class="op">=</span> <span class="st">&quot;data&quot;</span></span>
-<span id="cb4-56"><a href="#cb4-56"></a></span>
-<span id="cb4-57"><a href="#cb4-57"></a><span class="co"># Load individual season data</span></span>
-<span id="cb4-58"><a href="#cb4-58"></a>wnba_2022 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2022.csv&quot;</span>))</span>
-<span id="cb4-59"><a href="#cb4-59"></a>wnba_2023 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2023.csv&quot;</span>))</span>
-<span id="cb4-60"><a href="#cb4-60"></a>wnba_2024 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2024.csv&quot;</span>))</span>
-<span id="cb4-61"><a href="#cb4-61"></a></span>
-<span id="cb4-62"><a href="#cb4-62"></a><span class="co"># Combine all seasons into one dataset</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a>wnba_data <span class="op">=</span> pd.concat([wnba_2022, wnba_2023, wnba_2024], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb4-64"><a href="#cb4-64"></a></span>
-<span id="cb4-65"><a href="#cb4-65"></a><span class="co"># Display basic information about the dataset</span></span>
-<span id="cb4-66"><a href="#cb4-66"></a><span class="bu">print</span>(<span class="ss">f&quot;Total records across all seasons: </span><span class="sc">{</span><span class="bu">len</span>(wnba_data)<span class="sc">:,}</span><span class="ss">&quot;</span>)</span>
-<span id="cb4-67"><a href="#cb4-67"></a><span class="bu">print</span>(<span class="ss">f&quot;Columns in dataset: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb4-68"><a href="#cb4-68"></a><span class="bu">print</span>(<span class="ss">f&quot;Dataset shape: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb4-69"><a href="#cb4-69"></a></span>
-<span id="cb4-70"><a href="#cb4-70"></a><span class="co"># Show first few rows and column names</span></span>
-<span id="cb4-71"><a href="#cb4-71"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Dataset columns:&quot;</span>)</span>
-<span id="cb4-72"><a href="#cb4-72"></a><span class="bu">print</span>(wnba_data.columns.tolist())</span>
+<span id="cb4-45"><a href="#cb4-45"></a>The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy (<span class="co">[</span><span class="ot">dataset link</span><span class="co">](https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data)</span>) who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extraneous effort due to limitations on API data requests per game for play-by-play details.</span>
+<span id="cb4-46"><a href="#cb4-46"></a></span>
+<span id="cb4-47"><a href="#cb4-47"></a>The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season that was webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.</span>
+<span id="cb4-48"><a href="#cb4-48"></a></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="in">```{python}</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="co">#| label: load-dataset</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="co">#| message: false</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a></span>
+<span id="cb4-55"><a href="#cb4-55"></a><span class="co"># Import WNBA data from the data folder</span></span>
+<span id="cb4-56"><a href="#cb4-56"></a><span class="im">import</span> os</span>
+<span id="cb4-57"><a href="#cb4-57"></a></span>
+<span id="cb4-58"><a href="#cb4-58"></a><span class="co"># Define the data folder path</span></span>
+<span id="cb4-59"><a href="#cb4-59"></a>data_folder <span class="op">=</span> <span class="st">&quot;data&quot;</span></span>
+<span id="cb4-60"><a href="#cb4-60"></a></span>
+<span id="cb4-61"><a href="#cb4-61"></a><span class="co"># Load individual season data</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a>wnba_2022 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2022.csv&quot;</span>))</span>
+<span id="cb4-63"><a href="#cb4-63"></a>wnba_2023 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2023.csv&quot;</span>))</span>
+<span id="cb4-64"><a href="#cb4-64"></a>wnba_2024 <span class="op">=</span> pd.read_csv(os.path.join(data_folder, <span class="st">&quot;wnba_2024.csv&quot;</span>))</span>
+<span id="cb4-65"><a href="#cb4-65"></a></span>
+<span id="cb4-66"><a href="#cb4-66"></a><span class="co"># Combine all seasons into one dataset</span></span>
+<span id="cb4-67"><a href="#cb4-67"></a>wnba_data <span class="op">=</span> pd.concat([wnba_2022, wnba_2023, wnba_2024], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-68"><a href="#cb4-68"></a></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="co"># Display basic information about the dataset</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a><span class="bu">print</span>(<span class="ss">f&quot;Total records across all seasons: </span><span class="sc">{</span><span class="bu">len</span>(wnba_data)<span class="sc">:,}</span><span class="ss">&quot;</span>)</span>
+<span id="cb4-71"><a href="#cb4-71"></a><span class="bu">print</span>(<span class="ss">f&quot;Columns in dataset: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="bu">print</span>(<span class="ss">f&quot;Dataset shape: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb4-73"><a href="#cb4-73"></a></span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">First 5 rows:&quot;</span>)</span>
-<span id="cb4-75"><a href="#cb4-75"></a>wnba_data.head()</span>
-<span id="cb4-76"><a href="#cb4-76"></a><span class="in">```</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="co"># Show first few rows and column names</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Dataset columns:&quot;</span>)</span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="bu">print</span>(wnba_data.columns.tolist())</span>
 <span id="cb4-77"><a href="#cb4-77"></a></span>
-<span id="cb4-78"><a href="#cb4-78"></a>The dataset required for this project is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy who combined several sources into several datasets for publicly available use. I am choosing to use this source that has been created by another individual due to the granular nature of this project. If I were I collect this data myself, it would require extrenious effort due to limitations on API data requests per game for play-by-play details.</span>
-<span id="cb4-79"><a href="#cb4-79"></a></span>
-<span id="cb4-80"><a href="#cb4-80"></a>The dataset used in this analysis is from the 2022, 2023, 2024 WNBA season webscraped from CDN.NBA.COM by Vladislav Shufinskiy. The dataset will use all games available including in-season, playoffs and finals in order to increase sample size for the analysis.</span>
+<span id="cb4-78"><a href="#cb4-78"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">First 5 rows:&quot;</span>)</span>
+<span id="cb4-79"><a href="#cb4-79"></a>wnba_data.head()</span>
+<span id="cb4-80"><a href="#cb4-80"></a><span class="in">```</span></span>
 <span id="cb4-81"><a href="#cb4-81"></a></span>
 <span id="cb4-82"><a href="#cb4-82"></a><span class="fu">## Research Questions</span></span>
 <span id="cb4-83"><a href="#cb4-83"></a></span>
 <span id="cb4-84"><a href="#cb4-84"></a>The research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.</span>
 <span id="cb4-85"><a href="#cb4-85"></a></span>
-<span id="cb4-86"><a href="#cb4-86"></a><span class="fu">### 1. Do home teams have significantly higher win rates under specific referee crews?</span></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="fu">#### 1. Do home teams have significantly higher win rates under specific referee crews?</span></span>
 <span id="cb4-87"><a href="#cb4-87"></a></span>
 <span id="cb4-88"><a href="#cb4-88"></a>This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.</span>
 <span id="cb4-89"><a href="#cb4-89"></a></span>
-<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">### 2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</span></span>
+<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">#### 2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</span></span>
 <span id="cb4-91"><a href="#cb4-91"></a></span>
 <span id="cb4-92"><a href="#cb4-92"></a>This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.</span>
 <span id="cb4-93"><a href="#cb4-93"></a></span>
-<span id="cb4-94"><a href="#cb4-94"></a><span class="fu">### 3. Do certain referees call more fouls on away teams?</span></span>
+<span id="cb4-94"><a href="#cb4-94"></a><span class="fu">#### 3.  Do certain referees call more fouls on away teams?</span></span>
 <span id="cb4-95"><a href="#cb4-95"></a></span>
 <span id="cb4-96"><a href="#cb4-96"></a>This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.</span>
 <span id="cb4-97"><a href="#cb4-97"></a></span>
@@ -5203,87 +5210,115 @@ Apply Principal Component Analysis (PCA) to identify latent components in offici
 <span id="cb4-111"><a href="#cb4-111"></a></span>
 <span id="cb4-112"><a href="#cb4-112"></a><span class="ss">-   </span>**Variables of Interest:**</span>
 <span id="cb4-113"><a href="#cb4-113"></a></span>
-<span id="cb4-114"><a href="#cb4-114"></a><span class="ss">    -   </span>Game metadata: date, teams, location (home/away), final scores\</span>
-<span id="cb4-115"><a href="#cb4-115"></a><span class="ss">    -   </span>Referee assignments (names or IDs, crew combinations)\</span>
+<span id="cb4-114"><a href="#cb4-114"></a><span class="ss">    -   </span>Game metadata: date, teams, location (home/away), final scores</span>
+<span id="cb4-115"><a href="#cb4-115"></a><span class="ss">    -   </span>Referee assignments (names or IDs, crew combinations)</span>
 <span id="cb4-116"><a href="#cb4-116"></a><span class="ss">    -   </span>Team foul counts</span>
 <span id="cb4-117"><a href="#cb4-117"></a><span class="ss">    -   </span>Game outcomes (win/loss, point differential)</span>
 <span id="cb4-118"><a href="#cb4-118"></a></span>
 <span id="cb4-119"><a href="#cb4-119"></a><span class="ss">-   </span>**Data Cleaning:**</span>
 <span id="cb4-120"><a href="#cb4-120"></a></span>
-<span id="cb4-121"><a href="#cb4-121"></a><span class="ss">    -   </span>Normalize referee names across games\</span>
-<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">    -   </span>Merge datasets to associate referee crews with game-level statistics\</span>
-<span id="cb4-123"><a href="#cb4-123"></a><span class="ss">    -   </span>Handle missing or inconsistent values\</span>
-<span id="cb4-124"><a href="#cb4-124"></a><span class="ss">    -   </span>Feature engineering such as average fouls per team, foul differential, home team win indicator, and officiating crew identifiers</span>
-<span id="cb4-125"><a href="#cb4-125"></a></span>
-<span id="cb4-126"><a href="#cb4-126"></a><span class="fu">#### 2. Descriptive Statistics</span></span>
-<span id="cb4-127"><a href="#cb4-127"></a></span>
-<span id="cb4-128"><a href="#cb4-128"></a><span class="ss">-   </span>Summarize foul counts by team and referee\</span>
-<span id="cb4-129"><a href="#cb4-129"></a><span class="ss">-   </span>Visualize average foul differential by referee and referee crew\</span>
-<span id="cb4-130"><a href="#cb4-130"></a><span class="ss">-   </span>Compute home vs. away win rates across different referee combinations</span>
-<span id="cb4-131"><a href="#cb4-131"></a><span class="ss">-   </span>Generate pairwise correlations to identify potentially relevant feature groupings</span>
-<span id="cb4-132"><a href="#cb4-132"></a></span>
-<span id="cb4-133"><a href="#cb4-133"></a><span class="fu">#### 3. Unsupervised Learning (Pattern Discovery)</span></span>
-<span id="cb4-134"><a href="#cb4-134"></a></span>
-<span id="cb4-135"><a href="#cb4-135"></a><span class="ss">-   </span>**K-Means Clustering:**</span>
-<span id="cb4-136"><a href="#cb4-136"></a></span>
-<span id="cb4-137"><a href="#cb4-137"></a>    Use K-means clustering to group:</span>
-<span id="cb4-138"><a href="#cb4-138"></a></span>
-<span id="cb4-139"><a href="#cb4-139"></a><span class="ss">    -   </span>Referee crew based on game-level foul and outcome patterns</span>
-<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">    -   </span>Individual referees based on their aggregated officiating behavior across multiple games</span>
-<span id="cb4-141"><a href="#cb4-141"></a></span>
-<span id="cb4-142"><a href="#cb4-142"></a><span class="ss">-   </span>**Dimensionality Reduction:**\</span>
-<span id="cb4-143"><a href="#cb4-143"></a>    Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</span>
-<span id="cb4-144"><a href="#cb4-144"></a></span>
-<span id="cb4-145"><a href="#cb4-145"></a><span class="fu">#### 4. Cluster Interpretation</span></span>
-<span id="cb4-146"><a href="#cb4-146"></a></span>
-<span id="cb4-147"><a href="#cb4-147"></a><span class="ss">-   </span>Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)</span>
-<span id="cb4-148"><a href="#cb4-148"></a><span class="ss">-   </span>Label clusters based on behavioral tendencies (such as &quot;neutral crews&quot;, &quot;home-favoring referees&quot;, &quot;high-caller crews&quot;)</span>
-<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">-   </span>Identify any outlier referees or crews with extreme values</span>
-<span id="cb4-150"><a href="#cb4-150"></a></span>
-<span id="cb4-151"><a href="#cb4-151"></a><span class="fu">#### 5. Reporting and Visualization</span></span>
-<span id="cb4-152"><a href="#cb4-152"></a></span>
-<span id="cb4-153"><a href="#cb4-153"></a><span class="ss">-   </span>Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\</span>
-<span id="cb4-154"><a href="#cb4-154"></a><span class="ss">-   </span>Plot clustered referee data to visualize separation and cohesion\</span>
-<span id="cb4-155"><a href="#cb4-155"></a><span class="ss">-   </span>Discuss implications of findings in the context of WNBA officiating policy and fairness</span>
-<span id="cb4-156"><a href="#cb4-156"></a><span class="ss">-   </span>Provide future recommendations to improve the analysis</span>
-<span id="cb4-157"><a href="#cb4-157"></a></span>
-<span id="cb4-158"><a href="#cb4-158"></a><span class="fu">## Plan of Attack</span></span>
-<span id="cb4-159"><a href="#cb4-159"></a></span>
-<span id="cb4-160"><a href="#cb4-160"></a><span class="pp">|</span> Milestone <span class="pp">|</span> Task <span class="pp">|</span> Due Date <span class="pp">|</span></span>
-<span id="cb4-161"><a href="#cb4-161"></a><span class="pp">|-------------------|-----------------------------------|-------------------|</span></span>
-<span id="cb4-162"><a href="#cb4-162"></a><span class="pp">|</span> Submit Proposal <span class="pp">|</span> Finalize and submit initial proposal for others to provide feedback <span class="pp">|</span> 8/3/2025 <span class="pp">|</span></span>
-<span id="cb4-163"><a href="#cb4-163"></a><span class="pp">|</span> Revise Proposal <span class="pp">|</span> Address all peer feedback as needed <span class="pp">|</span> 8/6/2025 <span class="pp">|</span></span>
-<span id="cb4-164"><a href="#cb4-164"></a><span class="pp">|</span> Submit Revised Proposal <span class="pp">|</span> Incorporate and address all feedback for instructor review <span class="pp">|</span> 8/8/2025 <span class="pp">|</span></span>
-<span id="cb4-165"><a href="#cb4-165"></a><span class="pp">|</span> Data Collection &amp; Cleaning <span class="pp">|</span> <span class="sc">\-</span> Gather and clean WNBA game logs, referee assignments, and team stats <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Merge datasets and ensure consistent formatting <span class="pp">|</span> 8/10/2025 <span class="pp">|</span></span>
-<span id="cb4-166"><a href="#cb4-166"></a><span class="pp">|</span> Feature Engineering &amp; EDA <span class="pp">|</span> <span class="sc">\-</span> Create variables such as foul differential, crew IDs, and home/away indicators <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Visualize trends and explore feature distributions <span class="pp">|</span> 8/12/2025 <span class="pp">|</span></span>
-<span id="cb4-167"><a href="#cb4-167"></a><span class="pp">|</span> Pattern Discovery with K-means <span class="pp">|</span> <span class="sc">\-</span> Standardize features and apply K-means clustering <span class="pp">|</span> 8/14/2025 <span class="pp">|</span></span>
-<span id="cb4-168"><a href="#cb4-168"></a><span class="pp">|</span> Cluster Interpretation <span class="pp">|</span> <span class="sc">\-</span> Interpret each cluster’s characteristics (e.g., home bias, foul disparity) <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Identify and analyze outlier referees or crews <span class="pp">|</span> 8/16/2025 <span class="pp">|</span></span>
-<span id="cb4-169"><a href="#cb4-169"></a><span class="pp">|</span> Visual &amp; Storytelling <span class="pp">|</span> Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps <span class="pp">|</span> 8/17/2025 <span class="pp">|</span></span>
-<span id="cb4-170"><a href="#cb4-170"></a><span class="pp">|</span> Final Write-Up &amp; Presentation <span class="pp">|</span> <span class="sc">\-</span> Create, refine, and finalize the report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Ensure all results are well-documented and reproducible <span class="pp">|</span> 8/19/2025 <span class="pp">|</span></span>
-<span id="cb4-171"><a href="#cb4-171"></a><span class="pp">|</span> Final Submission <span class="pp">|</span> <span class="sc">\-</span> Submit final report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Back up to GitHub (or drive) <span class="pp">|</span> 8/20/2025 <span class="pp">|</span></span>
+<span id="cb4-121"><a href="#cb4-121"></a><span class="ss">    -   </span>Normalize referee names across games</span>
+<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">    -   </span>Merge datasets to associate referee crews with game-level statistics</span>
+<span id="cb4-123"><a href="#cb4-123"></a><span class="ss">    -   </span>Handle missing or inconsistent values</span>
+<span id="cb4-124"><a href="#cb4-124"></a></span>
+<span id="cb4-125"><a href="#cb4-125"></a><span class="fu">#### 2. Exploratory Data Analysis</span></span>
+<span id="cb4-126"><a href="#cb4-126"></a></span>
+<span id="cb4-127"><a href="#cb4-127"></a>To validate that the data supports our research questions, key features were explored using distributions and summary statistics:</span>
+<span id="cb4-128"><a href="#cb4-128"></a></span>
+<span id="cb4-129"><a href="#cb4-129"></a><span class="ss">-   </span>Summarize foul counts by team and referee to understand Foul Differential Distribution.</span>
+<span id="cb4-130"><a href="#cb4-130"></a><span class="ss">-   </span>Visualize average foul differential by referee and referee crew to see if there is skewness which could suggest certain crews favor one side.</span>
+<span id="cb4-131"><a href="#cb4-131"></a><span class="ss">-   </span>Compute home vs. away win rates across different referee combinations Crews with consistently higher home win rates may indicate officiating bias regardless of foul disparities.</span>
+<span id="cb4-132"><a href="#cb4-132"></a><span class="ss">-   </span>Generate pairwise correlations to identify potentially relevant feature groupings. Specific investigation will look at whether foul differential has a meaningful impact on scoring.</span>
+<span id="cb4-133"><a href="#cb4-133"></a></span>
+<span id="cb4-134"><a href="#cb4-134"></a><span class="fu">#### 3. Feature Engineering</span></span>
+<span id="cb4-135"><a href="#cb4-135"></a></span>
+<span id="cb4-136"><a href="#cb4-136"></a>The goal is to construct a comprehensive set of quantitative features that can characterize officiating tendencies and enable meaningful clustering. Below are several features that I plan to create:</span>
+<span id="cb4-137"><a href="#cb4-137"></a></span>
+<span id="cb4-138"><a href="#cb4-138"></a><span class="ss">-   </span>**Foul Differential:** The difference in total fouls called on the home team versus the away team. This feature serves as a proxy for imbalance in foul calls and is a central indicator of potential bias.</span>
+<span id="cb4-139"><a href="#cb4-139"></a></span>
+<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">-   </span>**Total Fouls Per Game:**\</span>
+<span id="cb4-141"><a href="#cb4-141"></a>    The sum of fouls called on both teams, capturing referees’ strictness or leniency in foul calling. Calculated as fouls called on the away team minus fouls called on the home team.</span>
+<span id="cb4-142"><a href="#cb4-142"></a></span>
+<span id="cb4-143"><a href="#cb4-143"></a><span class="ss">-   </span>**Average Fouls Per Team:**\</span>
+<span id="cb4-144"><a href="#cb4-144"></a>    Computed as total fouls divided by the number of games officiated by a referee or crew. This helps normalize foul volume across varying sample sizes.</span>
+<span id="cb4-145"><a href="#cb4-145"></a></span>
+<span id="cb4-146"><a href="#cb4-146"></a><span class="ss">-   </span>**Free Throw Differential:**\</span>
+<span id="cb4-147"><a href="#cb4-147"></a>    The difference in free throw attempts between the home and away teams, which may reflect the practical consequences of foul calls.</span>
+<span id="cb4-148"><a href="#cb4-148"></a></span>
+<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">-   </span>**Home Win Indicator:**\</span>
+<span id="cb4-150"><a href="#cb4-150"></a>    A binary variable denoting whether the home team won the game (1 = home team won, 0 = home team loss). Used to explore relationships between crew assignments and home-court advantage.</span>
+<span id="cb4-151"><a href="#cb4-151"></a></span>
+<span id="cb4-152"><a href="#cb4-152"></a><span class="ss">-   </span>**Referee and Crew Identifiers:**\</span>
+<span id="cb4-153"><a href="#cb4-153"></a>    Encoded categorical identifiers for individual referees and three-person crew combinations to enable grouping and aggregation across games. Referee names will be normalized and mapped to a consistent ID to support aggregation. A composite key will be created for the three referees per game to analyze group effects.</span>
+<span id="cb4-154"><a href="#cb4-154"></a></span>
+<span id="cb4-155"><a href="#cb4-155"></a><span class="ss">-   </span>**Normalization and Scaling:**</span>
+<span id="cb4-156"><a href="#cb4-156"></a></span>
+<span id="cb4-157"><a href="#cb4-157"></a>    To prepare for K-means clustering, all continuous features will be standardized (e.g., z-score normalization) to ensure that variables are on the same scale and contribute equally to distance calculations in the clustering algorithm</span>
+<span id="cb4-158"><a href="#cb4-158"></a></span>
+<span id="cb4-159"><a href="#cb4-159"></a><span class="ss">-   </span>**Aggregation Strategy:**</span>
+<span id="cb4-160"><a href="#cb4-160"></a></span>
+<span id="cb4-161"><a href="#cb4-161"></a>    Referee-level features will be aggregated across games to create a per-referee profile. Similarly, crew-level statistics will be generated by grouping games officiated by the same three-referee combinations. This aggregation supports both individual and crew-based cluster analysis.</span>
+<span id="cb4-162"><a href="#cb4-162"></a></span>
+<span id="cb4-163"><a href="#cb4-163"></a><span class="fu">#### 4. Unsupervised Learning (Pattern Discovery)</span></span>
+<span id="cb4-164"><a href="#cb4-164"></a></span>
+<span id="cb4-165"><a href="#cb4-165"></a><span class="ss">-   </span>**K-Means Clustering:** Use K-means clustering to group:</span>
+<span id="cb4-166"><a href="#cb4-166"></a></span>
+<span id="cb4-167"><a href="#cb4-167"></a><span class="ss">    -   </span>Referee crew based on game-level foul and outcome patterns</span>
+<span id="cb4-168"><a href="#cb4-168"></a></span>
+<span id="cb4-169"><a href="#cb4-169"></a><span class="ss">    -   </span>Individual referees based on their aggregated officiating behavior across multiple games</span>
+<span id="cb4-170"><a href="#cb4-170"></a></span>
+<span id="cb4-171"><a href="#cb4-171"></a><span class="ss">-   </span>**Dimensionality Reduction:** Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</span>
 <span id="cb4-172"><a href="#cb4-172"></a></span>
-<span id="cb4-173"><a href="#cb4-173"></a><span class="fu">### Repo Organization</span></span>
+<span id="cb4-173"><a href="#cb4-173"></a><span class="fu">#### 5. Cluster Interpretation</span></span>
 <span id="cb4-174"><a href="#cb4-174"></a></span>
-<span id="cb4-175"><a href="#cb4-175"></a><span class="pp">|</span> Path / File <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb4-176"><a href="#cb4-176"></a><span class="pp">|-----------------------|-------------------------------------------------|</span></span>
-<span id="cb4-177"><a href="#cb4-177"></a><span class="pp">|</span> <span class="in">`.github/`</span> <span class="pp">|</span> Contains GitHub-specific files, including workflows, actions, and issue management templates. <span class="pp">|</span></span>
-<span id="cb4-178"><a href="#cb4-178"></a><span class="pp">|</span> <span class="in">`_extra/`</span> <span class="pp">|</span> Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. <span class="pp">|</span></span>
-<span id="cb4-179"><a href="#cb4-179"></a><span class="pp">|</span> <span class="in">`_freeze/`</span> <span class="pp">|</span> Houses frozen environment files detailing the project’s setup and dependencies. <span class="pp">|</span></span>
-<span id="cb4-180"><a href="#cb4-180"></a><span class="pp">|</span> <span class="in">`data/`</span> <span class="pp">|</span> Directory for all essential data files, including input datasets and resources required for analysis. <span class="pp">|</span></span>
-<span id="cb4-181"><a href="#cb4-181"></a><span class="pp">|</span> <span class="in">`images/`</span> <span class="pp">|</span> Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. <span class="pp">|</span></span>
-<span id="cb4-182"><a href="#cb4-182"></a><span class="pp">|</span> <span class="in">`.gitignore`</span> <span class="pp">|</span> Specifies files and directories to exclude from Git version control. <span class="pp">|</span></span>
-<span id="cb4-183"><a href="#cb4-183"></a><span class="pp">|</span> <span class="in">`README.md`</span> <span class="pp">|</span> Central documentation file providing project overview, setup instructions, and usage guidelines. <span class="pp">|</span></span>
-<span id="cb4-184"><a href="#cb4-184"></a><span class="pp">|</span> <span class="in">`_quarto.yml`</span> <span class="pp">|</span> Configuration file for Quarto, specifying rendering options and document settings. <span class="pp">|</span></span>
-<span id="cb4-185"><a href="#cb4-185"></a><span class="pp">|</span> <span class="in">`about.qmd`</span> <span class="pp">|</span> Provides contextual information about the project and introduces team members and their roles. <span class="pp">|</span></span>
-<span id="cb4-186"><a href="#cb4-186"></a><span class="pp">|</span> <span class="in">`index.qmd`</span> <span class="pp">|</span> Main page of the project write-up, including code, visualizations, and final results. <span class="pp">|</span></span>
-<span id="cb4-187"><a href="#cb4-187"></a><span class="pp">|</span> <span class="in">`presentation.qmd`</span> <span class="pp">|</span> Quarto file used to create a slideshow of the final project presentation. <span class="pp">|</span></span>
-<span id="cb4-188"><a href="#cb4-188"></a><span class="pp">|</span> <span class="in">`project-final.Rproj`</span> <span class="pp">|</span> RStudio project file that defines project-level settings for R-based workflows. <span class="pp">|</span></span>
-<span id="cb4-189"><a href="#cb4-189"></a><span class="pp">|</span> <span class="in">`proposal.qmd`</span> <span class="pp">|</span> Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. <span class="pp">|</span></span>
-<span id="cb4-190"><a href="#cb4-190"></a><span class="pp">|</span> <span class="in">`requirements.txt`</span> <span class="pp">|</span> Lists required Python packages and versions necessary for reproducing the project environment. <span class="pp">|</span></span>
-<span id="cb4-191"><a href="#cb4-191"></a></span>
-<span id="cb4-192"><a href="#cb4-192"></a><span class="fu">### References</span></span>
-<span id="cb4-193"><a href="#cb4-193"></a></span>
-<span id="cb4-194"><a href="#cb4-194"></a><span class="sc">\[</span>1<span class="sc">\]</span> WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project</span>
+<span id="cb4-175"><a href="#cb4-175"></a><span class="ss">-   </span>Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)</span>
+<span id="cb4-176"><a href="#cb4-176"></a><span class="ss">-   </span>Label clusters based on behavioral tendencies (such as &quot;neutral crews&quot;, &quot;home-favoring referees&quot;, &quot;high-caller crews&quot;)</span>
+<span id="cb4-177"><a href="#cb4-177"></a><span class="ss">-   </span>Identify any outlier referees or crews with extreme values</span>
+<span id="cb4-178"><a href="#cb4-178"></a></span>
+<span id="cb4-179"><a href="#cb4-179"></a><span class="fu">#### 6. Reporting and Visualization</span></span>
+<span id="cb4-180"><a href="#cb4-180"></a></span>
+<span id="cb4-181"><a href="#cb4-181"></a><span class="ss">-   </span>Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\</span>
+<span id="cb4-182"><a href="#cb4-182"></a><span class="ss">-   </span>Plot clustered referee data to visualize separation and cohesion\</span>
+<span id="cb4-183"><a href="#cb4-183"></a><span class="ss">-   </span>Discuss implications of findings in the context of WNBA officiating policy and fairness</span>
+<span id="cb4-184"><a href="#cb4-184"></a><span class="ss">-   </span>Provide future recommendations to improve the analysis</span>
+<span id="cb4-185"><a href="#cb4-185"></a></span>
+<span id="cb4-186"><a href="#cb4-186"></a><span class="fu">## Plan of Attack</span></span>
+<span id="cb4-187"><a href="#cb4-187"></a></span>
+<span id="cb4-188"><a href="#cb4-188"></a><span class="pp">|</span> Milestone <span class="pp">|</span> Task <span class="pp">|</span> Due Date <span class="pp">|</span></span>
+<span id="cb4-189"><a href="#cb4-189"></a><span class="pp">|-------------------|------------------------------------------|----------|</span></span>
+<span id="cb4-190"><a href="#cb4-190"></a><span class="pp">|</span> Submit Proposal <span class="pp">|</span> Finalize and submit initial proposal for others to provide feedback <span class="pp">|</span> 8/3/2025 <span class="pp">|</span></span>
+<span id="cb4-191"><a href="#cb4-191"></a><span class="pp">|</span> Revise Proposal <span class="pp">|</span> Address all peer feedback as needed <span class="pp">|</span> 8/6/2025 <span class="pp">|</span></span>
+<span id="cb4-192"><a href="#cb4-192"></a><span class="pp">|</span> Submit Revised Proposal <span class="pp">|</span> Incorporate and address all feedback for instructor review <span class="pp">|</span> 8/8/2025 <span class="pp">|</span></span>
+<span id="cb4-193"><a href="#cb4-193"></a><span class="pp">|</span> Data Collection &amp; Cleaning <span class="pp">|</span> <span class="sc">\-</span> Gather and clean WNBA game logs, referee assignments, and team stats <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Merge datasets and ensure consistent formatting <span class="pp">|</span> 8/10/2025 <span class="pp">|</span></span>
+<span id="cb4-194"><a href="#cb4-194"></a><span class="pp">|</span> Feature Engineering &amp; EDA <span class="pp">|</span> <span class="sc">\-</span> Create variables such as foul differential, crew IDs, and home/away indicators <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Visualize trends and explore feature distributions <span class="pp">|</span> 8/12/2025 <span class="pp">|</span></span>
+<span id="cb4-195"><a href="#cb4-195"></a><span class="pp">|</span> Pattern Discovery with K-means <span class="pp">|</span> <span class="sc">\-</span> Standardize features and apply K-means clustering <span class="pp">|</span> 8/14/2025 <span class="pp">|</span></span>
+<span id="cb4-196"><a href="#cb4-196"></a><span class="pp">|</span> Cluster Interpretation <span class="pp">|</span> <span class="sc">\-</span> Interpret each cluster’s characteristics (e.g., home bias, foul disparity) <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Identify and analyze outlier referees or crews <span class="pp">|</span> 8/16/2025 <span class="pp">|</span></span>
+<span id="cb4-197"><a href="#cb4-197"></a><span class="pp">|</span> Visual &amp; Storytelling <span class="pp">|</span> Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps <span class="pp">|</span> 8/17/2025 <span class="pp">|</span></span>
+<span id="cb4-198"><a href="#cb4-198"></a><span class="pp">|</span> Final Write-Up &amp; Presentation <span class="pp">|</span> <span class="sc">\-</span> Create, refine, and finalize the report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Ensure all results are well-documented and reproducible <span class="pp">|</span> 8/19/2025 <span class="pp">|</span></span>
+<span id="cb4-199"><a href="#cb4-199"></a><span class="pp">|</span> Final Submission <span class="pp">|</span> <span class="sc">\-</span> Submit final report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Back up to GitHub (or drive) <span class="pp">|</span> 8/20/2025 <span class="pp">|</span></span>
+<span id="cb4-200"><a href="#cb4-200"></a></span>
+<span id="cb4-201"><a href="#cb4-201"></a><span class="fu">### Repo Organization</span></span>
+<span id="cb4-202"><a href="#cb4-202"></a></span>
+<span id="cb4-203"><a href="#cb4-203"></a><span class="pp">|</span> Path / File <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb4-204"><a href="#cb4-204"></a><span class="pp">|---------------|--------------------------------------------------------|</span></span>
+<span id="cb4-205"><a href="#cb4-205"></a><span class="pp">|</span> <span class="in">`.github/`</span> <span class="pp">|</span> Contains GitHub-specific files, including workflows, actions, and issue management templates. <span class="pp">|</span></span>
+<span id="cb4-206"><a href="#cb4-206"></a><span class="pp">|</span> <span class="in">`_extra/`</span> <span class="pp">|</span> Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. <span class="pp">|</span></span>
+<span id="cb4-207"><a href="#cb4-207"></a><span class="pp">|</span> <span class="in">`_freeze/`</span> <span class="pp">|</span> Houses frozen environment files detailing the project’s setup and dependencies. <span class="pp">|</span></span>
+<span id="cb4-208"><a href="#cb4-208"></a><span class="pp">|</span> <span class="in">`data/`</span> <span class="pp">|</span> Directory for all essential data files, including input datasets and resources required for analysis. <span class="pp">|</span></span>
+<span id="cb4-209"><a href="#cb4-209"></a><span class="pp">|</span> <span class="in">`images/`</span> <span class="pp">|</span> Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. <span class="pp">|</span></span>
+<span id="cb4-210"><a href="#cb4-210"></a><span class="pp">|</span> <span class="in">`.gitignore`</span> <span class="pp">|</span> Specifies files and directories to exclude from Git version control. <span class="pp">|</span></span>
+<span id="cb4-211"><a href="#cb4-211"></a><span class="pp">|</span> <span class="in">`README.md`</span> <span class="pp">|</span> Central documentation file providing project overview, setup instructions, and usage guidelines. <span class="pp">|</span></span>
+<span id="cb4-212"><a href="#cb4-212"></a><span class="pp">|</span> <span class="in">`_quarto.yml`</span> <span class="pp">|</span> Configuration file for Quarto, specifying rendering options and document settings. <span class="pp">|</span></span>
+<span id="cb4-213"><a href="#cb4-213"></a><span class="pp">|</span> <span class="in">`about.qmd`</span> <span class="pp">|</span> Provides contextual information about the project and introduces team members and their roles. <span class="pp">|</span></span>
+<span id="cb4-214"><a href="#cb4-214"></a><span class="pp">|</span> <span class="in">`index.qmd`</span> <span class="pp">|</span> Main page of the project write-up, including code, visualizations, and final results. <span class="pp">|</span></span>
+<span id="cb4-215"><a href="#cb4-215"></a><span class="pp">|</span> <span class="in">`presentation.qmd`</span> <span class="pp">|</span> Quarto file used to create a slideshow of the final project presentation. <span class="pp">|</span></span>
+<span id="cb4-216"><a href="#cb4-216"></a><span class="pp">|</span> <span class="in">`project-final.Rproj`</span> <span class="pp">|</span> RStudio project file that defines project-level settings for R-based workflows. <span class="pp">|</span></span>
+<span id="cb4-217"><a href="#cb4-217"></a><span class="pp">|</span> <span class="in">`proposal.qmd`</span> <span class="pp">|</span> Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. <span class="pp">|</span></span>
+<span id="cb4-218"><a href="#cb4-218"></a><span class="pp">|</span> <span class="in">`requirements.txt`</span> <span class="pp">|</span> Lists required Python packages and versions necessary for reproducing the project environment. <span class="pp">|</span></span>
+<span id="cb4-219"><a href="#cb4-219"></a></span>
+<span id="cb4-220"><a href="#cb4-220"></a><span class="fu">### References</span></span>
+<span id="cb4-221"><a href="#cb4-221"></a></span>
+<span id="cb4-222"><a href="#cb4-222"></a><span class="sc">\[</span>1<span class="sc">\]</span> WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
