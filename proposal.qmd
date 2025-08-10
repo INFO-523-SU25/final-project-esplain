@@ -67,12 +67,15 @@ print(f"Total records across all seasons: {len(wnba_data):,}")
 print(f"Columns in dataset: {wnba_data.shape[1]}")
 print(f"Dataset shape: {wnba_data.shape}")
 
-# Show first few rows and column names
+# Show first few rows where the officialId is not null
 print("\nDataset columns:")
 print(wnba_data.columns.tolist())
 
-print("\nFirst 5 rows:")
-wnba_data.head()
+print("\nExample of the dataset:")
+# Filter for rows where officialId is not null and show first 5
+official_data = wnba_data[wnba_data['officialId'].notnull()]
+
+official_data.head(10)
 ```
 
 ## Research Questions
@@ -83,11 +86,11 @@ The research questions guiding this project are designed to uncover latent patte
 
 This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.
 
-#### 2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
+#### 2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
 
 This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.
 
-#### 3.  Do certain referees call more fouls on away teams?
+#### 3. Do certain referees call more fouls on away teams?
 
 This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.
 
@@ -182,7 +185,7 @@ The goal is to construct a comprehensive set of quantitative features that can c
 ## Plan of Attack
 
 | Milestone | Task | Due Date |
-|-------------------|------------------------------------------|----------|
+|------------------|------------------------------------|------------------|
 | Submit Proposal | Finalize and submit initial proposal for others to provide feedback | 8/3/2025 |
 | Revise Proposal | Address all peer feedback as needed | 8/6/2025 |
 | Submit Revised Proposal | Incorporate and address all feedback for instructor review | 8/8/2025 |
@@ -197,7 +200,7 @@ The goal is to construct a comprehensive set of quantitative features that can c
 ### Repo Organization
 
 | Path / File | Description |
-|---------------|--------------------------------------------------------|
+|----------------------|--------------------------------------------------|
 | `.github/` | Contains GitHub-specific files, including workflows, actions, and issue management templates. |
 | `_extra/` | Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. |
 | `_freeze/` | Houses frozen environment files detailing the project’s setup and dependencies. |

@@ -3842,10 +3842,7 @@ vertical-align: -.125em;
 }</script>
 <script>var requirejs,require,define;!function(global,setTimeout){var req,s,head,baseElement,dataMain,src,interactiveScript,currentlyAddingScript,mainScript,subPath,version="2.3.6",commentRegExp=/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm,cjsRequireRegExp=/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,jsSuffixRegExp=/\.js$/,currDirRegExp=/^\.\//,op=Object.prototype,ostring=op.toString,hasOwn=op.hasOwnProperty,isBrowser=!("undefined"==typeof window||"undefined"==typeof navigator||!window.document),isWebWorker=!isBrowser&&"undefined"!=typeof importScripts,readyRegExp=isBrowser&&"PLAYSTATION 3"===navigator.platform?/^complete$/:/^(complete|loaded)$/,defContextName="_",isOpera="undefined"!=typeof opera&&"[object Opera]"===opera.toString(),contexts={},cfg={},globalDefQueue=[],useInteractive=!1;function commentReplace(e,t){return t||""}function isFunction(e){return"[object Function]"===ostring.call(e)}function isArray(e){return"[object Array]"===ostring.call(e)}function each(e,t){var i;if(e)for(i=0;i<e.length&&(!e[i]||!t(e[i],i,e));i+=1);}function eachReverse(e,t){var i;if(e)for(i=e.length-1;-1<i&&(!e[i]||!t(e[i],i,e));i-=1);}function hasProp(e,t){return hasOwn.call(e,t)}function getOwn(e,t){return hasProp(e,t)&&e[t]}function eachProp(e,t){var i;for(i in e)if(hasProp(e,i)&&t(e[i],i))break}function mixin(i,e,r,n){return e&&eachProp(e,function(e,t){!r&&hasProp(i,t)||(!n||"object"!=typeof e||!e||isArray(e)||isFunction(e)||e instanceof RegExp?i[t]=e:(i[t]||(i[t]={}),mixin(i[t],e,r,n)))}),i}function bind(e,t){return function(){return t.apply(e,arguments)}}function scripts(){return document.getElementsByTagName("script")}function defaultOnError(e){throw e}function getGlobal(e){if(!e)return e;var t=global;return each(e.split("."),function(e){t=t[e]}),t}function makeError(e,t,i,r){var n=new Error(t+"\nhttps://requirejs.org/docs/errors.html#"+e);return n.requireType=e,n.requireModules=r,i&&(n.originalError=i),n}if(void 0===define){if(void 0!==requirejs){if(isFunction(requirejs))return;cfg=requirejs,requirejs=void 0}void 0===require||isFunction(require)||(cfg=require,require=void 0),req=requirejs=function(e,t,i,r){var n,o,a=defContextName;return isArray(e)||"string"==typeof e||(o=e,isArray(t)?(e=t,t=i,i=r):e=[]),o&&o.context&&(a=o.context),(n=getOwn(contexts,a))||(n=contexts[a]=req.s.newContext(a)),o&&n.configure(o),n.require(e,t,i)},req.config=function(e){return req(e)},req.nextTick=void 0!==setTimeout?function(e){setTimeout(e,4)}:function(e){e()},require||(require=req),req.version=version,req.jsExtRegExp=/^\/|:|\?|\.js$/,req.isBrowser=isBrowser,s=req.s={contexts:contexts,newContext:newContext},req({}),each(["toUrl","undef","defined","specified"],function(t){req[t]=function(){var e=contexts[defContextName];return e.require[t].apply(e,arguments)}}),isBrowser&&(head=s.head=document.getElementsByTagName("head")[0],baseElement=document.getElementsByTagName("base")[0],baseElement&&(head=s.head=baseElement.parentNode)),req.onError=defaultOnError,req.createNode=function(e,t,i){var r=e.xhtml?document.createElementNS("http://www.w3.org/1999/xhtml","html:script"):document.createElement("script");return r.type=e.scriptType||"text/javascript",r.charset="utf-8",r.async=!0,r},req.load=function(t,i,r){var e,n=t&&t.config||{};if(isBrowser)return(e=req.createNode(n,i,r)).setAttribute("data-requirecontext",t.contextName),e.setAttribute("data-requiremodule",i),!e.attachEvent||e.attachEvent.toString&&e.attachEvent.toString().indexOf("[native code")<0||isOpera?(e.addEventListener("load",t.onScriptLoad,!1),e.addEventListener("error",t.onScriptError,!1)):(useInteractive=!0,e.attachEvent("onreadystatechange",t.onScriptLoad)),e.src=r,n.onNodeCreated&&n.onNodeCreated(e,n,i,r),currentlyAddingScript=e,baseElement?head.insertBefore(e,baseElement):head.appendChild(e),currentlyAddingScript=null,e;if(isWebWorker)try{setTimeout(function(){},0),importScripts(r),t.completeLoad(i)}catch(e){t.onError(makeError("importscripts","importScripts failed for "+i+" at "+r,e,[i]))}},isBrowser&&!cfg.skipDataMain&&eachReverse(scripts(),function(e){if(head||(head=e.parentNode),dataMain=e.getAttribute("data-main"))return mainScript=dataMain,cfg.baseUrl||-1!==mainScript.indexOf("!")||(mainScript=(src=mainScript.split("/")).pop(),subPath=src.length?src.join("/")+"/":"./",cfg.baseUrl=subPath),mainScript=mainScript.replace(jsSuffixRegExp,""),req.jsExtRegExp.test(mainScript)&&(mainScript=dataMain),cfg.deps=cfg.deps?cfg.deps.concat(mainScript):[mainScript],!0}),define=function(e,i,t){var r,n;"string"!=typeof e&&(t=i,i=e,e=null),isArray(i)||(t=i,i=null),!i&&isFunction(t)&&(i=[],t.length&&(t.toString().replace(commentRegExp,commentReplace).replace(cjsRequireRegExp,function(e,t){i.push(t)}),i=(1===t.length?["require"]:["require","exports","module"]).concat(i))),useInteractive&&(r=currentlyAddingScript||getInteractiveScript())&&(e||(e=r.getAttribute("data-requiremodule")),n=contexts[r.getAttribute("data-requirecontext")]),n?(n.defQueue.push([e,i,t]),n.defQueueMap[e]=!0):globalDefQueue.push([e,i,t])},define.amd={jQuery:!0},req.exec=function(text){return eval(text)},req(cfg)}function newContext(u){var i,e,l,c,d,g={waitSeconds:7,baseUrl:"./",paths:{},bundles:{},pkgs:{},shim:{},config:{}},p={},f={},r={},h=[],m={},n={},v={},x=1,b=1;function q(e,t,i){var r,n,o,a,s,u,c,d,p,f,l=t&&t.split("/"),h=g.map,m=h&&h["*"];if(e&&(u=(e=e.split("/")).length-1,g.nodeIdCompat&&jsSuffixRegExp.test(e[u])&&(e[u]=e[u].replace(jsSuffixRegExp,"")),"."===e[0].charAt(0)&&l&&(e=l.slice(0,l.length-1).concat(e)),function(e){var t,i;for(t=0;t<e.length;t++)if("."===(i=e[t]))e.splice(t,1),t-=1;else if(".."===i){if(0===t||1===t&&".."===e[2]||".."===e[t-1])continue;0<t&&(e.splice(t-1,2),t-=2)}}(e),e=e.join("/")),i&&h&&(l||m)){e:for(o=(n=e.split("/")).length;0<o;o-=1){if(s=n.slice(0,o).join("/"),l)for(a=l.length;0<a;a-=1)if((r=getOwn(h,l.slice(0,a).join("/")))&&(r=getOwn(r,s))){c=r,d=o;break e}!p&&m&&getOwn(m,s)&&(p=getOwn(m,s),f=o)}!c&&p&&(c=p,d=f),c&&(n.splice(0,d,c),e=n.join("/"))}return getOwn(g.pkgs,e)||e}function E(t){isBrowser&&each(scripts(),function(e){if(e.getAttribute("data-requiremodule")===t&&e.getAttribute("data-requirecontext")===l.contextName)return e.parentNode.removeChild(e),!0})}function w(e){var t=getOwn(g.paths,e);if(t&&isArray(t)&&1<t.length)return t.shift(),l.require.undef(e),l.makeRequire(null,{skipMap:!0})([e]),!0}function y(e){var t,i=e?e.indexOf("!"):-1;return-1<i&&(t=e.substring(0,i),e=e.substring(i+1,e.length)),[t,e]}function S(e,t,i,r){var n,o,a,s,u=null,c=t?t.name:null,d=e,p=!0,f="";return e||(p=!1,e="_@r"+(x+=1)),u=(s=y(e))[0],e=s[1],u&&(u=q(u,c,r),o=getOwn(m,u)),e&&(u?f=i?e:o&&o.normalize?o.normalize(e,function(e){return q(e,c,r)}):-1===e.indexOf("!")?q(e,c,r):e:(u=(s=y(f=q(e,c,r)))[0],f=s[1],i=!0,n=l.nameToUrl(f))),{prefix:u,name:f,parentMap:t,unnormalized:!!(a=!u||o||i?"":"_unnormalized"+(b+=1)),url:n,originalName:d,isDefine:p,id:(u?u+"!"+f:f)+a}}function k(e){var t=e.id,i=getOwn(p,t);return i||(i=p[t]=new l.Module(e)),i}function M(e,t,i){var r=e.id,n=getOwn(p,r);!hasProp(m,r)||n&&!n.defineEmitComplete?(n=k(e)).error&&"error"===t?i(n.error):n.on(t,i):"defined"===t&&i(m[r])}function O(i,e){var t=i.requireModules,r=!1;e?e(i):(each(t,function(e){var t=getOwn(p,e);t&&(t.error=i,t.events.error&&(r=!0,t.emit("error",i)))}),r||req.onError(i))}function j(){globalDefQueue.length&&(each(globalDefQueue,function(e){var t=e[0];"string"==typeof t&&(l.defQueueMap[t]=!0),h.push(e)}),globalDefQueue=[])}function P(e){delete p[e],delete f[e]}function R(){var e,r,t=1e3*g.waitSeconds,n=t&&l.startTime+t<(new Date).getTime(),o=[],a=[],s=!1,u=!0;if(!i){if(i=!0,eachProp(f,function(e){var t=e.map,i=t.id;if(e.enabled&&(t.isDefine||a.push(e),!e.error))if(!e.inited&&n)w(i)?s=r=!0:(o.push(i),E(i));else if(!e.inited&&e.fetched&&t.isDefine&&(s=!0,!t.prefix))return u=!1}),n&&o.length)return(e=makeError("timeout","Load timeout for modules: "+o,null,o)).contextName=l.contextName,O(e);u&&each(a,function(e){!function n(o,a,s){var e=o.map.id;o.error?o.emit("error",o.error):(a[e]=!0,each(o.depMaps,function(e,t){var i=e.id,r=getOwn(p,i);!r||o.depMatched[t]||s[i]||(getOwn(a,i)?(o.defineDep(t,m[i]),o.check()):n(r,a,s))}),s[e]=!0)}(e,{},{})}),n&&!r||!s||!isBrowser&&!isWebWorker||d||(d=setTimeout(function(){d=0,R()},50)),i=!1}}function a(e){hasProp(m,e[0])||k(S(e[0],null,!0)).init(e[1],e[2])}function o(e,t,i,r){e.detachEvent&&!isOpera?r&&e.detachEvent(r,t):e.removeEventListener(i,t,!1)}function s(e){var t=e.currentTarget||e.srcElement;return o(t,l.onScriptLoad,"load","onreadystatechange"),o(t,l.onScriptError,"error"),{node:t,id:t&&t.getAttribute("data-requiremodule")}}function T(){var e;for(j();h.length;){if(null===(e=h.shift())[0])return O(makeError("mismatch","Mismatched anonymous define() module: "+e[e.length-1]));a(e)}l.defQueueMap={}}return c={require:function(e){return e.require?e.require:e.require=l.makeRequire(e.map)},exports:function(e){if(e.usingExports=!0,e.map.isDefine)return e.exports?m[e.map.id]=e.exports:e.exports=m[e.map.id]={}},module:function(e){return e.module?e.module:e.module={id:e.map.id,uri:e.map.url,config:function(){return getOwn(g.config,e.map.id)||{}},exports:e.exports||(e.exports={})}}},(e=function(e){this.events=getOwn(r,e.id)||{},this.map=e,this.shim=getOwn(g.shim,e.id),this.depExports=[],this.depMaps=[],this.depMatched=[],this.pluginMaps={},this.depCount=0}).prototype={init:function(e,t,i,r){r=r||{},this.inited||(this.factory=t,i?this.on("error",i):this.events.error&&(i=bind(this,function(e){this.emit("error",e)})),this.depMaps=e&&e.slice(0),this.errback=i,this.inited=!0,this.ignore=r.ignore,r.enabled||this.enabled?this.enable():this.check())},defineDep:function(e,t){this.depMatched[e]||(this.depMatched[e]=!0,this.depCount-=1,this.depExports[e]=t)},fetch:function(){if(!this.fetched){this.fetched=!0,l.startTime=(new Date).getTime();var e=this.map;if(!this.shim)return e.prefix?this.callPlugin():this.load();l.makeRequire(this.map,{enableBuildCallback:!0})(this.shim.deps||[],bind(this,function(){return e.prefix?this.callPlugin():this.load()}))}},load:function(){var e=this.map.url;n[e]||(n[e]=!0,l.load(this.map.id,e))},check:function(){if(this.enabled&&!this.enabling){var t,e,i=this.map.id,r=this.depExports,n=this.exports,o=this.factory;if(this.inited){if(this.error)this.emit("error",this.error);else if(!this.defining){if(this.defining=!0,this.depCount<1&&!this.defined){if(isFunction(o)){if(this.events.error&&this.map.isDefine||req.onError!==defaultOnError)try{n=l.execCb(i,o,r,n)}catch(e){t=e}else n=l.execCb(i,o,r,n);if(this.map.isDefine&&void 0===n&&((e=this.module)?n=e.exports:this.usingExports&&(n=this.exports)),t)return t.requireMap=this.map,t.requireModules=this.map.isDefine?[this.map.id]:null,t.requireType=this.map.isDefine?"define":"require",O(this.error=t)}else n=o;if(this.exports=n,this.map.isDefine&&!this.ignore&&(m[i]=n,req.onResourceLoad)){var a=[];each(this.depMaps,function(e){a.push(e.normalizedMap||e)}),req.onResourceLoad(l,this.map,a)}P(i),this.defined=!0}this.defining=!1,this.defined&&!this.defineEmitted&&(this.defineEmitted=!0,this.emit("defined",this.exports),this.defineEmitComplete=!0)}}else hasProp(l.defQueueMap,i)||this.fetch()}},callPlugin:function(){var u=this.map,c=u.id,e=S(u.prefix);this.depMaps.push(e),M(e,"defined",bind(this,function(e){var o,t,i,r=getOwn(v,this.map.id),n=this.map.name,a=this.map.parentMap?this.map.parentMap.name:null,s=l.makeRequire(u.parentMap,{enableBuildCallback:!0});return this.map.unnormalized?(e.normalize&&(n=e.normalize(n,function(e){return q(e,a,!0)})||""),M(t=S(u.prefix+"!"+n,this.map.parentMap,!0),"defined",bind(this,function(e){this.map.normalizedMap=t,this.init([],function(){return e},null,{enabled:!0,ignore:!0})})),void((i=getOwn(p,t.id))&&(this.depMaps.push(t),this.events.error&&i.on("error",bind(this,function(e){this.emit("error",e)})),i.enable()))):r?(this.map.url=l.nameToUrl(r),void this.load()):((o=bind(this,function(e){this.init([],function(){return e},null,{enabled:!0})})).error=bind(this,function(e){this.inited=!0,(this.error=e).requireModules=[c],eachProp(p,function(e){0===e.map.id.indexOf(c+"_unnormalized")&&P(e.map.id)}),O(e)}),o.fromText=bind(this,function(e,t){var i=u.name,r=S(i),n=useInteractive;t&&(e=t),n&&(useInteractive=!1),k(r),hasProp(g.config,c)&&(g.config[i]=g.config[c]);try{req.exec(e)}catch(e){return O(makeError("fromtexteval","fromText eval for "+c+" failed: "+e,e,[c]))}n&&(useInteractive=!0),this.depMaps.push(r),l.completeLoad(i),s([i],o)}),void e.load(u.name,s,o,g))})),l.enable(e,this),this.pluginMaps[e.id]=e},enable:function(){(f[this.map.id]=this).enabled=!0,this.enabling=!0,each(this.depMaps,bind(this,function(e,t){var i,r,n;if("string"==typeof e){if(e=S(e,this.map.isDefine?this.map:this.map.parentMap,!1,!this.skipMap),this.depMaps[t]=e,n=getOwn(c,e.id))return void(this.depExports[t]=n(this));this.depCount+=1,M(e,"defined",bind(this,function(e){this.undefed||(this.defineDep(t,e),this.check())})),this.errback?M(e,"error",bind(this,this.errback)):this.events.error&&M(e,"error",bind(this,function(e){this.emit("error",e)}))}i=e.id,r=p[i],hasProp(c,i)||!r||r.enabled||l.enable(e,this)})),eachProp(this.pluginMaps,bind(this,function(e){var t=getOwn(p,e.id);t&&!t.enabled&&l.enable(e,this)})),this.enabling=!1,this.check()},on:function(e,t){var i=this.events[e];i||(i=this.events[e]=[]),i.push(t)},emit:function(e,t){each(this.events[e],function(e){e(t)}),"error"===e&&delete this.events[e]}},(l={config:g,contextName:u,registry:p,defined:m,urlFetched:n,defQueue:h,defQueueMap:{},Module:e,makeModuleMap:S,nextTick:req.nextTick,onError:O,configure:function(e){if(e.baseUrl&&"/"!==e.baseUrl.charAt(e.baseUrl.length-1)&&(e.baseUrl+="/"),"string"==typeof e.urlArgs){var i=e.urlArgs;e.urlArgs=function(e,t){return(-1===t.indexOf("?")?"?":"&")+i}}var r=g.shim,n={paths:!0,bundles:!0,config:!0,map:!0};eachProp(e,function(e,t){n[t]?(g[t]||(g[t]={}),mixin(g[t],e,!0,!0)):g[t]=e}),e.bundles&&eachProp(e.bundles,function(e,t){each(e,function(e){e!==t&&(v[e]=t)})}),e.shim&&(eachProp(e.shim,function(e,t){isArray(e)&&(e={deps:e}),!e.exports&&!e.init||e.exportsFn||(e.exportsFn=l.makeShimExports(e)),r[t]=e}),g.shim=r),e.packages&&each(e.packages,function(e){var t;t=(e="string"==typeof e?{name:e}:e).name,e.location&&(g.paths[t]=e.location),g.pkgs[t]=e.name+"/"+(e.main||"main").replace(currDirRegExp,"").replace(jsSuffixRegExp,"")}),eachProp(p,function(e,t){e.inited||e.map.unnormalized||(e.map=S(t,null,!0))}),(e.deps||e.callback)&&l.require(e.deps||[],e.callback)},makeShimExports:function(t){return function(){var e;return t.init&&(e=t.init.apply(global,arguments)),e||t.exports&&getGlobal(t.exports)}},makeRequire:function(o,a){function s(e,t,i){var r,n;return a.enableBuildCallback&&t&&isFunction(t)&&(t.__requireJsBuild=!0),"string"==typeof e?isFunction(t)?O(makeError("requireargs","Invalid require call"),i):o&&hasProp(c,e)?c[e](p[o.id]):req.get?req.get(l,e,o,s):(r=S(e,o,!1,!0).id,hasProp(m,r)?m[r]:O(makeError("notloaded",'Module name "'+r+'" has not been loaded yet for context: '+u+(o?"":". Use require([])")))):(T(),l.nextTick(function(){T(),(n=k(S(null,o))).skipMap=a.skipMap,n.init(e,t,i,{enabled:!0}),R()}),s)}return a=a||{},mixin(s,{isBrowser:isBrowser,toUrl:function(e){var t,i=e.lastIndexOf("."),r=e.split("/")[0];return-1!==i&&(!("."===r||".."===r)||1<i)&&(t=e.substring(i,e.length),e=e.substring(0,i)),l.nameToUrl(q(e,o&&o.id,!0),t,!0)},defined:function(e){return hasProp(m,S(e,o,!1,!0).id)},specified:function(e){return e=S(e,o,!1,!0).id,hasProp(m,e)||hasProp(p,e)}}),o||(s.undef=function(i){j();var e=S(i,o,!0),t=getOwn(p,i);t.undefed=!0,E(i),delete m[i],delete n[e.url],delete r[i],eachReverse(h,function(e,t){e[0]===i&&h.splice(t,1)}),delete l.defQueueMap[i],t&&(t.events.defined&&(r[i]=t.events),P(i))}),s},enable:function(e){getOwn(p,e.id)&&k(e).enable()},completeLoad:function(e){var t,i,r,n=getOwn(g.shim,e)||{},o=n.exports;for(j();h.length;){if(null===(i=h.shift())[0]){if(i[0]=e,t)break;t=!0}else i[0]===e&&(t=!0);a(i)}if(l.defQueueMap={},r=getOwn(p,e),!t&&!hasProp(m,e)&&r&&!r.inited){if(!(!g.enforceDefine||o&&getGlobal(o)))return w(e)?void 0:O(makeError("nodefine","No define call for "+e,null,[e]));a([e,n.deps||[],n.exportsFn])}R()},nameToUrl:function(e,t,i){var r,n,o,a,s,u,c=getOwn(g.pkgs,e);if(c&&(e=c),u=getOwn(v,e))return l.nameToUrl(u,t,i);if(req.jsExtRegExp.test(e))a=e+(t||"");else{for(r=g.paths,o=(n=e.split("/")).length;0<o;o-=1)if(s=getOwn(r,n.slice(0,o).join("/"))){isArray(s)&&(s=s[0]),n.splice(0,o,s);break}a=n.join("/"),a=("/"===(a+=t||(/^data\:|^blob\:|\?/.test(a)||i?"":".js")).charAt(0)||a.match(/^[\w\+\.\-]+:/)?"":g.baseUrl)+a}return g.urlArgs&&!/^blob\:/.test(a)?a+g.urlArgs(e,a):a},load:function(e,t){req.load(l,e,t)},execCb:function(e,t,i,r){return t.apply(r,i)},onScriptLoad:function(e){if("load"===e.type||readyRegExp.test((e.currentTarget||e.srcElement).readyState)){interactiveScript=null;var t=s(e);l.completeLoad(t.id)}},onScriptError:function(e){var i=s(e);if(!w(i.id)){var r=[];return eachProp(p,function(e,t){0!==t.indexOf("_@r")&&each(e.depMaps,function(e){if(e.id===i.id)return r.push(t),!0})}),O(makeError("scripterror",'Script error for "'+i.id+(r.length?'", needed by: '+r.join(", "):'"'),e,[i.id]))}}}).require=l.makeRequire(),l}function getInteractiveScript(){return interactiveScript&&"interactive"===interactiveScript.readyState||eachReverse(scripts(),function(e){if("interactive"===e.readyState)return interactiveScript=e}),interactiveScript}}(this,"undefined"==typeof setTimeout?void 0:setTimeout);</script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 </head>
@@ -4164,12 +4161,15 @@ vertical-align: -.125em;
 <span id="cb2-17"><a href="#cb2-17"></a><span class="bu">print</span>(<span class="ss">f&quot;Columns in dataset: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb2-18"><a href="#cb2-18"></a><span class="bu">print</span>(<span class="ss">f&quot;Dataset shape: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a><span class="co"># Show first few rows and column names</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co"># Show first few rows where the officialId is not null</span></span>
 <span id="cb2-21"><a href="#cb2-21"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Dataset columns:&quot;</span>)</span>
 <span id="cb2-22"><a href="#cb2-22"></a><span class="bu">print</span>(wnba_data.columns.tolist())</span>
 <span id="cb2-23"><a href="#cb2-23"></a></span>
-<span id="cb2-24"><a href="#cb2-24"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">First 5 rows:&quot;</span>)</span>
-<span id="cb2-25"><a href="#cb2-25"></a>wnba_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Example of the dataset:&quot;</span>)</span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co"># Filter for rows where officialId is not null and show first 5</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a>official_data <span class="op">=</span> wnba_data[wnba_data[<span class="st">&#39;officialId&#39;</span>].notnull()]</span>
+<span id="cb2-27"><a href="#cb2-27"></a></span>
+<span id="cb2-28"><a href="#cb2-28"></a>official_data.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total records across all seasons: 28,103
 Columns in dataset: 57
@@ -4178,9 +4178,9 @@ Dataset shape: (28103, 57)
 Dataset columns:
 [&#39;actionNumber&#39;, &#39;clock&#39;, &#39;timeActual&#39;, &#39;period&#39;, &#39;periodType&#39;, &#39;actionType&#39;, &#39;subType&#39;, &#39;qualifiers&#39;, &#39;personId&#39;, &#39;x&#39;, &#39;y&#39;, &#39;possession&#39;, &#39;scoreHome&#39;, &#39;scoreAway&#39;, &#39;edited&#39;, &#39;orderNumber&#39;, &#39;xLegacy&#39;, &#39;yLegacy&#39;, &#39;isFieldGoal&#39;, &#39;side&#39;, &#39;description&#39;, &#39;personIdsFilter&#39;, &#39;teamId&#39;, &#39;teamTricode&#39;, &#39;descriptor&#39;, &#39;jumpBallRecoveredName&#39;, &#39;jumpBallRecoverdPersonId&#39;, &#39;playerName&#39;, &#39;playerNameI&#39;, &#39;jumpBallWonPlayerName&#39;, &#39;jumpBallWonPersonId&#39;, &#39;jumpBallLostPlayerName&#39;, &#39;jumpBallLostPersonId&#39;, &#39;shotDistance&#39;, &#39;shotResult&#39;, &#39;shotActionNumber&#39;, &#39;reboundTotal&#39;, &#39;reboundDefensiveTotal&#39;, &#39;reboundOffensiveTotal&#39;, &#39;pointsTotal&#39;, &#39;assistPlayerNameInitial&#39;, &#39;assistPersonId&#39;, &#39;assistTotal&#39;, &#39;turnoverTotal&#39;, &#39;stealPlayerName&#39;, &#39;stealPersonId&#39;, &#39;officialId&#39;, &#39;foulPersonalTotal&#39;, &#39;foulTechnicalTotal&#39;, &#39;foulDrawnPlayerName&#39;, &#39;foulDrawnPersonId&#39;, &#39;blockPlayerName&#39;, &#39;blockPersonId&#39;, &#39;gameId&#39;, &#39;isTargetScoreLastPeriod&#39;, &#39;area&#39;, &#39;areaDetail&#39;]
 
-First 5 rows:</code></pre>
+Example of the dataset:</code></pre>
 </div>
-<div id="load-dataset" class="cell-output cell-output-display" data-execution_count="26">
+<div id="load-dataset" class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -4213,22 +4213,22 @@ First 5 rows:</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>2</td>
-<td>PT10M00.00S</td>
-<td>2022-08-18T02:10:38.900Z</td>
+<td data-quarto-table-cell-role="th">38</td>
+<td>50</td>
+<td>PT05M11.00S</td>
+<td>2022-08-18T02:15:47Z</td>
 <td>1</td>
 <td>REGULAR</td>
-<td>period</td>
-<td>start</td>
+<td>foul</td>
+<td>personal</td>
 <td>NaN</td>
-<td>0</td>
+<td>1628287</td>
 <td>NaN</td>
 <td>...</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Wilson</td>
+<td>1628932.0</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>1042200101</td>
@@ -4237,16 +4237,16 @@ First 5 rows:</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>4</td>
-<td>PT09M57.00S</td>
-<td>2022-08-18T02:10:40.900Z</td>
+<td data-quarto-table-cell-role="th">46</td>
+<td>60</td>
+<td>PT04M38.00S</td>
+<td>2022-08-18T02:16:46.900Z</td>
 <td>1</td>
 <td>REGULAR</td>
-<td>jumpball</td>
-<td>recovered</td>
+<td>turnover</td>
+<td>out-of-bounds</td>
 <td>NaN</td>
-<td>1628932</td>
+<td>1628276</td>
 <td>NaN</td>
 <td>...</td>
 <td>NaN</td>
@@ -4261,22 +4261,22 @@ First 5 rows:</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>7</td>
-<td>PT09M43.00S</td>
-<td>2022-08-18T02:10:55.300Z</td>
+<td data-quarto-table-cell-role="th">56</td>
+<td>68</td>
+<td>PT03M58.00S</td>
+<td>2022-08-18T02:20:32.100Z</td>
 <td>1</td>
 <td>REGULAR</td>
-<td>2pt</td>
-<td>Jump Shot</td>
-<td>pointsinthepaint</td>
-<td>1628932</td>
-<td>90.676062</td>
+<td>foul</td>
+<td>personal</td>
+<td>NaN</td>
+<td>1629498</td>
+<td>NaN</td>
 <td>...</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Cunningham</td>
+<td>1629482.0</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>1042200101</td>
@@ -4285,18 +4285,114 @@ First 5 rows:</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>8</td>
-<td>PT09M40.00S</td>
-<td>2022-08-18T02:10:57.800Z</td>
+<td data-quarto-table-cell-role="th">68</td>
+<td>85</td>
+<td>PT02M23.00S</td>
+<td>2022-08-18T02:22:29.500Z</td>
 <td>1</td>
 <td>REGULAR</td>
-<td>rebound</td>
-<td>defensive</td>
-<td>NaN</td>
+<td>foul</td>
+<td>personal</td>
+<td>2freethrow</td>
 <td>1629488</td>
 <td>NaN</td>
 <td>...</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Wilson</td>
+<td>1628932.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1042200101</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">77</td>
+<td>95</td>
+<td>PT01M59.00S</td>
+<td>2022-08-18T02:23:44Z</td>
+<td>1</td>
+<td>REGULAR</td>
+<td>foul</td>
+<td>personal</td>
+<td>NaN</td>
+<td>1629482</td>
+<td>NaN</td>
+<td>...</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Wilson</td>
+<td>1628932.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1042200101</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">90</td>
+<td>117</td>
+<td>PT00M09.40S</td>
+<td>2022-08-18T02:26:14.700Z</td>
+<td>1</td>
+<td>REGULAR</td>
+<td>foul</td>
+<td>personal</td>
+<td>inpenalty, 2freethrow</td>
+<td>1629484</td>
+<td>NaN</td>
+<td>...</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Wilson</td>
+<td>1628932.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1042200101</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">113</td>
+<td>148</td>
+<td>PT08M39.00S</td>
+<td>2022-08-18T02:32:02.900Z</td>
+<td>2</td>
+<td>REGULAR</td>
+<td>foul</td>
+<td>personal</td>
+<td>NaN</td>
+<td>203833</td>
+<td>NaN</td>
+<td>...</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Gray</td>
+<td>204334.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1042200101</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">116</td>
+<td>153</td>
+<td>PT08M31.00S</td>
+<td>2022-08-18T02:32:47.900Z</td>
+<td>2</td>
+<td>REGULAR</td>
+<td>turnover</td>
+<td>out-of-bounds</td>
+<td>NaN</td>
+<td>203833</td>
+<td>NaN</td>
+<td>...</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -4309,17 +4405,41 @@ First 5 rows:</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>9</td>
-<td>PT09M32.00S</td>
-<td>2022-08-18T02:11:06.500Z</td>
-<td>1</td>
+<td data-quarto-table-cell-role="th">120</td>
+<td>157</td>
+<td>PT08M01.00S</td>
+<td>2022-08-18T02:33:33.400Z</td>
+<td>2</td>
 <td>REGULAR</td>
-<td>3pt</td>
-<td>Jump Shot</td>
+<td>foul</td>
+<td>offensive</td>
 <td>NaN</td>
-<td>1628890</td>
-<td>25.316585</td>
+<td>1630387</td>
+<td>NaN</td>
+<td>...</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>Peddy</td>
+<td>203035.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1042200101</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">121</td>
+<td>159</td>
+<td>PT08M01.00S</td>
+<td>2022-08-18T02:33:33.400Z</td>
+<td>2</td>
+<td>REGULAR</td>
+<td>turnover</td>
+<td>offensive foul</td>
+<td>NaN</td>
+<td>1630387</td>
+<td>NaN</td>
 <td>...</td>
 <td>NaN</td>
 <td>NaN</td>
@@ -4335,7 +4455,7 @@ First 5 rows:</code></pre>
 </tbody>
 </table>
 
-<p>5 rows × 57 columns</p>
+<p>10 rows × 57 columns</p>
 </div>
 </div>
 </div>
@@ -4451,9 +4571,9 @@ Encoded categorical identifiers for individual referees and three-person crew co
 <h2 class="anchored" data-anchor-id="plan-of-attack">Plan of Attack</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 59%">
-<col style="width: 14%">
+<col style="width: 25%">
+<col style="width: 50%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -4519,8 +4639,8 @@ Encoded categorical identifiers for individual referees and three-person crew co
 <h3 class="anchored" data-anchor-id="repo-organization">Repo Organization</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 78%">
+<col style="width: 30%">
+<col style="width: 69%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -5170,155 +5290,158 @@ Encoded categorical identifiers for individual referees and three-person crew co
 <span id="cb4-71"><a href="#cb4-71"></a><span class="bu">print</span>(<span class="ss">f&quot;Columns in dataset: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb4-72"><a href="#cb4-72"></a><span class="bu">print</span>(<span class="ss">f&quot;Dataset shape: </span><span class="sc">{</span>wnba_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb4-73"><a href="#cb4-73"></a></span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="co"># Show first few rows and column names</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="co"># Show first few rows where the officialId is not null</span></span>
 <span id="cb4-75"><a href="#cb4-75"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Dataset columns:&quot;</span>)</span>
 <span id="cb4-76"><a href="#cb4-76"></a><span class="bu">print</span>(wnba_data.columns.tolist())</span>
 <span id="cb4-77"><a href="#cb4-77"></a></span>
-<span id="cb4-78"><a href="#cb4-78"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">First 5 rows:&quot;</span>)</span>
-<span id="cb4-79"><a href="#cb4-79"></a>wnba_data.head()</span>
-<span id="cb4-80"><a href="#cb4-80"></a><span class="in">```</span></span>
+<span id="cb4-78"><a href="#cb4-78"></a><span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Example of the dataset:&quot;</span>)</span>
+<span id="cb4-79"><a href="#cb4-79"></a><span class="co"># Filter for rows where officialId is not null and show first 5</span></span>
+<span id="cb4-80"><a href="#cb4-80"></a>official_data <span class="op">=</span> wnba_data[wnba_data[<span class="st">&#39;officialId&#39;</span>].notnull()]</span>
 <span id="cb4-81"><a href="#cb4-81"></a></span>
-<span id="cb4-82"><a href="#cb4-82"></a><span class="fu">## Research Questions</span></span>
-<span id="cb4-83"><a href="#cb4-83"></a></span>
-<span id="cb4-84"><a href="#cb4-84"></a>The research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.</span>
-<span id="cb4-85"><a href="#cb4-85"></a></span>
-<span id="cb4-86"><a href="#cb4-86"></a><span class="fu">#### 1. Do home teams have significantly higher win rates under specific referee crews?</span></span>
-<span id="cb4-87"><a href="#cb4-87"></a></span>
-<span id="cb4-88"><a href="#cb4-88"></a>This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.</span>
-<span id="cb4-89"><a href="#cb4-89"></a></span>
-<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">#### 2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</span></span>
-<span id="cb4-91"><a href="#cb4-91"></a></span>
-<span id="cb4-92"><a href="#cb4-92"></a>This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.</span>
-<span id="cb4-93"><a href="#cb4-93"></a></span>
-<span id="cb4-94"><a href="#cb4-94"></a><span class="fu">#### 3.  Do certain referees call more fouls on away teams?</span></span>
-<span id="cb4-95"><a href="#cb4-95"></a></span>
-<span id="cb4-96"><a href="#cb4-96"></a>This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.</span>
-<span id="cb4-97"><a href="#cb4-97"></a></span>
-<span id="cb4-98"><a href="#cb4-98"></a><span class="fu">## Analysis plan</span></span>
-<span id="cb4-99"><a href="#cb4-99"></a></span>
-<span id="cb4-100"><a href="#cb4-100"></a><span class="fu">### Problem Introduction</span></span>
-<span id="cb4-101"><a href="#cb4-101"></a></span>
-<span id="cb4-102"><a href="#cb4-102"></a>The Women’s National Basketball Association (WNBA) has experienced significant growth in recent years, accompanied by an increasing emphasis on data analytics to enhance forecasting and anomaly detection capabilities. This project seeks to evaluate the fairness of officiating in the WNBA by applying machine learning techniques to referee assignment data, foul differentials, and game outcomes. The primary objective is to identify potential officiating bias and assess the extent to which individual referees may contribute to a home-court advantage.</span>
-<span id="cb4-103"><a href="#cb4-103"></a></span>
-<span id="cb4-104"><a href="#cb4-104"></a><span class="fu">### Problem Formulation</span></span>
-<span id="cb4-105"><a href="#cb4-105"></a></span>
-<span id="cb4-106"><a href="#cb4-106"></a>This study will examine potential officiating bias in WNBA games by analyzing referee assignment data, foul differentials, and game outcomes across multiple seasons. The analysis will proceed in the following stages:</span>
-<span id="cb4-107"><a href="#cb4-107"></a></span>
-<span id="cb4-108"><a href="#cb4-108"></a><span class="fu">#### 1. Data Collection and Preprocessing</span></span>
-<span id="cb4-109"><a href="#cb4-109"></a></span>
-<span id="cb4-110"><a href="#cb4-110"></a><span class="ss">-   </span>**Data Sources:** Collecting data from <span class="ot">&lt;https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data&gt;</span> which is a play-by-play datasets with referee assignments.</span>
-<span id="cb4-111"><a href="#cb4-111"></a></span>
-<span id="cb4-112"><a href="#cb4-112"></a><span class="ss">-   </span>**Variables of Interest:**</span>
-<span id="cb4-113"><a href="#cb4-113"></a></span>
-<span id="cb4-114"><a href="#cb4-114"></a><span class="ss">    -   </span>Game metadata: date, teams, location (home/away), final scores</span>
-<span id="cb4-115"><a href="#cb4-115"></a><span class="ss">    -   </span>Referee assignments (names or IDs, crew combinations)</span>
-<span id="cb4-116"><a href="#cb4-116"></a><span class="ss">    -   </span>Team foul counts</span>
-<span id="cb4-117"><a href="#cb4-117"></a><span class="ss">    -   </span>Game outcomes (win/loss, point differential)</span>
-<span id="cb4-118"><a href="#cb4-118"></a></span>
-<span id="cb4-119"><a href="#cb4-119"></a><span class="ss">-   </span>**Data Cleaning:**</span>
-<span id="cb4-120"><a href="#cb4-120"></a></span>
-<span id="cb4-121"><a href="#cb4-121"></a><span class="ss">    -   </span>Normalize referee names across games</span>
-<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">    -   </span>Merge datasets to associate referee crews with game-level statistics</span>
-<span id="cb4-123"><a href="#cb4-123"></a><span class="ss">    -   </span>Handle missing or inconsistent values</span>
-<span id="cb4-124"><a href="#cb4-124"></a></span>
-<span id="cb4-125"><a href="#cb4-125"></a><span class="fu">#### 2. Exploratory Data Analysis</span></span>
-<span id="cb4-126"><a href="#cb4-126"></a></span>
-<span id="cb4-127"><a href="#cb4-127"></a>To validate that the data supports our research questions, key features were explored using distributions and summary statistics:</span>
-<span id="cb4-128"><a href="#cb4-128"></a></span>
-<span id="cb4-129"><a href="#cb4-129"></a><span class="ss">-   </span>Summarize foul counts by team and referee to understand Foul Differential Distribution.</span>
-<span id="cb4-130"><a href="#cb4-130"></a><span class="ss">-   </span>Visualize average foul differential by referee and referee crew to see if there is skewness which could suggest certain crews favor one side.</span>
-<span id="cb4-131"><a href="#cb4-131"></a><span class="ss">-   </span>Compute home vs. away win rates across different referee combinations Crews with consistently higher home win rates may indicate officiating bias regardless of foul disparities.</span>
-<span id="cb4-132"><a href="#cb4-132"></a><span class="ss">-   </span>Generate pairwise correlations to identify potentially relevant feature groupings. Specific investigation will look at whether foul differential has a meaningful impact on scoring.</span>
-<span id="cb4-133"><a href="#cb4-133"></a></span>
-<span id="cb4-134"><a href="#cb4-134"></a><span class="fu">#### 3. Feature Engineering</span></span>
-<span id="cb4-135"><a href="#cb4-135"></a></span>
-<span id="cb4-136"><a href="#cb4-136"></a>The goal is to construct a comprehensive set of quantitative features that can characterize officiating tendencies and enable meaningful clustering. Below are several features that I plan to create:</span>
-<span id="cb4-137"><a href="#cb4-137"></a></span>
-<span id="cb4-138"><a href="#cb4-138"></a><span class="ss">-   </span>**Foul Differential:** The difference in total fouls called on the home team versus the away team. This feature serves as a proxy for imbalance in foul calls and is a central indicator of potential bias.</span>
-<span id="cb4-139"><a href="#cb4-139"></a></span>
-<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">-   </span>**Total Fouls Per Game:**\</span>
-<span id="cb4-141"><a href="#cb4-141"></a>    The sum of fouls called on both teams, capturing referees’ strictness or leniency in foul calling. Calculated as fouls called on the away team minus fouls called on the home team.</span>
+<span id="cb4-82"><a href="#cb4-82"></a>official_data.head(<span class="dv">10</span>)</span>
+<span id="cb4-83"><a href="#cb4-83"></a><span class="in">```</span></span>
+<span id="cb4-84"><a href="#cb4-84"></a></span>
+<span id="cb4-85"><a href="#cb4-85"></a><span class="fu">## Research Questions</span></span>
+<span id="cb4-86"><a href="#cb4-86"></a></span>
+<span id="cb4-87"><a href="#cb4-87"></a>The research questions guiding this project are designed to uncover latent patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.</span>
+<span id="cb4-88"><a href="#cb4-88"></a></span>
+<span id="cb4-89"><a href="#cb4-89"></a><span class="fu">#### 1. Do home teams have significantly higher win rates under specific referee crews?</span></span>
+<span id="cb4-90"><a href="#cb4-90"></a></span>
+<span id="cb4-91"><a href="#cb4-91"></a>This question aims to identify clusters of referee crews associated with elevated home team win rates. The project will explore whether specific officiating crews are consistently linked to favorable home outcomes. Patterns that emerge may reflect officiating tendencies that unintentionally reinforce home-court advantage.</span>
+<span id="cb4-92"><a href="#cb4-92"></a></span>
+<span id="cb4-93"><a href="#cb4-93"></a><span class="fu">#### 2. When games are officiated by certain referee combinations, do they have higher or lower foul disparity?</span></span>
+<span id="cb4-94"><a href="#cb4-94"></a></span>
+<span id="cb4-95"><a href="#cb4-95"></a>This question focuses on foul differential as a key indicator of officiating style. The analysis seeks to reveal groups of crews with similar behavioral patterns. Identifying outliers or consistently imbalanced combinations may point to structural officiating trends.</span>
+<span id="cb4-96"><a href="#cb4-96"></a></span>
+<span id="cb4-97"><a href="#cb4-97"></a><span class="fu">#### 3. Do certain referees call more fouls on away teams?</span></span>
+<span id="cb4-98"><a href="#cb4-98"></a></span>
+<span id="cb4-99"><a href="#cb4-99"></a>This question narrows the scope to individual referees to examine whether certain officials consistently contribute to foul imbalances. The objective is to detect underlying officiating bias and identify individuals whose patterns deviate significantly from the normal.</span>
+<span id="cb4-100"><a href="#cb4-100"></a></span>
+<span id="cb4-101"><a href="#cb4-101"></a><span class="fu">## Analysis plan</span></span>
+<span id="cb4-102"><a href="#cb4-102"></a></span>
+<span id="cb4-103"><a href="#cb4-103"></a><span class="fu">### Problem Introduction</span></span>
+<span id="cb4-104"><a href="#cb4-104"></a></span>
+<span id="cb4-105"><a href="#cb4-105"></a>The Women’s National Basketball Association (WNBA) has experienced significant growth in recent years, accompanied by an increasing emphasis on data analytics to enhance forecasting and anomaly detection capabilities. This project seeks to evaluate the fairness of officiating in the WNBA by applying machine learning techniques to referee assignment data, foul differentials, and game outcomes. The primary objective is to identify potential officiating bias and assess the extent to which individual referees may contribute to a home-court advantage.</span>
+<span id="cb4-106"><a href="#cb4-106"></a></span>
+<span id="cb4-107"><a href="#cb4-107"></a><span class="fu">### Problem Formulation</span></span>
+<span id="cb4-108"><a href="#cb4-108"></a></span>
+<span id="cb4-109"><a href="#cb4-109"></a>This study will examine potential officiating bias in WNBA games by analyzing referee assignment data, foul differentials, and game outcomes across multiple seasons. The analysis will proceed in the following stages:</span>
+<span id="cb4-110"><a href="#cb4-110"></a></span>
+<span id="cb4-111"><a href="#cb4-111"></a><span class="fu">#### 1. Data Collection and Preprocessing</span></span>
+<span id="cb4-112"><a href="#cb4-112"></a></span>
+<span id="cb4-113"><a href="#cb4-113"></a><span class="ss">-   </span>**Data Sources:** Collecting data from <span class="ot">&lt;https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data&gt;</span> which is a play-by-play datasets with referee assignments.</span>
+<span id="cb4-114"><a href="#cb4-114"></a></span>
+<span id="cb4-115"><a href="#cb4-115"></a><span class="ss">-   </span>**Variables of Interest:**</span>
+<span id="cb4-116"><a href="#cb4-116"></a></span>
+<span id="cb4-117"><a href="#cb4-117"></a><span class="ss">    -   </span>Game metadata: date, teams, location (home/away), final scores</span>
+<span id="cb4-118"><a href="#cb4-118"></a><span class="ss">    -   </span>Referee assignments (names or IDs, crew combinations)</span>
+<span id="cb4-119"><a href="#cb4-119"></a><span class="ss">    -   </span>Team foul counts</span>
+<span id="cb4-120"><a href="#cb4-120"></a><span class="ss">    -   </span>Game outcomes (win/loss, point differential)</span>
+<span id="cb4-121"><a href="#cb4-121"></a></span>
+<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">-   </span>**Data Cleaning:**</span>
+<span id="cb4-123"><a href="#cb4-123"></a></span>
+<span id="cb4-124"><a href="#cb4-124"></a><span class="ss">    -   </span>Normalize referee names across games</span>
+<span id="cb4-125"><a href="#cb4-125"></a><span class="ss">    -   </span>Merge datasets to associate referee crews with game-level statistics</span>
+<span id="cb4-126"><a href="#cb4-126"></a><span class="ss">    -   </span>Handle missing or inconsistent values</span>
+<span id="cb4-127"><a href="#cb4-127"></a></span>
+<span id="cb4-128"><a href="#cb4-128"></a><span class="fu">#### 2. Exploratory Data Analysis</span></span>
+<span id="cb4-129"><a href="#cb4-129"></a></span>
+<span id="cb4-130"><a href="#cb4-130"></a>To validate that the data supports our research questions, key features were explored using distributions and summary statistics:</span>
+<span id="cb4-131"><a href="#cb4-131"></a></span>
+<span id="cb4-132"><a href="#cb4-132"></a><span class="ss">-   </span>Summarize foul counts by team and referee to understand Foul Differential Distribution.</span>
+<span id="cb4-133"><a href="#cb4-133"></a><span class="ss">-   </span>Visualize average foul differential by referee and referee crew to see if there is skewness which could suggest certain crews favor one side.</span>
+<span id="cb4-134"><a href="#cb4-134"></a><span class="ss">-   </span>Compute home vs. away win rates across different referee combinations Crews with consistently higher home win rates may indicate officiating bias regardless of foul disparities.</span>
+<span id="cb4-135"><a href="#cb4-135"></a><span class="ss">-   </span>Generate pairwise correlations to identify potentially relevant feature groupings. Specific investigation will look at whether foul differential has a meaningful impact on scoring.</span>
+<span id="cb4-136"><a href="#cb4-136"></a></span>
+<span id="cb4-137"><a href="#cb4-137"></a><span class="fu">#### 3. Feature Engineering</span></span>
+<span id="cb4-138"><a href="#cb4-138"></a></span>
+<span id="cb4-139"><a href="#cb4-139"></a>The goal is to construct a comprehensive set of quantitative features that can characterize officiating tendencies and enable meaningful clustering. Below are several features that I plan to create:</span>
+<span id="cb4-140"><a href="#cb4-140"></a></span>
+<span id="cb4-141"><a href="#cb4-141"></a><span class="ss">-   </span>**Foul Differential:** The difference in total fouls called on the home team versus the away team. This feature serves as a proxy for imbalance in foul calls and is a central indicator of potential bias.</span>
 <span id="cb4-142"><a href="#cb4-142"></a></span>
-<span id="cb4-143"><a href="#cb4-143"></a><span class="ss">-   </span>**Average Fouls Per Team:**\</span>
-<span id="cb4-144"><a href="#cb4-144"></a>    Computed as total fouls divided by the number of games officiated by a referee or crew. This helps normalize foul volume across varying sample sizes.</span>
+<span id="cb4-143"><a href="#cb4-143"></a><span class="ss">-   </span>**Total Fouls Per Game:**\</span>
+<span id="cb4-144"><a href="#cb4-144"></a>    The sum of fouls called on both teams, capturing referees’ strictness or leniency in foul calling. Calculated as fouls called on the away team minus fouls called on the home team.</span>
 <span id="cb4-145"><a href="#cb4-145"></a></span>
-<span id="cb4-146"><a href="#cb4-146"></a><span class="ss">-   </span>**Free Throw Differential:**\</span>
-<span id="cb4-147"><a href="#cb4-147"></a>    The difference in free throw attempts between the home and away teams, which may reflect the practical consequences of foul calls.</span>
+<span id="cb4-146"><a href="#cb4-146"></a><span class="ss">-   </span>**Average Fouls Per Team:**\</span>
+<span id="cb4-147"><a href="#cb4-147"></a>    Computed as total fouls divided by the number of games officiated by a referee or crew. This helps normalize foul volume across varying sample sizes.</span>
 <span id="cb4-148"><a href="#cb4-148"></a></span>
-<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">-   </span>**Home Win Indicator:**\</span>
-<span id="cb4-150"><a href="#cb4-150"></a>    A binary variable denoting whether the home team won the game (1 = home team won, 0 = home team loss). Used to explore relationships between crew assignments and home-court advantage.</span>
+<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">-   </span>**Free Throw Differential:**\</span>
+<span id="cb4-150"><a href="#cb4-150"></a>    The difference in free throw attempts between the home and away teams, which may reflect the practical consequences of foul calls.</span>
 <span id="cb4-151"><a href="#cb4-151"></a></span>
-<span id="cb4-152"><a href="#cb4-152"></a><span class="ss">-   </span>**Referee and Crew Identifiers:**\</span>
-<span id="cb4-153"><a href="#cb4-153"></a>    Encoded categorical identifiers for individual referees and three-person crew combinations to enable grouping and aggregation across games. Referee names will be normalized and mapped to a consistent ID to support aggregation. A composite key will be created for the three referees per game to analyze group effects.</span>
+<span id="cb4-152"><a href="#cb4-152"></a><span class="ss">-   </span>**Home Win Indicator:**\</span>
+<span id="cb4-153"><a href="#cb4-153"></a>    A binary variable denoting whether the home team won the game (1 = home team won, 0 = home team loss). Used to explore relationships between crew assignments and home-court advantage.</span>
 <span id="cb4-154"><a href="#cb4-154"></a></span>
-<span id="cb4-155"><a href="#cb4-155"></a><span class="ss">-   </span>**Normalization and Scaling:**</span>
-<span id="cb4-156"><a href="#cb4-156"></a></span>
-<span id="cb4-157"><a href="#cb4-157"></a>    To prepare for K-means clustering, all continuous features will be standardized (e.g., z-score normalization) to ensure that variables are on the same scale and contribute equally to distance calculations in the clustering algorithm</span>
-<span id="cb4-158"><a href="#cb4-158"></a></span>
-<span id="cb4-159"><a href="#cb4-159"></a><span class="ss">-   </span>**Aggregation Strategy:**</span>
-<span id="cb4-160"><a href="#cb4-160"></a></span>
-<span id="cb4-161"><a href="#cb4-161"></a>    Referee-level features will be aggregated across games to create a per-referee profile. Similarly, crew-level statistics will be generated by grouping games officiated by the same three-referee combinations. This aggregation supports both individual and crew-based cluster analysis.</span>
-<span id="cb4-162"><a href="#cb4-162"></a></span>
-<span id="cb4-163"><a href="#cb4-163"></a><span class="fu">#### 4. Unsupervised Learning (Pattern Discovery)</span></span>
-<span id="cb4-164"><a href="#cb4-164"></a></span>
-<span id="cb4-165"><a href="#cb4-165"></a><span class="ss">-   </span>**K-Means Clustering:** Use K-means clustering to group:</span>
-<span id="cb4-166"><a href="#cb4-166"></a></span>
-<span id="cb4-167"><a href="#cb4-167"></a><span class="ss">    -   </span>Referee crew based on game-level foul and outcome patterns</span>
-<span id="cb4-168"><a href="#cb4-168"></a></span>
-<span id="cb4-169"><a href="#cb4-169"></a><span class="ss">    -   </span>Individual referees based on their aggregated officiating behavior across multiple games</span>
-<span id="cb4-170"><a href="#cb4-170"></a></span>
-<span id="cb4-171"><a href="#cb4-171"></a><span class="ss">-   </span>**Dimensionality Reduction:** Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</span>
-<span id="cb4-172"><a href="#cb4-172"></a></span>
-<span id="cb4-173"><a href="#cb4-173"></a><span class="fu">#### 5. Cluster Interpretation</span></span>
-<span id="cb4-174"><a href="#cb4-174"></a></span>
-<span id="cb4-175"><a href="#cb4-175"></a><span class="ss">-   </span>Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)</span>
-<span id="cb4-176"><a href="#cb4-176"></a><span class="ss">-   </span>Label clusters based on behavioral tendencies (such as &quot;neutral crews&quot;, &quot;home-favoring referees&quot;, &quot;high-caller crews&quot;)</span>
-<span id="cb4-177"><a href="#cb4-177"></a><span class="ss">-   </span>Identify any outlier referees or crews with extreme values</span>
-<span id="cb4-178"><a href="#cb4-178"></a></span>
-<span id="cb4-179"><a href="#cb4-179"></a><span class="fu">#### 6. Reporting and Visualization</span></span>
-<span id="cb4-180"><a href="#cb4-180"></a></span>
-<span id="cb4-181"><a href="#cb4-181"></a><span class="ss">-   </span>Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\</span>
-<span id="cb4-182"><a href="#cb4-182"></a><span class="ss">-   </span>Plot clustered referee data to visualize separation and cohesion\</span>
-<span id="cb4-183"><a href="#cb4-183"></a><span class="ss">-   </span>Discuss implications of findings in the context of WNBA officiating policy and fairness</span>
-<span id="cb4-184"><a href="#cb4-184"></a><span class="ss">-   </span>Provide future recommendations to improve the analysis</span>
-<span id="cb4-185"><a href="#cb4-185"></a></span>
-<span id="cb4-186"><a href="#cb4-186"></a><span class="fu">## Plan of Attack</span></span>
-<span id="cb4-187"><a href="#cb4-187"></a></span>
-<span id="cb4-188"><a href="#cb4-188"></a><span class="pp">|</span> Milestone <span class="pp">|</span> Task <span class="pp">|</span> Due Date <span class="pp">|</span></span>
-<span id="cb4-189"><a href="#cb4-189"></a><span class="pp">|-------------------|------------------------------------------|----------|</span></span>
-<span id="cb4-190"><a href="#cb4-190"></a><span class="pp">|</span> Submit Proposal <span class="pp">|</span> Finalize and submit initial proposal for others to provide feedback <span class="pp">|</span> 8/3/2025 <span class="pp">|</span></span>
-<span id="cb4-191"><a href="#cb4-191"></a><span class="pp">|</span> Revise Proposal <span class="pp">|</span> Address all peer feedback as needed <span class="pp">|</span> 8/6/2025 <span class="pp">|</span></span>
-<span id="cb4-192"><a href="#cb4-192"></a><span class="pp">|</span> Submit Revised Proposal <span class="pp">|</span> Incorporate and address all feedback for instructor review <span class="pp">|</span> 8/8/2025 <span class="pp">|</span></span>
-<span id="cb4-193"><a href="#cb4-193"></a><span class="pp">|</span> Data Collection &amp; Cleaning <span class="pp">|</span> <span class="sc">\-</span> Gather and clean WNBA game logs, referee assignments, and team stats <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Merge datasets and ensure consistent formatting <span class="pp">|</span> 8/10/2025 <span class="pp">|</span></span>
-<span id="cb4-194"><a href="#cb4-194"></a><span class="pp">|</span> Feature Engineering &amp; EDA <span class="pp">|</span> <span class="sc">\-</span> Create variables such as foul differential, crew IDs, and home/away indicators <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Visualize trends and explore feature distributions <span class="pp">|</span> 8/12/2025 <span class="pp">|</span></span>
-<span id="cb4-195"><a href="#cb4-195"></a><span class="pp">|</span> Pattern Discovery with K-means <span class="pp">|</span> <span class="sc">\-</span> Standardize features and apply K-means clustering <span class="pp">|</span> 8/14/2025 <span class="pp">|</span></span>
-<span id="cb4-196"><a href="#cb4-196"></a><span class="pp">|</span> Cluster Interpretation <span class="pp">|</span> <span class="sc">\-</span> Interpret each cluster’s characteristics (e.g., home bias, foul disparity) <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Identify and analyze outlier referees or crews <span class="pp">|</span> 8/16/2025 <span class="pp">|</span></span>
-<span id="cb4-197"><a href="#cb4-197"></a><span class="pp">|</span> Visual &amp; Storytelling <span class="pp">|</span> Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps <span class="pp">|</span> 8/17/2025 <span class="pp">|</span></span>
-<span id="cb4-198"><a href="#cb4-198"></a><span class="pp">|</span> Final Write-Up &amp; Presentation <span class="pp">|</span> <span class="sc">\-</span> Create, refine, and finalize the report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Ensure all results are well-documented and reproducible <span class="pp">|</span> 8/19/2025 <span class="pp">|</span></span>
-<span id="cb4-199"><a href="#cb4-199"></a><span class="pp">|</span> Final Submission <span class="pp">|</span> <span class="sc">\-</span> Submit final report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Back up to GitHub (or drive) <span class="pp">|</span> 8/20/2025 <span class="pp">|</span></span>
-<span id="cb4-200"><a href="#cb4-200"></a></span>
-<span id="cb4-201"><a href="#cb4-201"></a><span class="fu">### Repo Organization</span></span>
-<span id="cb4-202"><a href="#cb4-202"></a></span>
-<span id="cb4-203"><a href="#cb4-203"></a><span class="pp">|</span> Path / File <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb4-204"><a href="#cb4-204"></a><span class="pp">|---------------|--------------------------------------------------------|</span></span>
-<span id="cb4-205"><a href="#cb4-205"></a><span class="pp">|</span> <span class="in">`.github/`</span> <span class="pp">|</span> Contains GitHub-specific files, including workflows, actions, and issue management templates. <span class="pp">|</span></span>
-<span id="cb4-206"><a href="#cb4-206"></a><span class="pp">|</span> <span class="in">`_extra/`</span> <span class="pp">|</span> Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. <span class="pp">|</span></span>
-<span id="cb4-207"><a href="#cb4-207"></a><span class="pp">|</span> <span class="in">`_freeze/`</span> <span class="pp">|</span> Houses frozen environment files detailing the project’s setup and dependencies. <span class="pp">|</span></span>
-<span id="cb4-208"><a href="#cb4-208"></a><span class="pp">|</span> <span class="in">`data/`</span> <span class="pp">|</span> Directory for all essential data files, including input datasets and resources required for analysis. <span class="pp">|</span></span>
-<span id="cb4-209"><a href="#cb4-209"></a><span class="pp">|</span> <span class="in">`images/`</span> <span class="pp">|</span> Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. <span class="pp">|</span></span>
-<span id="cb4-210"><a href="#cb4-210"></a><span class="pp">|</span> <span class="in">`.gitignore`</span> <span class="pp">|</span> Specifies files and directories to exclude from Git version control. <span class="pp">|</span></span>
-<span id="cb4-211"><a href="#cb4-211"></a><span class="pp">|</span> <span class="in">`README.md`</span> <span class="pp">|</span> Central documentation file providing project overview, setup instructions, and usage guidelines. <span class="pp">|</span></span>
-<span id="cb4-212"><a href="#cb4-212"></a><span class="pp">|</span> <span class="in">`_quarto.yml`</span> <span class="pp">|</span> Configuration file for Quarto, specifying rendering options and document settings. <span class="pp">|</span></span>
-<span id="cb4-213"><a href="#cb4-213"></a><span class="pp">|</span> <span class="in">`about.qmd`</span> <span class="pp">|</span> Provides contextual information about the project and introduces team members and their roles. <span class="pp">|</span></span>
-<span id="cb4-214"><a href="#cb4-214"></a><span class="pp">|</span> <span class="in">`index.qmd`</span> <span class="pp">|</span> Main page of the project write-up, including code, visualizations, and final results. <span class="pp">|</span></span>
-<span id="cb4-215"><a href="#cb4-215"></a><span class="pp">|</span> <span class="in">`presentation.qmd`</span> <span class="pp">|</span> Quarto file used to create a slideshow of the final project presentation. <span class="pp">|</span></span>
-<span id="cb4-216"><a href="#cb4-216"></a><span class="pp">|</span> <span class="in">`project-final.Rproj`</span> <span class="pp">|</span> RStudio project file that defines project-level settings for R-based workflows. <span class="pp">|</span></span>
-<span id="cb4-217"><a href="#cb4-217"></a><span class="pp">|</span> <span class="in">`proposal.qmd`</span> <span class="pp">|</span> Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. <span class="pp">|</span></span>
-<span id="cb4-218"><a href="#cb4-218"></a><span class="pp">|</span> <span class="in">`requirements.txt`</span> <span class="pp">|</span> Lists required Python packages and versions necessary for reproducing the project environment. <span class="pp">|</span></span>
-<span id="cb4-219"><a href="#cb4-219"></a></span>
-<span id="cb4-220"><a href="#cb4-220"></a><span class="fu">### References</span></span>
-<span id="cb4-221"><a href="#cb4-221"></a></span>
-<span id="cb4-222"><a href="#cb4-222"></a><span class="sc">\[</span>1<span class="sc">\]</span> WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project</span>
+<span id="cb4-155"><a href="#cb4-155"></a><span class="ss">-   </span>**Referee and Crew Identifiers:**\</span>
+<span id="cb4-156"><a href="#cb4-156"></a>    Encoded categorical identifiers for individual referees and three-person crew combinations to enable grouping and aggregation across games. Referee names will be normalized and mapped to a consistent ID to support aggregation. A composite key will be created for the three referees per game to analyze group effects.</span>
+<span id="cb4-157"><a href="#cb4-157"></a></span>
+<span id="cb4-158"><a href="#cb4-158"></a><span class="ss">-   </span>**Normalization and Scaling:**</span>
+<span id="cb4-159"><a href="#cb4-159"></a></span>
+<span id="cb4-160"><a href="#cb4-160"></a>    To prepare for K-means clustering, all continuous features will be standardized (e.g., z-score normalization) to ensure that variables are on the same scale and contribute equally to distance calculations in the clustering algorithm</span>
+<span id="cb4-161"><a href="#cb4-161"></a></span>
+<span id="cb4-162"><a href="#cb4-162"></a><span class="ss">-   </span>**Aggregation Strategy:**</span>
+<span id="cb4-163"><a href="#cb4-163"></a></span>
+<span id="cb4-164"><a href="#cb4-164"></a>    Referee-level features will be aggregated across games to create a per-referee profile. Similarly, crew-level statistics will be generated by grouping games officiated by the same three-referee combinations. This aggregation supports both individual and crew-based cluster analysis.</span>
+<span id="cb4-165"><a href="#cb4-165"></a></span>
+<span id="cb4-166"><a href="#cb4-166"></a><span class="fu">#### 4. Unsupervised Learning (Pattern Discovery)</span></span>
+<span id="cb4-167"><a href="#cb4-167"></a></span>
+<span id="cb4-168"><a href="#cb4-168"></a><span class="ss">-   </span>**K-Means Clustering:** Use K-means clustering to group:</span>
+<span id="cb4-169"><a href="#cb4-169"></a></span>
+<span id="cb4-170"><a href="#cb4-170"></a><span class="ss">    -   </span>Referee crew based on game-level foul and outcome patterns</span>
+<span id="cb4-171"><a href="#cb4-171"></a></span>
+<span id="cb4-172"><a href="#cb4-172"></a><span class="ss">    -   </span>Individual referees based on their aggregated officiating behavior across multiple games</span>
+<span id="cb4-173"><a href="#cb4-173"></a></span>
+<span id="cb4-174"><a href="#cb4-174"></a><span class="ss">-   </span>**Dimensionality Reduction:** Apply Principal Component Analysis (PCA) to identify latent components in officiating behavior (such as home bias, foul volume, crew consistency)</span>
+<span id="cb4-175"><a href="#cb4-175"></a></span>
+<span id="cb4-176"><a href="#cb4-176"></a><span class="fu">#### 5. Cluster Interpretation</span></span>
+<span id="cb4-177"><a href="#cb4-177"></a></span>
+<span id="cb4-178"><a href="#cb4-178"></a><span class="ss">-   </span>Analyze each cluster’s centroid to identify distinguishing features (such as high foul disparity, frequent home wins)</span>
+<span id="cb4-179"><a href="#cb4-179"></a><span class="ss">-   </span>Label clusters based on behavioral tendencies (such as &quot;neutral crews&quot;, &quot;home-favoring referees&quot;, &quot;high-caller crews&quot;)</span>
+<span id="cb4-180"><a href="#cb4-180"></a><span class="ss">-   </span>Identify any outlier referees or crews with extreme values</span>
+<span id="cb4-181"><a href="#cb4-181"></a></span>
+<span id="cb4-182"><a href="#cb4-182"></a><span class="fu">#### 6. Reporting and Visualization</span></span>
+<span id="cb4-183"><a href="#cb4-183"></a></span>
+<span id="cb4-184"><a href="#cb4-184"></a><span class="ss">-   </span>Create visualizations including heatmaps, bar charts, and PCA plot to articulate findings\</span>
+<span id="cb4-185"><a href="#cb4-185"></a><span class="ss">-   </span>Plot clustered referee data to visualize separation and cohesion\</span>
+<span id="cb4-186"><a href="#cb4-186"></a><span class="ss">-   </span>Discuss implications of findings in the context of WNBA officiating policy and fairness</span>
+<span id="cb4-187"><a href="#cb4-187"></a><span class="ss">-   </span>Provide future recommendations to improve the analysis</span>
+<span id="cb4-188"><a href="#cb4-188"></a></span>
+<span id="cb4-189"><a href="#cb4-189"></a><span class="fu">## Plan of Attack</span></span>
+<span id="cb4-190"><a href="#cb4-190"></a></span>
+<span id="cb4-191"><a href="#cb4-191"></a><span class="pp">|</span> Milestone <span class="pp">|</span> Task <span class="pp">|</span> Due Date <span class="pp">|</span></span>
+<span id="cb4-192"><a href="#cb4-192"></a><span class="pp">|------------------|------------------------------------|------------------|</span></span>
+<span id="cb4-193"><a href="#cb4-193"></a><span class="pp">|</span> Submit Proposal <span class="pp">|</span> Finalize and submit initial proposal for others to provide feedback <span class="pp">|</span> 8/3/2025 <span class="pp">|</span></span>
+<span id="cb4-194"><a href="#cb4-194"></a><span class="pp">|</span> Revise Proposal <span class="pp">|</span> Address all peer feedback as needed <span class="pp">|</span> 8/6/2025 <span class="pp">|</span></span>
+<span id="cb4-195"><a href="#cb4-195"></a><span class="pp">|</span> Submit Revised Proposal <span class="pp">|</span> Incorporate and address all feedback for instructor review <span class="pp">|</span> 8/8/2025 <span class="pp">|</span></span>
+<span id="cb4-196"><a href="#cb4-196"></a><span class="pp">|</span> Data Collection &amp; Cleaning <span class="pp">|</span> <span class="sc">\-</span> Gather and clean WNBA game logs, referee assignments, and team stats <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Merge datasets and ensure consistent formatting <span class="pp">|</span> 8/10/2025 <span class="pp">|</span></span>
+<span id="cb4-197"><a href="#cb4-197"></a><span class="pp">|</span> Feature Engineering &amp; EDA <span class="pp">|</span> <span class="sc">\-</span> Create variables such as foul differential, crew IDs, and home/away indicators <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Visualize trends and explore feature distributions <span class="pp">|</span> 8/12/2025 <span class="pp">|</span></span>
+<span id="cb4-198"><a href="#cb4-198"></a><span class="pp">|</span> Pattern Discovery with K-means <span class="pp">|</span> <span class="sc">\-</span> Standardize features and apply K-means clustering <span class="pp">|</span> 8/14/2025 <span class="pp">|</span></span>
+<span id="cb4-199"><a href="#cb4-199"></a><span class="pp">|</span> Cluster Interpretation <span class="pp">|</span> <span class="sc">\-</span> Interpret each cluster’s characteristics (e.g., home bias, foul disparity) <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Identify and analyze outlier referees or crews <span class="pp">|</span> 8/16/2025 <span class="pp">|</span></span>
+<span id="cb4-200"><a href="#cb4-200"></a><span class="pp">|</span> Visual &amp; Storytelling <span class="pp">|</span> Create and finalize visuals that showcase the clustering results, such as PCA plots and cluster heatmaps <span class="pp">|</span> 8/17/2025 <span class="pp">|</span></span>
+<span id="cb4-201"><a href="#cb4-201"></a><span class="pp">|</span> Final Write-Up &amp; Presentation <span class="pp">|</span> <span class="sc">\-</span> Create, refine, and finalize the report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Ensure all results are well-documented and reproducible <span class="pp">|</span> 8/19/2025 <span class="pp">|</span></span>
+<span id="cb4-202"><a href="#cb4-202"></a><span class="pp">|</span> Final Submission <span class="pp">|</span> <span class="sc">\-</span> Submit final report, code, and presentation <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> - Back up to GitHub (or drive) <span class="pp">|</span> 8/20/2025 <span class="pp">|</span></span>
+<span id="cb4-203"><a href="#cb4-203"></a></span>
+<span id="cb4-204"><a href="#cb4-204"></a><span class="fu">### Repo Organization</span></span>
+<span id="cb4-205"><a href="#cb4-205"></a></span>
+<span id="cb4-206"><a href="#cb4-206"></a><span class="pp">|</span> Path / File <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb4-207"><a href="#cb4-207"></a><span class="pp">|----------------------|--------------------------------------------------|</span></span>
+<span id="cb4-208"><a href="#cb4-208"></a><span class="pp">|</span> <span class="in">`.github/`</span> <span class="pp">|</span> Contains GitHub-specific files, including workflows, actions, and issue management templates. <span class="pp">|</span></span>
+<span id="cb4-209"><a href="#cb4-209"></a><span class="pp">|</span> <span class="in">`_extra/`</span> <span class="pp">|</span> Stores miscellaneous files that do not fit into other project categories; serves as a repository for supplementary documents. <span class="pp">|</span></span>
+<span id="cb4-210"><a href="#cb4-210"></a><span class="pp">|</span> <span class="in">`_freeze/`</span> <span class="pp">|</span> Houses frozen environment files detailing the project’s setup and dependencies. <span class="pp">|</span></span>
+<span id="cb4-211"><a href="#cb4-211"></a><span class="pp">|</span> <span class="in">`data/`</span> <span class="pp">|</span> Directory for all essential data files, including input datasets and resources required for analysis. <span class="pp">|</span></span>
+<span id="cb4-212"><a href="#cb4-212"></a><span class="pp">|</span> <span class="in">`images/`</span> <span class="pp">|</span> Central repository for visual assets such as diagrams, charts, and screenshots used for documentation and presentations. <span class="pp">|</span></span>
+<span id="cb4-213"><a href="#cb4-213"></a><span class="pp">|</span> <span class="in">`.gitignore`</span> <span class="pp">|</span> Specifies files and directories to exclude from Git version control. <span class="pp">|</span></span>
+<span id="cb4-214"><a href="#cb4-214"></a><span class="pp">|</span> <span class="in">`README.md`</span> <span class="pp">|</span> Central documentation file providing project overview, setup instructions, and usage guidelines. <span class="pp">|</span></span>
+<span id="cb4-215"><a href="#cb4-215"></a><span class="pp">|</span> <span class="in">`_quarto.yml`</span> <span class="pp">|</span> Configuration file for Quarto, specifying rendering options and document settings. <span class="pp">|</span></span>
+<span id="cb4-216"><a href="#cb4-216"></a><span class="pp">|</span> <span class="in">`about.qmd`</span> <span class="pp">|</span> Provides contextual information about the project and introduces team members and their roles. <span class="pp">|</span></span>
+<span id="cb4-217"><a href="#cb4-217"></a><span class="pp">|</span> <span class="in">`index.qmd`</span> <span class="pp">|</span> Main page of the project write-up, including code, visualizations, and final results. <span class="pp">|</span></span>
+<span id="cb4-218"><a href="#cb4-218"></a><span class="pp">|</span> <span class="in">`presentation.qmd`</span> <span class="pp">|</span> Quarto file used to create a slideshow of the final project presentation. <span class="pp">|</span></span>
+<span id="cb4-219"><a href="#cb4-219"></a><span class="pp">|</span> <span class="in">`project-final.Rproj`</span> <span class="pp">|</span> RStudio project file that defines project-level settings for R-based workflows. <span class="pp">|</span></span>
+<span id="cb4-220"><a href="#cb4-220"></a><span class="pp">|</span> <span class="in">`proposal.qmd`</span> <span class="pp">|</span> Contains the project proposal, including dataset descriptions, metadata, research questions, and a weekly progress plan. <span class="pp">|</span></span>
+<span id="cb4-221"><a href="#cb4-221"></a><span class="pp">|</span> <span class="in">`requirements.txt`</span> <span class="pp">|</span> Lists required Python packages and versions necessary for reproducing the project environment. <span class="pp">|</span></span>
+<span id="cb4-222"><a href="#cb4-222"></a></span>
+<span id="cb4-223"><a href="#cb4-223"></a><span class="fu">### References</span></span>
+<span id="cb4-224"><a href="#cb4-224"></a></span>
+<span id="cb4-225"><a href="#cb4-225"></a><span class="sc">\[</span>1<span class="sc">\]</span> WNBA Dataset: https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data used in the project</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
