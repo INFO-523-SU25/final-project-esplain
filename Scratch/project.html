@@ -382,7 +382,7 @@ Dataset columns:
 ['actionNumber', 'clock', 'timeActual', 'period', 'periodType', 'actionType', 'subType', 'qualifiers', 'personId', 'x', 'y', 'possession', 'scoreHome', 'scoreAway', 'edited', 'orderNumber', 'xLegacy', 'yLegacy', 'isFieldGoal', 'side', 'description', 'personIdsFilter', 'teamId', 'teamTricode', 'descriptor', 'jumpBallRecoveredName', 'jumpBallRecoverdPersonId', 'playerName', 'playerNameI', 'jumpBallWonPlayerName', 'jumpBallWonPersonId', 'jumpBallLostPlayerName', 'jumpBallLostPersonId', 'shotDistance', 'shotResult', 'shotActionNumber', 'reboundTotal', 'reboundDefensiveTotal', 'reboundOffensiveTotal', 'pointsTotal', 'assistPlayerNameInitial', 'assistPersonId', 'assistTotal', 'turnoverTotal', 'stealPlayerName', 'stealPersonId', 'officialId', 'foulPersonalTotal', 'foulTechnicalTotal', 'foulDrawnPlayerName', 'foulDrawnPersonId', 'blockPlayerName', 'blockPersonId', 'gameId', 'isTargetScoreLastPeriod', 'area', 'areaDetail', 'year']</code></pre>
 </div>
 </div>
-<div id="fdbc2357" class="cell" data-execution_count="190">
+<div id="fdbc2357" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------  Game Metadata Analysis</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">1. Summary of the Game Data:"</span>)</span>
@@ -436,89 +436,90 @@ Dataset columns:
 <span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- Game Outcomes Analysis</span></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>games_summary <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>).agg({</span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scoreHome'</span>: <span class="st">'max'</span>,</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scoreAway'</span>: <span class="st">'max'</span>,</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">'teamTricode'</span>: <span class="st">'nunique'</span>,</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: <span class="st">'first'</span></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>}).reset_index()</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>games_summary[<span class="st">'point_differential'</span>] <span class="op">=</span> games_summary[<span class="st">'scoreHome'</span>] <span class="op">-</span> games_summary[<span class="st">'scoreAway'</span>]</span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>games_summary[<span class="st">'home_win'</span>] <span class="op">=</span> games_summary[<span class="st">'point_differential'</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyzing by year the game outcomes</span></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>yearly_outcomes <span class="op">=</span> games_summary.groupby(<span class="st">'year'</span>).agg({</span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gameId'</span>: <span class="st">'count'</span>,</span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">'home_win'</span>: [<span class="st">'sum'</span>, <span class="st">'mean'</span>],</span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">'point_differential'</span>: <span class="st">'mean'</span></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>}).<span class="bu">round</span>(<span class="dv">0</span>)</span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Outcomes by Season:"</span>)</span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> yearly_outcomes.index:</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>    games_count <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'gameId'</span>, <span class="st">'count'</span>)]</span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>    home_wins <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'home_win'</span>, <span class="st">'sum'</span>)]</span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    home_win_pct <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'home_win'</span>, <span class="st">'mean'</span>)] <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    avg_diff <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'point_differential'</span>, <span class="st">'mean'</span>)]</span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(year)<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">int</span>(games_count)<span class="sc">}</span><span class="ss"> games, </span><span class="sc">{</span><span class="bu">int</span>(home_wins)<span class="sc">}</span><span class="ss"> home wins , average point difference: </span><span class="sc">{</span><span class="bu">int</span>(avg_diff)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------- Missing Values Analysis</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing Values Analysis:"</span>)</span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the missing vaules for referee actions</span></span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Key variables for referee analysis</span></span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>key_variables <span class="op">=</span> [<span class="st">'gameId'</span>, <span class="st">'officialId'</span>, <span class="st">'teamTricode'</span>, <span class="st">'foulPersonalTotal'</span>, </span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>                <span class="st">'scoreHome'</span>, <span class="st">'scoreAway'</span>, <span class="st">'timeActual'</span>, <span class="st">'period'</span>]</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing values within actionType calls </span></span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>actiontype_total <span class="op">=</span> wnba_data.groupby(<span class="st">'actionType'</span>)[<span class="st">'officialId'</span>].size().reset_index(name<span class="op">=</span><span class="st">'total_count'</span>)</span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>actiontype_with_ref <span class="op">=</span> wnba_data[wnba_data[<span class="st">'officialId'</span>].notnull()].groupby(<span class="st">'actionType'</span>)[<span class="st">'officialId'</span>].count().reset_index(name<span class="op">=</span><span class="st">'referee_count'</span>)</span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>actiontype_counts <span class="op">=</span> pd.merge(actiontype_total, actiontype_with_ref, on<span class="op">=</span><span class="st">'actionType'</span>, how<span class="op">=</span><span class="st">'left'</span>).fillna(<span class="dv">0</span>)</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>actiontype_counts[<span class="st">'percent_missing'</span>] <span class="op">=</span> ((actiontype_counts[<span class="st">'total_count'</span>] <span class="op">-</span> actiontype_counts[<span class="st">'referee_count'</span>]) <span class="op">/</span> actiontype_counts[<span class="st">'total_count'</span>] <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>actiontype_counts <span class="op">=</span> actiontype_counts.sort_values(<span class="st">'percent_missing'</span>, ascending<span class="op">=</span><span class="va">False</span>).set_index(<span class="st">'actionType'</span>)</span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(actiontype_counts[[<span class="st">'total_count'</span>, <span class="st">'referee_count'</span>, <span class="st">'percent_missing'</span>]])</span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values</span></span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>actiontype_counts.index, </span>
-<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>actiontype_counts[<span class="st">'percent_missing'</span>])</span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">75</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Referee ID Missingness by ActionType'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'ActionType'</span>)</span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Percent Missing (%)'</span>)</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">105</span>)</span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing referee ID values for different subtypes within actionType = 'Turnover'</span></span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>turnover_data <span class="op">=</span> wnba_data[wnba_data[<span class="st">'actionType'</span>] <span class="op">==</span> <span class="st">'turnover'</span>]</span>
-<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>subtype_total <span class="op">=</span> turnover_data.groupby(<span class="st">'subType'</span>)[<span class="st">'officialId'</span>].size().reset_index(name<span class="op">=</span><span class="st">'total_count'</span>)</span>
-<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>subtype_with_ref <span class="op">=</span> turnover_data[turnover_data[<span class="st">'officialId'</span>].notnull()].groupby(<span class="st">'subType'</span>)[<span class="st">'officialId'</span>].count().reset_index(name<span class="op">=</span><span class="st">'referee_count'</span>)</span>
-<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> pd.merge(subtype_total, subtype_with_ref, on<span class="op">=</span><span class="st">'subType'</span>, how<span class="op">=</span><span class="st">'left'</span>).fillna(<span class="dv">0</span>)</span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>subtype_counts[<span class="st">'percent_missing'</span>] <span class="op">=</span> ((subtype_counts[<span class="st">'total_count'</span>] <span class="op">-</span> subtype_counts[<span class="st">'referee_count'</span>]) <span class="op">/</span> subtype_counts[<span class="st">'total_count'</span>] <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
-<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> subtype_counts.sort_values(<span class="st">'percent_missing'</span>, ascending<span class="op">=</span><span class="va">False</span>).set_index(<span class="st">'subType'</span>)</span>
-<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing Referee ID Values for Turnover Subtypes:"</span>)</span>
-<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(subtype_counts[[<span class="st">'total_count'</span>, <span class="st">'referee_count'</span>, <span class="st">'percent_missing'</span>]]) </span>
-<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values</span></span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
-<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
-<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>subtype_counts.index, </span>
-<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>subtype_counts[<span class="st">'percent_missing'</span>])</span>
-<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">75</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
-<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Referee ID Missingness by ActionType'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'ActionType'</span>)</span>
-<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Percent Missing (%)'</span>)</span>
-<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">105</span>)</span>
-<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------- Game Outcomes Analysis</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>games_summary <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>).agg({</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scoreHome'</span>: <span class="st">'max'</span>,</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scoreAway'</span>: <span class="st">'max'</span>,</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">'teamTricode'</span>: <span class="st">'nunique'</span>,</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: <span class="st">'first'</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>}).reset_index()</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>games_summary[<span class="st">'point_differential'</span>] <span class="op">=</span> games_summary[<span class="st">'scoreHome'</span>] <span class="op">-</span> games_summary[<span class="st">'scoreAway'</span>]</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>games_summary[<span class="st">'home_win'</span>] <span class="op">=</span> games_summary[<span class="st">'point_differential'</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyzing by year the game outcomes</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>yearly_outcomes <span class="op">=</span> games_summary.groupby(<span class="st">'year'</span>).agg({</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gameId'</span>: <span class="st">'count'</span>,</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">'home_win'</span>: [<span class="st">'sum'</span>, <span class="st">'mean'</span>],</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">'point_differential'</span>: <span class="st">'mean'</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>}).<span class="bu">round</span>(<span class="dv">0</span>)</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Outcomes by Season:"</span>)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> yearly_outcomes.index:</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>    games_count <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'gameId'</span>, <span class="st">'count'</span>)]</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    home_wins <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'home_win'</span>, <span class="st">'sum'</span>)]</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    home_win_pct <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'home_win'</span>, <span class="st">'mean'</span>)] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>    avg_diff <span class="op">=</span> yearly_outcomes.loc[year, (<span class="st">'point_differential'</span>, <span class="st">'mean'</span>)]</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(year)<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">int</span>(games_count)<span class="sc">}</span><span class="ss"> games, </span><span class="sc">{</span><span class="bu">int</span>(home_wins)<span class="sc">}</span><span class="ss"> home wins , average point difference: </span><span class="sc">{</span><span class="bu">int</span>(avg_diff)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------- Missing Values Analysis</span></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing Values Analysis:"</span>)</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the missing vaules for referee actions</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Key variables for referee analysis</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>key_variables <span class="op">=</span> [<span class="st">'gameId'</span>, <span class="st">'officialId'</span>, <span class="st">'teamTricode'</span>, <span class="st">'foulPersonalTotal'</span>, </span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>                <span class="st">'scoreHome'</span>, <span class="st">'scoreAway'</span>, <span class="st">'timeActual'</span>, <span class="st">'period'</span>]</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing values within actionType calls </span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>actiontype_total <span class="op">=</span> wnba_data.groupby(<span class="st">'actionType'</span>)[<span class="st">'officialId'</span>].size().reset_index(name<span class="op">=</span><span class="st">'total_count'</span>)</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>actiontype_with_ref <span class="op">=</span> wnba_data[wnba_data[<span class="st">'officialId'</span>].notnull()].groupby(<span class="st">'actionType'</span>)[<span class="st">'officialId'</span>].count().reset_index(name<span class="op">=</span><span class="st">'referee_count'</span>)</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>actiontype_counts <span class="op">=</span> pd.merge(actiontype_total, actiontype_with_ref, on<span class="op">=</span><span class="st">'actionType'</span>, how<span class="op">=</span><span class="st">'left'</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>actiontype_counts[<span class="st">'percent_missing'</span>] <span class="op">=</span> ((actiontype_counts[<span class="st">'total_count'</span>] <span class="op">-</span> actiontype_counts[<span class="st">'referee_count'</span>]) <span class="op">/</span> actiontype_counts[<span class="st">'total_count'</span>] <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>actiontype_counts <span class="op">=</span> actiontype_counts.sort_values(<span class="st">'percent_missing'</span>, ascending<span class="op">=</span><span class="va">False</span>).set_index(<span class="st">'actionType'</span>)</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(actiontype_counts[[<span class="st">'total_count'</span>, <span class="st">'referee_count'</span>, <span class="st">'percent_missing'</span>]])</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>actiontype_counts.index, </span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>actiontype_counts[<span class="st">'percent_missing'</span>])</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">75</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Referee ID Missingness by ActionType'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'ActionType'</span>)</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Percent Missing (%)'</span>)</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">105</span>)</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing referee ID values for different subtypes within actionType = 'Turnover'</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>turnover_data <span class="op">=</span> wnba_data[wnba_data[<span class="st">'actionType'</span>] <span class="op">==</span> <span class="st">'turnover'</span>]</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>subtype_total <span class="op">=</span> turnover_data.groupby(<span class="st">'subType'</span>)[<span class="st">'officialId'</span>].size().reset_index(name<span class="op">=</span><span class="st">'total_count'</span>)</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>subtype_with_ref <span class="op">=</span> turnover_data[turnover_data[<span class="st">'officialId'</span>].notnull()].groupby(<span class="st">'subType'</span>)[<span class="st">'officialId'</span>].count().reset_index(name<span class="op">=</span><span class="st">'referee_count'</span>)</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> pd.merge(subtype_total, subtype_with_ref, on<span class="op">=</span><span class="st">'subType'</span>, how<span class="op">=</span><span class="st">'left'</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>subtype_counts[<span class="st">'percent_missing'</span>] <span class="op">=</span> ((subtype_counts[<span class="st">'total_count'</span>] <span class="op">-</span> subtype_counts[<span class="st">'referee_count'</span>]) <span class="op">/</span> subtype_counts[<span class="st">'total_count'</span>] <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> subtype_counts.sort_values(<span class="st">'percent_missing'</span>, ascending<span class="op">=</span><span class="va">False</span>).set_index(<span class="st">'subType'</span>)</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Missing Referee ID Values for Turnover Subtypes:"</span>)</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(subtype_counts[[<span class="st">'total_count'</span>, <span class="st">'referee_count'</span>, <span class="st">'percent_missing'</span>]]) </span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize missing values</span></span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>subtype_counts.index, </span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>subtype_counts[<span class="st">'percent_missing'</span>])</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">75</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Referee ID Missingness by ActionType'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'ActionType'</span>)</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Percent Missing (%)'</span>)</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">105</span>)</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 1. Summary of the Game Data:
