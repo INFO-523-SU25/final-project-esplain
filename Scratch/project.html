@@ -615,107 +615,101 @@ inbound                          1            1.0              0.0</code></pre>
 </div>
 </div>
 </div>
-<div id="53b79443" class="cell" data-execution_count="191">
+<div id="53b79443" class="cell" data-execution_count="262">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">####  Data Cleaning and Preparation for Referee-level event counts from raw play-by-play</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =========================</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Build home/away mapping</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># =========================</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>wnba_data <span class="op">=</span> wnba_data.copy()</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'scoreHome_num'</span>] <span class="op">=</span> pd.to_numeric(wnba_data.get(<span class="st">'scoreHome'</span>), errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'scoreAway_num'</span>] <span class="op">=</span> pd.to_numeric(wnba_data.get(<span class="st">'scoreAway'</span>), errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>wnba_data <span class="op">=</span> wnba_data.sort_values([<span class="st">'gameId'</span>,<span class="st">'period'</span>,<span class="st">'timeActual'</span>], kind<span class="op">=</span><span class="st">'mergesort'</span>)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'home_diff'</span>] <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>)[<span class="st">'scoreHome_num'</span>].diff()</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'away_diff'</span>] <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>)[<span class="st">'scoreAway_num'</span>].diff()</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>first_home <span class="op">=</span> (</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    wnba_data[wnba_data[<span class="st">'home_diff'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'gameId'</span>, as_index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    .agg(home_tricode<span class="op">=</span>(<span class="st">'teamTricode'</span>,<span class="st">'first'</span>))</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>first_away <span class="op">=</span> (</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    wnba_data[wnba_data[<span class="st">'away_diff'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'gameId'</span>, as_index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    .agg(away_tricode<span class="op">=</span>(<span class="st">'teamTricode'</span>,<span class="st">'first'</span>))</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>ha_map <span class="op">=</span> pd.merge(first_home, first_away, on<span class="op">=</span><span class="st">'gameId'</span>, how<span class="op">=</span><span class="st">'outer'</span>)</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> wnba_data.merge(ha_map, on<span class="op">=</span><span class="st">'gameId'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_home'</span>] <span class="op">=</span> (df[<span class="st">'teamTricode'</span>] <span class="op">==</span> df[<span class="st">'home_tricode'</span>]).astype(<span class="bu">int</span>)</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_away'</span>] <span class="op">=</span> (df[<span class="st">'teamTricode'</span>] <span class="op">==</span> df[<span class="st">'away_tricode'</span>]).astype(<span class="bu">int</span>)</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'away_game'</span>] <span class="op">=</span> (df[<span class="st">'is_away'</span>] <span class="op">==</span> <span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Referee-level event table</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>ref_events <span class="op">=</span> wnba_data[wnba_data[<span class="st">'officialId'</span>].notna()].copy()</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co">#-- assign each unique referee ID a unique alphabet label </span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ref_label(idx):</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Ref </span><span class="sc">{</span><span class="bu">chr</span>(<span class="dv">65</span> <span class="op">+</span> idx)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapping from officialId based on sorted unique IDs</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>unique_ref_ids <span class="op">=</span> <span class="bu">sorted</span>(ref_events[<span class="st">'officialId'</span>].dropna().unique())</span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>ref_id_to_label <span class="op">=</span> {ref_id: ref_label(i) <span class="cf">for</span> i, ref_id <span class="kw">in</span> <span class="bu">enumerate</span>(unique_ref_ids)}</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Build home/away mapping</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>wnba_data <span class="op">=</span> wnba_data.copy()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'scoreHome_num'</span>] <span class="op">=</span> pd.to_numeric(wnba_data.get(<span class="st">'scoreHome'</span>), errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'scoreAway_num'</span>] <span class="op">=</span> pd.to_numeric(wnba_data.get(<span class="st">'scoreAway'</span>), errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>wnba_data <span class="op">=</span> wnba_data.sort_values([<span class="st">'gameId'</span>,<span class="st">'period'</span>,<span class="st">'timeActual'</span>], kind<span class="op">=</span><span class="st">'mergesort'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'home_diff'</span>] <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>)[<span class="st">'scoreHome_num'</span>].diff()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>wnba_data[<span class="st">'away_diff'</span>] <span class="op">=</span> wnba_data.groupby(<span class="st">'gameId'</span>)[<span class="st">'scoreAway_num'</span>].diff()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>first_home <span class="op">=</span> (</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    wnba_data[wnba_data[<span class="st">'home_diff'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'gameId'</span>, as_index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    .agg(home_tricode<span class="op">=</span>(<span class="st">'teamTricode'</span>,<span class="st">'first'</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>first_away <span class="op">=</span> (</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    wnba_data[wnba_data[<span class="st">'away_diff'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'gameId'</span>, as_index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    .agg(away_tricode<span class="op">=</span>(<span class="st">'teamTricode'</span>,<span class="st">'first'</span>))</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>ha_map <span class="op">=</span> pd.merge(first_home, first_away, on<span class="op">=</span><span class="st">'gameId'</span>, how<span class="op">=</span><span class="st">'outer'</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> wnba_data.merge(ha_map, on<span class="op">=</span><span class="st">'gameId'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_home'</span>] <span class="op">=</span> (df[<span class="st">'teamTricode'</span>] <span class="op">==</span> df[<span class="st">'home_tricode'</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'is_away'</span>] <span class="op">=</span> (df[<span class="st">'teamTricode'</span>] <span class="op">==</span> df[<span class="st">'away_tricode'</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'away_game'</span>] <span class="op">=</span> (df[<span class="st">'is_away'</span>] <span class="op">==</span> <span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Referee-level event table</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>ref_events <span class="op">=</span> wnba_data[wnba_data[<span class="st">'officialId'</span>].notna()].copy()</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#-- assign each unique referee ID a unique alphabet label </span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ref_label(idx):</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Ref </span><span class="sc">{</span><span class="bu">chr</span>(<span class="dv">65</span> <span class="op">+</span> idx)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapping from officialId based on sorted unique IDs</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>unique_ref_ids <span class="op">=</span> <span class="bu">sorted</span>(ref_events[<span class="st">'officialId'</span>].dropna().unique())</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>ref_id_to_label <span class="op">=</span> {ref_id: ref_label(i) <span class="cf">for</span> i, ref_id <span class="kw">in</span> <span class="bu">enumerate</span>(unique_ref_ids)}</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> [<span class="st">'actionType'</span>, <span class="st">'subType'</span>, <span class="st">'teamTricode'</span>]:</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> ref_events.columns:</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        ref_events[col] <span class="op">=</span> ref_events[col].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower().replace({<span class="st">'nan'</span>: np.nan})</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'teamTricode'</span>] <span class="op">=</span> ref_events[<span class="st">'teamTricode'</span>].fillna(<span class="st">'unknown'</span>)</span>
 <span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> [<span class="st">'actionType'</span>, <span class="st">'subType'</span>, <span class="st">'teamTricode'</span>]:</span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> ref_events.columns:</span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>        ref_events[col] <span class="op">=</span> ref_events[col].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower().replace({<span class="st">'nan'</span>: np.nan})</span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'teamTricode'</span>] <span class="op">=</span> ref_events[<span class="st">'teamTricode'</span>].fillna(<span class="st">'unknown'</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>home_away_map <span class="op">=</span> df[[<span class="st">'gameId'</span>,<span class="st">'teamTricode'</span>,<span class="st">'is_home'</span>,<span class="st">'is_away'</span>,<span class="st">'away_game'</span>]].drop_duplicates()</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>ref_events <span class="op">=</span> ref_events.merge(home_away_map, on<span class="op">=</span>[<span class="st">'gameId'</span>,<span class="st">'teamTricode'</span>], how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'team_status'</span>] <span class="op">=</span> np.where(ref_events[<span class="st">'is_home'</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="st">'home'</span>,</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>                            np.where(ref_events[<span class="st">'is_away'</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="st">'away'</span>, <span class="st">'unknown'</span>))</span>
 <span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>home_away_map <span class="op">=</span> df[[<span class="st">'gameId'</span>,<span class="st">'teamTricode'</span>,<span class="st">'is_home'</span>,<span class="st">'is_away'</span>,<span class="st">'away_game'</span>]].drop_duplicates()</span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>ref_events <span class="op">=</span> ref_events.merge(home_away_map, on<span class="op">=</span>[<span class="st">'gameId'</span>,<span class="st">'teamTricode'</span>], how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Assign global ref_label ---</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'ref_label'</span>] <span class="op">=</span> ref_events[<span class="st">'officialId'</span>].<span class="bu">map</span>(ref_id_to_label)</span>
 <span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'team_status'</span>] <span class="op">=</span> np.where(ref_events[<span class="st">'is_home'</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="st">'home'</span>,</span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>                            np.where(ref_events[<span class="st">'is_away'</span>] <span class="op">==</span> <span class="dv">1</span>, <span class="st">'away'</span>, <span class="st">'unknown'</span>))</span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Assign global ref_label ---</span></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>ref_events[<span class="st">'ref_label'</span>] <span class="op">=</span> ref_events[<span class="st">'officialId'</span>].<span class="bu">map</span>(ref_id_to_label)</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Base counts per (game, ref, teamTricode, team_status)</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>ref_event_counts <span class="op">=</span> (ref_events.groupby([<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>])</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    .agg(fouls_made<span class="op">=</span>(<span class="st">'actionType'</span>, <span class="kw">lambda</span> x: (x <span class="op">==</span> <span class="st">'foul'</span>).<span class="bu">sum</span>()),</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>        turnovers_made<span class="op">=</span>(<span class="st">'actionType'</span>, <span class="kw">lambda</span> x: (x <span class="op">==</span> <span class="st">'turnover'</span>).<span class="bu">sum</span>())    )</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    .reset_index())</span>
 <span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Base counts per (game, ref, teamTricode, team_status)</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>ref_event_counts <span class="op">=</span> (</span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>    ref_events.groupby([<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>])</span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>    .agg(</span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>        fouls_made<span class="op">=</span>(<span class="st">'actionType'</span>, <span class="kw">lambda</span> x: (x <span class="op">==</span> <span class="st">'foul'</span>).<span class="bu">sum</span>()),</span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>        turnovers_made<span class="op">=</span>(<span class="st">'actionType'</span>, <span class="kw">lambda</span> x: (x <span class="op">==</span> <span class="st">'turnover'</span>).<span class="bu">sum</span>())</span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Per-subtype counts (pivot wide by subtype) — include team_status in keys</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> (ref_events.groupby([<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>,<span class="st">'subType'</span>])</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>    .size()</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>    .reset_index())</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>key_cols <span class="op">=</span> [<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>]</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>sub_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> subtype_counts.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> key_cols]</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> subtype_counts.rename(columns<span class="op">=</span>{c: <span class="ss">f"st_</span><span class="sc">{</span><span class="bu">str</span>(c)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> c <span class="kw">in</span> sub_cols})</span>
 <span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Per-subtype counts (pivot wide by subtype) — include team_status in keys</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> (</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    ref_events.groupby([<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>,<span class="st">'subType'</span>])</span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    .size()</span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>referee_game_data <span class="op">=</span> ref_event_counts.merge(</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>    subtype_counts,</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>],</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>count_cols <span class="op">=</span> [<span class="st">'fouls_made'</span>,<span class="st">'turnovers_made'</span>] <span class="op">+</span> [c <span class="cf">for</span> c <span class="kw">in</span> referee_game_data.columns <span class="cf">if</span> c.startswith(<span class="st">'st_'</span>)]</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>referee_game_data[count_cols] <span class="op">=</span> referee_game_data[count_cols].fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
 <span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>key_cols <span class="op">=</span> [<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>]</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>sub_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> subtype_counts.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> key_cols]</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>subtype_counts <span class="op">=</span> subtype_counts.rename(columns<span class="op">=</span>{c: <span class="ss">f"st_</span><span class="sc">{</span><span class="bu">str</span>(c)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> c <span class="kw">in</span> sub_cols})</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Referee-game dataset shape: </span><span class="sc">{</span>referee_game_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique referees: </span><span class="sc">{</span>referee_game_data[<span class="st">'officialId'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Referee-game records: </span><span class="sc">{</span><span class="bu">len</span>(referee_game_data)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>referee_game_data <span class="op">=</span> ref_event_counts.merge(</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    subtype_counts,</span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>],</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>    how<span class="op">=</span><span class="st">'left'</span></span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>sample_cols <span class="op">=</span> [<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>,<span class="st">'fouls_made'</span>,<span class="st">'turnovers_made'</span>]</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'st_traveling'</span> <span class="kw">in</span> referee_game_data.columns:</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>    sample_cols.append(<span class="st">'st_traveling'</span>)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Sample of Referee-game dataset:"</span>)</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(referee_game_data[sample_cols].head(<span class="dv">5</span>))</span>
 <span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>count_cols <span class="op">=</span> [<span class="st">'fouls_made'</span>,<span class="st">'turnovers_made'</span>] <span class="op">+</span> [c <span class="cf">for</span> c <span class="kw">in</span> referee_game_data.columns <span class="cf">if</span> c.startswith(<span class="st">'st_'</span>)]</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>referee_game_data[count_cols] <span class="op">=</span> referee_game_data[count_cols].fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Referee-game dataset shape: </span><span class="sc">{</span>referee_game_data<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique referees: </span><span class="sc">{</span>referee_game_data[<span class="st">'officialId'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Referee-game records: </span><span class="sc">{</span><span class="bu">len</span>(referee_game_data)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>sample_cols <span class="op">=</span> [<span class="st">'gameId'</span>,<span class="st">'officialId'</span>,<span class="st">'ref_label'</span>,<span class="st">'teamTricode'</span>,<span class="st">'team_status'</span>,<span class="st">'fouls_made'</span>,<span class="st">'turnovers_made'</span>]</span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'st_traveling'</span> <span class="kw">in</span> referee_game_data.columns:</span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>    sample_cols.append(<span class="st">'st_traveling'</span>)</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Sample of Referee-game dataset:"</span>)</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(referee_game_data[sample_cols].head(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the referee mapping</span></span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Referee ID to Label Mapping:"</span>)</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ref_id, label <span class="kw">in</span> ref_id_to_label.items():</span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>ref_id<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Referee-game dataset shape: (394, 24)
@@ -724,18 +718,47 @@ Referee-game records: 394
 
 Sample of Referee-game dataset:
        gameId  officialId ref_label teamTricode team_status  fouls_made  \
-0  1042200101    100274.0     Ref A         lva     unknown           5   
-1  1042200101    100274.0     Ref A         pho     unknown           3   
-2  1042200101    101044.0     Ref E         lva     unknown           7   
-3  1042200101    101044.0     Ref E         pho     unknown           7   
-4  1042200101   1628167.0     Ref Q         lva     unknown           6   
+0  1042200101    100274.0     Ref A         lva        home           5   
+1  1042200101    100274.0     Ref A         pho        away           3   
+2  1042200101    101044.0     Ref E         lva        home           7   
+3  1042200101    101044.0     Ref E         pho        away           7   
+4  1042200101   1628167.0     Ref Q         lva        home           6   
 
    turnovers_made  st_traveling  
 0               3             1  
 1               1             0  
 2               4             0  
 3               2             0  
-4               2             0  </code></pre>
+4               2             0  
+
+Referee ID to Label Mapping:
+100274.0: Ref A
+100308.0: Ref B
+100697.0: Ref C
+100698.0: Ref D
+101044.0: Ref E
+101286.0: Ref F
+200431.0: Ref G
+200667.0: Ref H
+201538.0: Ref I
+202297.0: Ref J
+202679.0: Ref K
+203054.0: Ref L
+203440.0: Ref M
+203800.0: Ref N
+203891.0: Ref O
+1627526.0: Ref P
+1628167.0: Ref Q
+1628168.0: Ref R
+1628480.0: Ref S
+1628484.0: Ref T
+1628702.0: Ref U
+1628952.0: Ref V
+1629174.0: Ref W
+1629176.0: Ref X
+1629178.0: Ref Y
+1629422.0: Ref Z
+1629770.0: Ref [</code></pre>
 </div>
 </div>
 <div id="f83359cc" class="cell">
