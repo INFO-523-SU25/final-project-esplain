@@ -81,7 +81,7 @@
     "href": "presentation.html#future-considerations",
     "title": "Whistle Bias?",
     "section": "Future Considerations",
-    "text": "Future Considerations\n\nData Expansion:\n\nIncorporate full seasons (including missing games and current season)\n\nIncrease sample size to improve cluster stability\n\nModeling Enhancements:\n\nApply mixed-effects / hierarchical regressions with crew & referee effects\n\nControl for game context (score margin, competitiveness, playoff vs. regular season)\n\nRobustness Checks:\n\nValidate clusters with alternative methods (e.g., DBSCAN, hierarchical clustering)\n\nCompare PCA-based results with raw feature clustering\n\nPractical Implications:\n\nAssess whether strict-on-away crews correlate with higher home win probability\n\nExplore league-level monitoring to identify outlier officials or crews"
+    "text": "Future Considerations\n\nData Expansion\n\nAdd full/missing seasons, including current\n\nGrow sample size for more stable clusters\n\nModeling\n\nUse mixed-effects regressions (crew & referee effects)\n\nControl for context (score margin, competitiveness, playoffs)\n\nRobustness\n\nTest alternative clustering (DBSCAN, hierarchical)\n\nCompare PCA vs. raw feature clustering\n\nImplications\n\nCheck if strict-on-away crews boost home win rates\n\nExplore league monitoring to flag outlier officials/crews"
   },
   {
     "objectID": "about.html",
