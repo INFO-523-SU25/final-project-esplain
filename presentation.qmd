@@ -1,16 +1,17 @@
 ---
-title: "Project title"
-subtitle: "INFO 523 - Summer 2025 - Final Project"
-author: "Author names"
+title: Whistle Bias?
+subtitle: "Investigating Referee Influence on WNBA Away Games<br><br>INFO 523 - Summer 2025 - Final Project"
+author: "Amy Esplain"
 title-slide-attributes:
-  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
+  data-background-image: images/refereestock.png
   data-background-size: stretch
-  data-background-opacity: "0.7"
+  data-background-opacity: "0.5"
   data-slide-number: none
+  data-font-color: white
 format:
   revealjs:
-    theme:  ['data/customtheming.scss']
-  
+    theme: dark
+
 editor: visual
 jupyter: python3
 execute:
@@ -51,117 +52,201 @@ mtcars['speed'] = mtcars['horsepower'] / mtcars['weight']
 penguins = sns.load_dataset('penguins').dropna()
 ```
 
-# Using Quarto for presentations
+# Presentation Recording:
+[Link to recording](https://arizona.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=3eeb27b3-7f14-47a5-9fce-b33f005a24c9)
 
-## Quarto
 
--   The presentation is created using the Quarto CLI
+# Table of Contents {.smaller}
+- Motivation & Research Question
+- Dataset Exploration
+- Feature Engineeering
+- Data Mining Approach: K Means and PCA
+- Conclusion
+- Future Considerations
 
--   `##` sets the start of a new slide
 
-## Layouts
 
-You can use plain text
+## Motivation & Research Question {.smaller}
 
+### Motivation
+With the WNBA’s rapid rise in popularity and visibility, this project is motivated by the increase in analytics and visibility we have in the sport.
+
+### Research Questions
+ This project evaluates the fairness of officiating by studying the following questions:
+
+1.  Do home teams have significantly higher win rates under specific referee crews?
+
+2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
+
+3.  Do certain referees call more fouls on away teams?
+
+### Primary Metrics
+Foul and turnover differentials called by each ref, and combination of refs.
+
+## Dataset & Metrics {.smaller}
+
+### Dataset
+-   65 complete games from August 2022 to October 2024
+-   11 teams instead of 12 total teams with 27 unique referee IDs
+-   Dataset is incomplete therefore proceed with caution!
+
+### Primary Metrics
+
+Average difference (away - home) per game for:
+
+1.  Foul difference
+
+2.  Whistle turnover difference
+
+ Referee & Referee crew level
+
+
+## Exploratory Analysis: <br> Individual Referees {.smaller}
 ::::: columns
-::: {.column width="40%"}
--   or bullet points[^1]
-:::
-
 ::: {.column width="60%"}
-or in two columns
+![](images/output1.png){fig-align="left" width="100%"}
+:::
+
+::: {.column width="40%"}
+- Most referees cluster near neutral (little difference between home vs. away)
+
+- Ref D & Ref V: strict on away (more fouls + more turnovers)
+
+- Ref P: lenient on away (fewer fouls + fewer turnovers)
+
 :::
 :::::
 
-[^1]: And add footnotes
+## Exploratory Analysis: <br> Referee Crew {.smaller}
+::::: columns
+::: {.column width="60%"}
+![](images/output2.png){fig-align="left" width="100%"}
+:::
 
--   like
+::: {.column width="40%"}
+- Most crews near neutral (balanced fouls/turnovers)
 
--   this
+- Strict on away (top-right)
 
-## Code
+- Turnover-heavy on away (top-left)
 
-```{python}
-from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import pandas as pd
+- Lenient on away (bottom) with fewer turnovers, neutral fouls
 
-# Fit a linear regression model
-X = mtcars[['speed']]
-y = mtcars['mpg']
-model = LinearRegression().fit(X, y)
+:::
+:::::
 
-# Summary of the model
-X2 = sm.add_constant(X)
-est = sm.OLS(y, X2)
-est2 = est.fit()
-print(est2.summary())
-```
+# Data Mining Approach {.smaller}
+- Calinski–Harabasz index to determine clusters
+- K-means and PCA to cluster data
 
-## Plots
-
-```{python}
-penguins['species'] = penguins['species'].apply(lambda x: "Adelie" if x == "Adelie" else "Other")
-sns.scatterplot(data=penguins, x='flipper_length_mm', y='body_mass_g', hue='species')
-plt.show()
-```
-
-## Plot and text
+## Choosing Clusters {.smaller}
 
 ::::: columns
-::: {.column width="50%"}
--   Some text
-
--   goes here
+::: {.column width="45%"}
+![](images/CHREF.png){fig-align="left" width="80%"}
+![](images/CHCREW.png){fig-align="left" width="80%"}
 :::
 
-::: {.column width="50%"}
-```{python}
-#| warning: false
-#| fig.width: 5.5
-fig, ax = plt.subplots(figsize=(5.5, 5.5 * 0.618))
-sns.boxplot(data=penguins, x='bill_length_mm', y='species', hue='species', ax=ax)
-plt.show()
-```
+::: {.column width="55%"}
+ 
+ **Clustering method:** Calinski–Harabasz (CH) index used to determine number of clusters for referees and crews  
+
+**Individual Referees (Figure 8) **
+
+- CH curve jumps sharply from *k = 2 → 3* then levels off  
+- Modest uptick around *k ≈ 6–7*  
+- **Chosen k = 6**: reveals structure without over fragmentation 
+
+ **Referee Crews (Figure 9) **
+
+- CH index rises steadily but bends near *k ≈ 7–8*  
+- **Chosen k = 8**: captures group separation at natural elbow point  
 :::
 :::::
 
-# A new section...
 
-## Tables
+## K-Means PCA Modeling: Referee-Level {.smaller .scrollable}
+::::: columns
+::: {.column width="50%"}
+![](images/PCA_REF.png){fig-align="left" width="99%"}
+PCA retains 82% variance 
+:::
 
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+::: {.column width="50%"}
+- Key Takeaways: Most referees cluster near neutral (cluster 2)
+  - Strict-on-away patterns: Cluster 0 (turnover-heavy), Cluster 3 (foul-heavy)  
+  - Lenient-on-away patterns: Cluster 1 (foul-driven), Cluster 4 (turnover-driven)  
 
-```{python}
-penguins.head().to_html()
-```
+- Features used:
+  - Average foul difference (Away − Home)  
+  - Average turnover whistle difference (Away − Home)  
 
-## Images
+:::
+:::::
 
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png){fig-align="center" width="500"}
+## K-Means PCA Modeling:  Crew-Level {.smaller .scrollable}
+::::: columns
+::: {.column width="50%"}
+![](images/PCACREW.png){fig-align="left" width="99%"}
+PCA retains 75.6% variance
 
-## Math Expressions {.smaller}
+:::
 
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\\alpha+\\beta\$ renders $\alpha + \beta$. You can use the display style with double dollar signs:
+::: {.column width="50%"}
+- Key Takeaways: Crew effects stronger on turnovers than fouls  
+  - Strict-on-away: Clusters 0, 4, 7  
+  - Lenient-on-away: Clusters 2, 3, 6 (outlier)  
+  - Mixed profiles: Clusters 1, 5  
 
-```         
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
+- Features used:
+  - Average foul difference (Away − Home)  
+  - Average turnover whistle difference (Away − Home)  
 
-$$
-\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i
-$$
+:::
+:::::
 
-Limitations:
 
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
+## Conclusion {.smaller}
 
-2.  There should not be spaces after the opening `$` or before the closing `$`.
+- **PCA + K-Means Results:**  
+  - Referees model (k=6) explain ≈82% variance and crews model (k=8) explain ≈75% variance  
+  - Moderate silhouette scores thus interpretable structure without overfitting  
 
-# Wrap up
+- **Crew-Level Patterns:** Most crews near neutral
+  - Small subset “strict-on-away”  
+  - Four types: strict-on-away, foul-heavy, turnover-heavy, lenient-on-away  
+  - Stronger dispersion in **turnover calls** than fouls  
 
-## Feeling adventurous?
+- **Referee-Level Patterns:** Most referees neutral
+  - Few outliers drive asymmetry  
 
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
+- **Overall Implication:**  
+  - Evidence of crew- and referee-specific tendencies, not league-wide bias  
+  - Findings limited by partial season data  
 
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.
+## Future Considerations{.smaller}
+
+- **Data Expansion**
+  - Add full/missing seasons, including current  
+  - Grow sample size for more stable clusters  
+
+- **Modeling**
+  - Use mixed-effects regressions (crew & referee effects)  
+  - Control for context (score margin, competitiveness, playoffs)  
+
+- **Robustness**
+  - Test alternative clustering (DBSCAN, hierarchical)  
+  - Compare PCA vs. raw feature clustering  
+
+- **Implications**
+  - Check if strict-on-away crews boost home win rates  
+  - Explore league monitoring to flag outlier officials/crews  
+
+# Thank you!
+
+
+
+
+
+
+

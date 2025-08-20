@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://INFO-523-SU25.github.io/final-project-esplain/proposal.html</loc>
-    <lastmod>2025-08-10T21:14:57.653Z</lastmod>
-  </url>
-  <url>
-    <loc>https://INFO-523-SU25.github.io/final-project-esplain/index.html</loc>
-    <lastmod>2025-08-05T00:17:30.634Z</lastmod>
-  </url>
-  <url>
-    <loc>https://INFO-523-SU25.github.io/final-project-esplain/about.html</loc>
-    <lastmod>2025-08-06T02:33:24.916Z</lastmod>
+    <loc>https://INFO-523-SU25.github.io/final-project-esplain/Scratch/project.html</loc>
+    <lastmod>2025-08-19T03:31:35.442Z</lastmod>
   </url>
   <url>
     <loc>https://INFO-523-SU25.github.io/final-project-esplain/presentation.html</loc>
-    <lastmod>2025-08-06T02:33:25.115Z</lastmod>
+    <lastmod>2025-08-20T05:38:11.365Z</lastmod>
+  </url>
+  <url>
+    <loc>https://INFO-523-SU25.github.io/final-project-esplain/about.html</loc>
+    <lastmod>2025-08-10T21:22:56.384Z</lastmod>
+  </url>
+  <url>
+    <loc>https://INFO-523-SU25.github.io/final-project-esplain/index.html</loc>
+    <lastmod>2025-08-19T03:40:00.390Z</lastmod>
+  </url>
+  <url>
+    <loc>https://INFO-523-SU25.github.io/final-project-esplain/proposal.html</loc>
+    <lastmod>2025-08-19T03:11:12.115Z</lastmod>
   </url>
 </urlset>

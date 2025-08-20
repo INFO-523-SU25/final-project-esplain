@@ -1,0 +1,2 @@
+The project.ipynb file is the working file for the final project. Not all code is included in the final report, but it contains all the necessary code to reproduce the results.
+The index.qmd file is the main page of the project and reflects the final report. All code chunks in this file are included in the final report, and it is designed to be a clean and readable version of the project.

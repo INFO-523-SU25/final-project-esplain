@@ -1,5 +1,5 @@
 ---
-title: "Whistle Bias? Investigating Referee Influence on WNBA Home Game Outcomes"
+title: "Whistle Bias? Investigating Referee Influence on WNBA Away Game Outcomes"
 
 subtitle: "INFO 523 - Final Project"
 author: 
@@ -21,4 +21,982 @@ jupyter: python3
 
 ## Abstract
 
-Add project abstract here.
+The Women’s National Basketball Association (WNBA) has experienced significant growth in recent years, accompanied by an increasing emphasis on data analytics to enhance forecasting and anomaly detection capabilities. This project seeks to evaluate the fairness of officiating in the WNBA by applying data mining techniques to referee assignment data, foul differentials, and game outcomes. The primary objective is to identify potential officiating bias and assess the extent to which individual referees may contribute to a home-court advantage. This study will examine potential officiating bias in WNBA games by analyzing referee assignment data, foul differentials, and game outcomes across multiple seasons.
+
+## Research Question
+
+The research questions guiding this project are designed to uncover patterns in officiating behavior within the WNBA using unsupervised data mining techniques. Rather than testing predefined hypotheses, the goal is to explore underlying structures and trends in referee decision-making that may indicate systemic tendencies or inconsistencies.
+
+1.  Do home teams have significantly higher win rates under specific referee crews?
+2.  When games are officiated by certain referee combinations, do they have higher or lower foul disparity?
+3.  Do certain referees call more fouls on away teams?
+
+## Dataset
+
+The dataset is a granular play-by-play level dataset in order to capture the fouls called within a game with an identifiable referee. The chosen dataset is from Kaggle created by Vladislav Shufinskiy ([dataset link](https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data)) who combined several sources into several datasets for publicly available use. Leveraging this dataset eliminates issues with limitations on API data requests per game for play-by-play details.
+
+```{python}
+# For data handling
+import os
+import pandas as pd
+import numpy as np
+import sys
+import re
+
+# For clustering
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score, calinski_harabasz_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# For visualization
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.decomposition import PCA
+
+data_folder = "./data"
+
+# Load individual season data
+wnba_2022 = pd.read_csv(os.path.join(data_folder, "wnba_2022.csv"))
+wnba_2023 = pd.read_csv(os.path.join(data_folder, "wnba_2023.csv"))
+wnba_2024 = pd.read_csv(os.path.join(data_folder, "wnba_2024.csv"))
+
+# Combine all seasons into one dataset
+wnba_data = pd.concat([wnba_2022, wnba_2023, wnba_2024], ignore_index=True)
+
+# Add a year column for Time Actual that's in format ISO8601
+wnba_data['timeActual'] = pd.to_datetime(wnba_data['timeActual'], format='ISO8601')
+# Ensure 'timeActual' is in datetime format
+wnba_data['year'] = wnba_data['timeActual'].dt.year
+
+```
+
+### General Game Data Overview
+
+The dataset consists of 65 games spanning August 2022 to October 2024. A typical WNBA season includes around 40 games between May and September. However, this dataset covers only 65 games total across this period and includes data for 11 teams rather than the full 12 active teams.Therefore, the dataset is incomplete, and any insights drawn from this analysis should be interpreted with caution, as they may not fully represent league-wide trends or season-long dynamics.
+
+```{python}
+print(f"Number of games: {wnba_data['gameId'].nunique()}")
+# Convert timeActual to datetime with proper format handling
+wnba_data['timeActual'] = pd.to_datetime(wnba_data['timeActual'], format='ISO8601')
+min_date = wnba_data['timeActual'].min().strftime('%B %Y')
+max_date = wnba_data['timeActual'].max().strftime('%B %Y')
+
+print(f"Date range: {min_date} to {max_date}")
+print(f"Number of teams: {wnba_data['teamTricode'].nunique()}")
+print("Teams:", sorted(wnba_data['teamTricode'].dropna().unique()))
+
+# -------------------- Game Outcomes Analysis
+
+games_summary = wnba_data.groupby('gameId').agg({
+    'scoreHome': 'max',
+    'scoreAway': 'max',
+    'teamTricode': 'nunique',
+    'year': 'first'
+}).reset_index()
+
+games_summary['point_differential'] = games_summary['scoreHome'] - games_summary['scoreAway']
+games_summary['home_win'] = games_summary['point_differential'] > 0
+
+# Analyzing by year the game outcomes
+yearly_outcomes = games_summary.groupby('year').agg({
+    'gameId': 'count',
+    'home_win': ['sum', 'mean'],
+    'point_differential': 'mean'
+}).round(0)
+
+print("\nOutcomes by Season:")
+for year in yearly_outcomes.index:
+    games_count = yearly_outcomes.loc[year, ('gameId', 'count')]
+    home_wins = yearly_outcomes.loc[year, ('home_win', 'sum')]
+    home_win_pct = yearly_outcomes.loc[year, ('home_win', 'mean')] * 100
+    avg_diff = yearly_outcomes.loc[year, ('point_differential', 'mean')]
+    
+    print(f"{int(year)}: {int(games_count)} games, {int(home_wins)} home wins , average point difference: {int(avg_diff)}")
+```
+
+### Summary of Referee Assignments
+
+A total of 27 unique referees appear across these games, with an average of 3.05 referees per game, which aligns with the standard three-person officiating crew format in the WNBA. Slight variation above 3.0 suggests instances of additional referee records, possibly due to substitutions or overtime data. The most active referees is defined by the number of appearances across distinct games. There are 7 referees who have appeared more than 15 times across the 65 games data set (Figure 1).
+
+```{python}
+referee_data = wnba_data[wnba_data['officialId'].notnull()]
+
+# Calculate the count of how many games have referee data
+games_with_referee_data = referee_data['gameId'].nunique()
+total_games = wnba_data['gameId'].nunique()
+
+print(f"Games with referee data: {games_with_referee_data} out of {total_games} total games ({games_with_referee_data/total_games*100:.1f}%)")
+print(f"Records with referee data: {len(referee_data):,} ({len(referee_data)/len(wnba_data)*100:.1f}%)")
+print(f"Unique referees: {referee_data['officialId'].nunique()}")
+
+# Referee assignments per game
+referee_assignments = referee_data.groupby('gameId')['officialId'].nunique().reset_index()
+referee_assignments.columns = ['gameId', 'num_referees']
+print(f"Average referees per game: {referee_assignments['num_referees'].mean():.2f}")
+
+
+# Referee unique game count
+all_referees = referee_data.groupby('officialId')['gameId'].nunique().sort_values(ascending=False)
+all_referees.index = all_referees.index.astype(str)  # Ensure IDs are strings, no decimals
+plt.figure(figsize=(8,5))
+sns.barplot(
+    x=all_referees.index, 
+    y=all_referees.values
+)
+plt.xticks(rotation=45, ha='right')
+plt.title('Figure 1: Count of Unique Games per Referee', fontsize=14, fontweight='bold')
+plt.xlabel('Referee ID')
+plt.ylabel('Number of Unique Games')
+plt.tight_layout()
+plt.show()
+```
+
+### Missing Values Analysis
+
+Referee ID data is missing across most action types. Core gameplay events such as shots, rebounds, substitutions, steals, and blocks have 100% missing referee IDs, which reflects structural design rather than data errors since these actions don’t require official attribution (Table 1). In contrast, fouls (0% missing) and violations (8% missing) consistently record referee IDs, making them reliable categories for analyzing officiating behavior (Table 1).
+
+Turnovers (56% missing) subtypes shows that missing referee IDs are tied to the nature of the event. There are subtypes like bad passes (100%), lost ball (98.7%), and other unforced errors almost never log a referee, reflecting that these turnovers occur without a whistle.
+
+In contrast, whistle-driven subtypes such as offensive fouls, traveling, double dribble, 5-second, 8-second, and inbound violations Referee IDs always recorded (Table 2).Intermediate categories like 3-second violations (17.6%), backcourt (11.1%), shot clock (10.9%), and out-of-bounds (4.5%) have high but not perfect coverage, likely due to inconsistent logging (Table 2). This confirms referee attribution is reliable only for whistle-based turnovers which will be used in this analysis.
+
+```{python}
+
+# Missing values within actionType calls
+actiontype_total = wnba_data.groupby('actionType')['officialId'].size().reset_index(name='total_count')
+actiontype_with_ref = wnba_data[wnba_data['officialId'].notnull()].groupby('actionType')['officialId'].count().reset_index(name='referee_count')
+actiontype_counts = pd.merge(actiontype_total, actiontype_with_ref, on='actionType', how='left').fillna(0)
+actiontype_counts['percent_missing'] = ((actiontype_counts['total_count'] - actiontype_counts['referee_count']) / actiontype_counts['total_count'] * 100).round(1)
+actiontype_counts = actiontype_counts.sort_values('percent_missing', ascending=False).set_index('actionType')
+print("Table 1: Action Type Breakout")
+print(actiontype_counts[['total_count', 'referee_count', 'percent_missing']])
+
+# Visualize missing values
+plt.figure(figsize=(8,5))
+sns.barplot(
+    x=actiontype_counts.index, 
+    y=actiontype_counts['percent_missing'])
+plt.xticks(rotation=75, ha='right')
+plt.title('Figure 2: Referee ID Missingness by ActionType', fontsize=14, fontweight='bold')
+plt.xlabel('ActionType')
+plt.ylabel('Percent Missing (%)')
+plt.ylim(0, 105)
+plt.tight_layout()
+plt.show()
+
+# Visualize missing referee ID values for Turnover
+turnover_data = wnba_data[wnba_data['actionType'] == 'turnover']
+
+subtype_total = turnover_data.groupby('subType')['officialId'].size().reset_index(name='total_count')
+subtype_with_ref = turnover_data[turnover_data['officialId'].notnull()].groupby('subType')['officialId'].count().reset_index(name='referee_count')
+subtype_counts = pd.merge(subtype_total, subtype_with_ref, on='subType', how='left').fillna(0)
+subtype_counts['percent_missing'] = ((subtype_counts['total_count'] - subtype_counts['referee_count']) / subtype_counts['total_count'] * 100).round(1)
+subtype_counts = subtype_counts.sort_values('percent_missing', ascending=False).set_index('subType')
+print("\nTable 2: Missing Referee ID Values for Turnover Subtypes")
+print(subtype_counts[['total_count', 'referee_count', 'percent_missing']]) 
+
+
+```
+
+## Feature Engineering
+
+```{python}
+
+####  Data Cleaning and Preparation for Referee-level
+
+# Build home/away mapping
+
+wnba_data = wnba_data.copy()
+wnba_data['scoreHome_num'] = pd.to_numeric(wnba_data.get('scoreHome'), errors='coerce')
+wnba_data['scoreAway_num'] = pd.to_numeric(wnba_data.get('scoreAway'), errors='coerce')
+wnba_data = wnba_data.sort_values(['gameId','period','timeActual'], kind='mergesort')
+
+wnba_data['home_diff'] = wnba_data.groupby('gameId')['scoreHome_num'].diff()
+wnba_data['away_diff'] = wnba_data.groupby('gameId')['scoreAway_num'].diff()
+
+first_home = (
+    wnba_data[wnba_data['home_diff'] > 0]
+    .groupby('gameId', as_index=False)
+    .agg(home_tricode=('teamTricode','first')))
+first_away = (
+    wnba_data[wnba_data['away_diff'] > 0]
+    .groupby('gameId', as_index=False)
+    .agg(away_tricode=('teamTricode','first')))
+ha_map = pd.merge(first_home, first_away, on='gameId', how='outer')
+
+df = wnba_data.merge(ha_map, on='gameId', how='left')
+df['is_home'] = (df['teamTricode'] == df['home_tricode']).astype(int)
+df['is_away'] = (df['teamTricode'] == df['away_tricode']).astype(int)
+df['away_game'] = (df['is_away'] == 1).astype(int)
+
+# Referee-level event table
+ref_events = wnba_data[wnba_data['officialId'].notna()].copy()
+
+#-- assign each unique referee ID a unique alphabet label 
+def ref_label(idx):
+    return f"Ref {chr(65 + idx)}"
+
+# Mapping from officialId based on sorted unique IDs
+unique_ref_ids = sorted(ref_events['officialId'].dropna().unique())
+ref_id_to_label = {ref_id: ref_label(i) for i, ref_id in enumerate(unique_ref_ids)}
+
+for col in ['actionType', 'subType', 'teamTricode']:
+    if col in ref_events.columns:
+        ref_events[col] = ref_events[col].astype(str).str.strip().str.lower().replace({'nan': np.nan})
+
+ref_events['teamTricode'] = ref_events['teamTricode'].fillna('unknown')
+
+home_away_map = df[['gameId','teamTricode','is_home','is_away','away_game']].drop_duplicates()
+ref_events = ref_events.merge(home_away_map, on=['gameId','teamTricode'], how='left')
+
+ref_events['team_status'] = np.where(ref_events['is_home'] == 1, 'home',
+                            np.where(ref_events['is_away'] == 1, 'away', 'unknown'))
+
+# --- Assign global ref_label ---
+ref_events['ref_label'] = ref_events['officialId'].map(ref_id_to_label)
+
+# --- Base counts per (game, ref, teamTricode, team_status)
+ref_event_counts = (
+    ref_events.groupby(['gameId','officialId','ref_label','teamTricode','team_status'])
+    .agg(
+        fouls_made=('actionType', lambda x: (x == 'foul').sum()),
+        turnovers_made=('actionType', lambda x: (x == 'turnover').sum())
+    )
+    .reset_index())
+
+# --- Per-subtype counts (pivot wide by subtype)
+subtype_counts = (
+    ref_events.groupby(['gameId','officialId','ref_label','teamTricode','team_status','subType'])
+    .size()
+    .unstack(fill_value=0)
+    .reset_index())
+
+key_cols = ['gameId','officialId','ref_label','teamTricode','team_status']
+sub_cols = [c for c in subtype_counts.columns if c not in key_cols]
+subtype_counts = subtype_counts.rename(columns={c: f"st_{str(c)}" for c in sub_cols})
+
+referee_game_data = ref_event_counts.merge(
+    subtype_counts,
+    on=['gameId','officialId','ref_label','teamTricode','team_status'],
+    how='left')
+
+count_cols = ['fouls_made','turnovers_made'] + [c for c in referee_game_data.columns if c.startswith('st_')]
+referee_game_data[count_cols] = referee_game_data[count_cols].fillna(0).astype(int)
+
+sample_cols = ['gameId','officialId','ref_label','teamTricode','team_status','fouls_made','turnovers_made']
+if 'st_traveling' in referee_game_data.columns:
+    sample_cols.append('st_traveling')
+
+
+# --- normalize text fields
+for c in ['actionType','subType','teamTricode']:
+    if c in wnba_data.columns:
+        wnba_data[c] = wnba_data[c].astype(str).str.lower().replace('nan', np.nan)
+
+# --- coerce scores to numeric
+wnba_data['scoreHome_num'] = pd.to_numeric(wnba_data['scoreHome'], errors='coerce')
+wnba_data['scoreAway_num'] = pd.to_numeric(wnba_data['scoreAway'], errors='coerce')
+
+# --- sort for correct order
+wnba_data = wnba_data.sort_values(['gameId','period','timeActual'], kind='mergesort')
+
+# --- detect scoreboard increments
+wnba_data['home_diff'] = wnba_data.groupby('gameId')['scoreHome_num'].diff()
+wnba_data['away_diff'] = wnba_data.groupby('gameId')['scoreAway_num'].diff()
+
+# --- first scoring teams = home/away
+first_home = (
+    wnba_data[wnba_data['home_diff'] > 0]
+    .groupby('gameId', as_index=False)
+    .agg(home_tricode=('teamTricode','first')))
+first_away = (
+    wnba_data[wnba_data['away_diff'] > 0]
+    .groupby('gameId', as_index=False)
+    .agg(away_tricode=('teamTricode','first')))
+ha_map = pd.merge(first_home, first_away, on='gameId', how='outer')
+
+# --- merge mapping back
+df = wnba_data.merge(ha_map, on='gameId', how='left')
+df['is_home'] = (df['teamTricode'] == df['home_tricode']).astype(int)
+df['is_away'] = (df['teamTricode'] == df['away_tricode']).astype(int)
+
+# --- turnover types that involve whistles
+turnover_keep = {
+    '3-second-violation','backcourt','shot clock','out-of-bounds',
+    'traveling','5-second-violation','double dribble','8-second-violation',
+    'offensive foul','inbound'}
+
+# --- keep fouls + selected turnovers
+mask_foul = df['actionType'] == 'foul'
+mask_to   = (df['actionType'] == 'turnover') & df['subType'].isin(turnover_keep)
+df = df[mask_foul | mask_to].copy()
+
+# --- basic foul + turnover counts
+df['foul_count'] = (df['actionType'] == 'foul').astype(int)
+df['turnover_whistle'] = (df['actionType'] == 'turnover').astype(int)
+
+# --- split by home/away
+df['foul_count_home'] = df['foul_count'] * df['is_home']
+df['foul_count_away'] = df['foul_count'] * df['is_away']
+df['turnover_whistle_home'] = df['turnover_whistle'] * df['is_home']
+df['turnover_whistle_away'] = df['turnover_whistle'] * df['is_away']
+
+
+# GLOBAL REF LABEL MAPPING
+
+unique_ref_ids = sorted(df['officialId'].dropna().unique())
+ref_id_to_label = {ref_id: f"Ref {chr(65+i)}" for i, ref_id in enumerate(unique_ref_ids)}
+
+# Per-game crew label string using global mapping
+def crew_label_str(official_ids):
+    ids = [oid for oid in sorted(set(official_ids)) if pd.notna(oid)]
+    return ', '.join([ref_id_to_label[oid] for oid in ids])
+
+crew_map = (
+    df.groupby('gameId')['officialId']
+      .apply(lambda s: sorted(set(s.dropna())))
+      .reset_index(name='official_ids')
+)
+crew_map['crew_combo'] = crew_map['official_ids'].apply(crew_label_str)
+crew_map = crew_map[['gameId','crew_combo']]
+
+# Attach each event’s ref_label using the global mapping
+df['ref_label'] = df['officialId'].map(ref_id_to_label)
+
+# INDIVIDUAL (per ref per game) aggregates
+referee_game_data = (
+    df.groupby(['gameId','officialId','ref_label','teamTricode'])
+      .agg(
+          fouls_made=('foul_count','sum'),
+          turnovers_made=('turnover_whistle','sum'),
+          fouls_home=('foul_count_home','sum'),
+          fouls_away=('foul_count_away','sum'),
+          to_home=('turnover_whistle_home','sum'),
+          to_away=('turnover_whistle_away','sum')
+      )
+      .reset_index()
+)
+
+# CREW (per game) aggregates
+
+games_with_refs = (
+    df.groupby('gameId')
+      .agg(
+          official_crew=('officialId', lambda x: sorted(set(x.dropna()))),
+          foul_count=('foul_count','sum'),
+          foul_count_home=('foul_count_home','sum'),
+          foul_count_away=('foul_count_away','sum'),
+          turnover_whistle=('turnover_whistle','sum'),
+          turnover_whistle_home=('turnover_whistle_home','sum'),
+          turnover_whistle_away=('turnover_whistle_away','sum'),
+          scoreHome=('scoreHome_num','max'),
+          scoreAway=('scoreAway_num','max')
+      )
+      .reset_index()
+)
+
+# Apply the global crew label string
+games_with_refs = games_with_refs.merge(crew_map, on='gameId', how='left')
+games_with_refs['crew_size'] = games_with_refs['official_crew'].apply(lambda ids: len(set(ids)))
+games_with_refs['point_diff_home'] = games_with_refs['scoreHome'] - games_with_refs['scoreAway']
+games_with_refs['home_win'] = (games_with_refs['point_diff_home'] > 0).astype(int)
+games_with_refs['away_game'] = (games_with_refs['home_win'] == 0).astype(int)
+
+games_with_refs.to_csv(os.path.join(data_folder, 'games_with_refs.csv'), index=False)
+
+# ------ REFEREE-LEVEL DIFFERENCES
+sns.set_theme(style="white")
+
+# Ensure a label exists
+if "ref_label" not in referee_game_data.columns:
+    referee_game_data["ref_label"] = referee_game_data["officialId"].astype(str)
+
+have_split = all(c in referee_game_data.columns for c in ["fouls_home","fouls_away","to_home","to_away"])
+
+if have_split:
+    # Collapse to one row per (gameId, ref_label) if data are split by team
+    cols_to_sum = ["fouls_home","fouls_away","to_home","to_away"]
+    ref_game = (referee_game_data
+                .groupby(["gameId","ref_label"], as_index=False)[cols_to_sum].sum())
+    ref_game["foul_diff_game"] = ref_game["fouls_away"] - ref_game["fouls_home"]
+    ref_game["to_diff_game"]   = ref_game["to_away"]    - ref_game["to_home"]
+else:
+    # Derive splits from team role column if needed
+    role_col = "team_status" if "team_status" in referee_game_data.columns else (
+               "team_role"   if "team_role"   in referee_game_data.columns else None)
+    if role_col is None:
+        raise ValueError("Need split cols (fouls_home/away,to_home/away) OR a role column (team_status/team_role).")
+
+    tmp = referee_game_data[["gameId","ref_label",role_col,"fouls_made","turnovers_made"]].copy()
+    pvt = tmp.pivot_table(index=["gameId","ref_label"],
+                          columns=role_col,
+                          values=["fouls_made","turnovers_made"],
+                          aggfunc="sum",
+                          fill_value=0)
+    home_fouls = pvt[("fouls_made","home")] if ("fouls_made","home") in pvt.columns else 0
+    away_fouls = pvt[("fouls_made","away")] if ("fouls_made","away") in pvt.columns else 0
+    home_to    = pvt[("turnovers_made","home")] if ("turnovers_made","home") in pvt.columns else 0
+    away_to    = pvt[("turnovers_made","away")] if ("turnovers_made","away") in pvt.columns else 0
+
+    ref_game = pvt.reset_index()
+    ref_game["foul_diff_game"] = np.array(away_fouls) - np.array(home_fouls)
+    ref_game["to_diff_game"]   = np.array(away_to)    - np.array(home_to)
+
+# Average per ref_label
+ref_summary = (ref_game
+               .groupby("ref_label", as_index=False)
+               .agg(
+                   avg_foul_diff_away_home=("foul_diff_game","mean"),
+                   avg_turnover_diff_away_home=("to_diff_game","mean"),
+                   games_officiated=("gameId","nunique")
+               ))
+
+# Orders for the two referee plots
+ref_sorted_foul = ref_summary.sort_values("avg_foul_diff_away_home", ascending=False)
+order_refs_foul = ref_sorted_foul["ref_label"].tolist()
+
+ref_sorted_to   = ref_summary.sort_values("avg_turnover_diff_away_home", ascending=False)
+order_refs_to   = ref_sorted_to["ref_label"].tolist()
+
+#--------- CREW-LEVEL DIFFERENCES 
+crew_name_col = "crew_combo" if "crew_combo" in games_with_refs.columns else (
+                "crew_str"   if "crew_str"   in games_with_refs.columns else None)
+if crew_name_col is None:
+    games_with_refs["crew_str"] = games_with_refs["official_crew"].apply(
+        lambda ids: ", ".join(map(str, sorted(ids))) if isinstance(ids, (list,tuple)) else str(ids))
+    crew_name_col = "crew_str"
+
+crew_df = games_with_refs.copy()
+crew_df["crew_foul_diff_game"] = crew_df["foul_count_away"] - crew_df["foul_count_home"]
+crew_df["crew_to_diff_game"]   = crew_df["turnover_whistle_away"] - crew_df["turnover_whistle_home"]
+
+crew_summary = (crew_df.groupby(crew_name_col, as_index=False)
+                .agg(
+                    avg_foul_diff_per_game=("crew_foul_diff_game","mean"),
+                    avg_to_diff_per_game=("crew_to_diff_game","mean"),
+                    games_officiated=("gameId","nunique")))
+
+crew_sorted_foul = crew_summary.sort_values("avg_foul_diff_per_game", ascending=False)
+order_crews_foul = crew_sorted_foul[crew_name_col].tolist()
+
+crew_sorted_to   = crew_summary.sort_values("avg_to_diff_per_game", ascending=False)
+order_crews_to   = crew_sorted_to[crew_name_col].tolist()
+# For referee-level: add total fouls and turnovers per game, plus home/away ratios
+ref_game["total_fouls"] = ref_game["fouls_home"] + ref_game["fouls_away"]
+ref_game["total_turnovers"] = ref_game["to_home"] + ref_game["to_away"]
+ref_game["foul_home_ratio"] = ref_game["fouls_home"] / (ref_game["total_fouls"] + 1e-6)
+ref_game["foul_away_ratio"] = ref_game["fouls_away"] / (ref_game["total_fouls"] + 1e-6)
+ref_game["to_home_ratio"] = ref_game["to_home"] / (ref_game["total_turnovers"] + 1e-6)
+ref_game["to_away_ratio"] = ref_game["to_away"] / (ref_game["total_turnovers"] + 1e-6)
+
+ref_summary = (ref_game
+    .groupby("ref_label", as_index=False)
+    .agg(avg_foul_diff_away_home=("foul_diff_game","mean"),
+        avg_turnover_diff_away_home=("to_diff_game","mean"),
+        games_officiated=("gameId","nunique"),
+        avg_total_fouls=("total_fouls","mean"),
+        avg_total_turnovers=("total_turnovers","mean"),
+        avg_foul_home_ratio=("foul_home_ratio","mean"),
+        avg_foul_away_ratio=("foul_away_ratio","mean"),
+        avg_to_home_ratio=("to_home_ratio","mean"),
+        avg_to_away_ratio=("to_away_ratio","mean")))
+
+# For crew-level: add total fouls and turnovers per game, plus home/away ratios
+crew_df["crew_total_fouls"] = crew_df["foul_count_home"] + crew_df["foul_count_away"]
+crew_df["crew_total_turnovers"] = crew_df["turnover_whistle_home"] + crew_df["turnover_whistle_away"]
+crew_df["crew_foul_home_ratio"] = crew_df["foul_count_home"] / (crew_df["crew_total_fouls"] + 1e-6)
+crew_df["crew_foul_away_ratio"] = crew_df["foul_count_away"] / (crew_df["crew_total_fouls"] + 1e-6)
+crew_df["crew_to_home_ratio"] = crew_df["turnover_whistle_home"] / (crew_df["crew_total_turnovers"] + 1e-6)
+crew_df["crew_to_away_ratio"] = crew_df["turnover_whistle_away"] / (crew_df["crew_total_turnovers"] + 1e-6)
+
+crew_summary = (crew_df.groupby(crew_name_col, as_index=False)
+    .agg(avg_foul_diff_per_game=("crew_foul_diff_game","mean"),
+        avg_to_diff_per_game=("crew_to_diff_game","mean"),
+        games_officiated=("gameId","nunique"),
+        avg_total_fouls=("crew_total_fouls","mean"),
+        avg_total_turnovers=("crew_total_turnovers","mean"),
+        avg_foul_home_ratio=("crew_foul_home_ratio","mean"),
+        avg_foul_away_ratio=("crew_foul_away_ratio","mean"),
+        avg_to_home_ratio=("crew_to_home_ratio","mean"),
+        avg_to_away_ratio=("crew_to_away_ratio","mean")))
+
+# -- add bar label definition for later use
+
+def add_bar_labels(ax, fmt="{:.1f}"):
+        for p in ax.patches:
+            val = p.get_height()
+            if val != 0:
+                ax.annotate(fmt.format(val),
+                            (p.get_x() + p.get_width() / 2, val),
+                            ha='center', va='bottom', fontsize=11, xytext=(0, 3),
+                            textcoords='offset points')
+
+```
+
+Using the original play-by-play data, two additional datasets were constructed. Additionally, all referee IDs were mapped to a shortened character based referee name for readability as seen in Table 3.
+
+```{python}
+# Print the referee mapping
+print("\nTable 3: Referee ID to Label Mapping:")
+for ref_id, label in ref_id_to_label.items():
+    print(f"{ref_id}: {label}")
+```
+
+### Individual Referee–Game Level Dataset
+
+Each row represents an individual referee’s involvement in a specific game. This dataset includes game-level information (scores, outcome, fouls, competitiveness) alongside referee-specific statistics such as the number of fouls and turnover violations they called, and a breakdown of turnover calls by subtype. This structure enables analysis of individual referee behavior across games. Additionally, referees IDs were mapped to a letter to help with the readability.
+
+Figure 3 and 4 shows a sorted view of the individual referees' average difference in foul and whistle turnover call per game between away and home.\
+Those who call more fouls or whistle turnovers on the away team are on the left, while least is on the right.
+
+```{python}
+
+# --- Referee plots ---
+# Refs: Avg Foul Diff (Away − Home)
+plt.figure(figsize=(8,5))
+ax1 = sns.barplot(data=ref_sorted_foul, x="ref_label", y="avg_foul_diff_away_home", order=order_refs_foul)
+ax1.axhline(0, lw=1, color="gray")
+ax1.set_title("Figure 3: Individual Referee \n  Average Foul Difference (Away − Home) per Game", fontsize=16, pad=12)
+ax1.set_xlabel("Referee", fontsize=14)
+ax1.set_ylabel("Avg Foul Diff (Away − Home)", fontsize=14)
+ax1.tick_params(axis="x", rotation=90, labelsize=11)
+add_bar_labels(ax1)
+plt.tight_layout()
+plt.show()
+
+# Refs: Avg Whistle TO Diff (Away − Home)
+plt.figure(figsize=(8,5))
+ax2 = sns.barplot(data=ref_sorted_to, x="ref_label", y="avg_turnover_diff_away_home", order=order_refs_to)
+ax2.axhline(0, lw=1, color="gray")
+ax2.set_title("Figure 4: Individual Referee \n Average Whistle Turnover Difference (Away − Home) per Game", fontsize=16, pad=12)
+ax2.set_xlabel("Referee", fontsize=14)
+ax2.set_ylabel("Avg TO Diff (Away − Home)", fontsize=14)
+ax2.tick_params(axis="x", rotation=90, labelsize=10)
+add_bar_labels(ax2)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Referee Crew–Game Level Dataset
+
+Each row represents the crew assigned to a particular game. Crews are defined as the set of referees officiating together. This dataset allows for the evaluation of crew-level dynamics such as whether certain combinations of officials are associated with higher foul counts or whistle turnovers. Additionally, referees crews were mapped to the respective individual referee letter to help with the readability.
+
+Figure 5 and 6 show a sorted view where the referee crews who call more fouls or whistle turnovers on the away team are on the left, while least is on the right.
+
+```{python}
+# Crews: Avg Foul Diff — ALL crews
+plt.figure(figsize=(10,6))
+ax3 = sns.barplot(data=crew_sorted_foul, x=crew_name_col, y="avg_foul_diff_per_game", order=order_crews_foul)
+ax3.axhline(0, lw=1, color="gray")
+ax3.set_title(f"Figure 5: Referee Crew \n Average Foul Difference (Away − Home) per Game", fontsize=16, pad=12)
+ax3.set_xlabel("Crew", fontsize=10)
+ax3.set_ylabel("Avg Foul Diff (Away − Home)", fontsize=12)
+ax3.tick_params(axis="x", rotation=90, labelsize=10)
+ax3.margins(x=0.01)
+plt.tight_layout()
+plt.show()
+
+# Crews: Avg Whistle TO Diff — ALL crews
+plt.figure(figsize=(10,6))
+ax4 = sns.barplot(data=crew_sorted_to, x=crew_name_col, y="avg_to_diff_per_game", order=order_crews_to)
+ax4.axhline(0, lw=1, color="gray")
+ax4.set_title(f"Figure 6: Referee Crew \n Average Whistle Turnover Difference (Away − Home) per Game", fontsize=16, pad=12)
+ax4.set_xlabel("Crew", fontsize=10)
+ax4.set_ylabel("Avg TO Diff (Away − Home)", fontsize=12)
+ax4.tick_params(axis="x", rotation=90, labelsize=10)
+ax4.margins(x=0.01)
+plt.tight_layout()
+plt.show()
+
+```
+
+## Analysis Overview
+
+The analysis profiles the individuals referees (Figure 7) and the referee crews (Figure 8) based on their average turn over whistle difference per game and their average foul difference per game. Both metrics take the difference between away and home games. This analysis helps identifies which referees and referee crews that are calling more fouls and / or whistle based turnovers.
+
+Each graph is broken into quadrants, where the top right indicates more fouls and more turnovers called on away teams (more strict on away) while the bottom left represents fewer falls and turnovers called on the away team (which indiciates more strict on home teams).
+
+```{python}
+
+
+sns.set_theme(style="white")
+palette = sns.color_palette("crest")
+COLOR_OUTLIER = "red"
+
+# ---------- helpers ----------
+def get_outliers(df, x_col, y_col, n=10, center=(0.0, 0.0)):
+    """Return top-n farthest points from `center` (default neutral 0,0)."""
+    c = np.array(center, dtype=float)
+    pts = df[[x_col, y_col]].to_numpy(dtype=float)
+    dist = np.linalg.norm(pts - c, axis=1)
+    return df.iloc[dist.argsort()[-n:]]
+
+def annotate_quadrants(ax, x0=0.0, y0=0.0, color="blue", fx=0.45, fy=0.45, fs=9):
+    """Place quadrant labels inside each quadrant, relative to (x0,y0)."""
+    ax.axvline(x0, ls="--", lw=1, color="gray", zorder=0)
+    ax.axhline(y0, ls="--", lw=1, color="gray", zorder=0)
+
+    xlo, xhi = ax.get_xlim(); ylo, yhi = ax.get_ylim()
+    xR = x0 + fx*(xhi - x0); xL = x0 - fx*(x0 - xlo)
+    yT = y0 + fy*(yhi - y0); yB = y0 - fy*(y0 - ylo)
+
+    box = dict(boxstyle="round,pad=0.3", fc="white", ec="none", alpha=0.8)
+    ax.text(xR, yT, "More fouls & more TOs on AWAY\n(strict on away)",
+            ha="center", va="center", fontsize=fs, color=color, bbox=box, clip_on=False)
+    ax.text(xL, yT, "Fewer fouls on AWAY, more TOs on AWAY\n(turnover-heavy on away)",
+            ha="center", va="center", fontsize=fs, color=color, bbox=box, clip_on=False)
+    ax.text(xR, yB, "More fouls on AWAY, fewer TOs on AWAY\n(foul-heavy on away)",
+            ha="center", va="center", fontsize=fs, color=color, bbox=box, clip_on=False)
+    ax.text(xL, yB, "Fewer fouls & fewer TOs on AWAY\n(lenient on away)",
+            ha="center", va="center", fontsize=fs, color=color, bbox=box, clip_on=False)
+
+def label_outliers(ax, df, x_col, y_col, id_col, dx_frac=0.00, dy_frac=0.02, color="black", fs=9):
+    """Label points just BELOW each outlier dot (axis-relative offset)."""
+    xlo, xhi = ax.get_xlim(); ylo, yhi = ax.get_ylim()
+    dx = dx_frac * (xhi - xlo); dy = dy_frac * (yhi - ylo)
+    for _, r in df.iterrows():
+        ax.text(r[x_col] + dx, r[y_col] - dy, str(r[id_col]),
+                ha="center", va="top", fontsize=fs, color=color, clip_on=False)
+```
+
+### Individual Referee Analysis
+
+In Figure 7, most referees are close to the origin which represents neutral to away and home teams.
+
+-   Ref D and Ref V in the top-right quadrant, call more fouls and more whistle-turnovers on away teams (“strict on away”).
+
+-   Ref O is also right of center with a positive whistle-turnovers difference, suggesting a milder version of that strict pattern.
+
+-   Ref B in the bottom-right calls more fouls on away but fewer whistle-turnovers (“foul-heavy on away”).
+
+-   Ref P in far bottom-left calls fewer fouls and fewer whistle-turnovers on away teams ("lenient toward the away").
+
+```{python}
+# --------------- INDIVIDUAL REFEREES ---------------
+out_refs = get_outliers(ref_summary,
+                        'avg_foul_diff_away_home',
+                        'avg_turnover_diff_away_home',
+                        n=5, center=(0.0, 0.0))
+
+plt.figure(figsize=(8,5))
+sns.scatterplot(data=ref_summary,
+                x='avg_foul_diff_away_home', y='avg_turnover_diff_away_home',
+                size='games_officiated', sizes=(30, 300),
+                alpha=0.8, color=palette[2], legend=False)
+sns.scatterplot(data=out_refs,
+                x='avg_foul_diff_away_home', y='avg_turnover_diff_away_home',
+                size='games_officiated', sizes=(30, 300),
+                alpha=0.95, color=COLOR_OUTLIER, legend=False)
+
+annotate_quadrants(plt.gca(), x0=0.0, y0=0.0, fx=0.45, fy=0.45, fs=9)
+label_outliers(plt.gca(), out_refs,
+               'avg_foul_diff_away_home', 'avg_turnover_diff_away_home',
+               'ref_label', dy_frac=0.025, fs=9)
+
+plt.title('Figure 7: Individual Referees \n Average Foul vs. Turnover Whistle Difference (Away - Home) per Game',
+          fontsize=14, pad=12)
+plt.xlabel('Avg Foul Difference (Away - Home) per Game', fontsize=12)
+plt.ylabel('Avg Turnover Whistle Difference (Away - Home) per Game', fontsize=12)
+plt.grid(False)
+plt.show()
+```
+
+### Referee Crew Analysis
+
+In Figure 8, most referee crews cluster near the origin which implies little systematic difference between whistles on away vs. home teams.
+
+Top-right (strict on away):
+
+-   Ref H, Ref K, Ref N and Ref C, Ref M, Ref V call more fouls and more whistle turnovers on away teams.
+
+-   Ref D, Ref L, Ref N is strongly foul-heavy on away with moderate extra TOs.
+
+Top-left (turnover-heavy on away):
+
+-   Ref G, Ref J, Ref N show fewer fouls but more whistle turnovers on away teams.
+
+Bottom area (lenient on away for turnovers):
+
+-   There is one extreme crew (Ref C, Ref H, Ref V) has much fewer whistle turnovers on away with near-neutral fouls.
+
+```{python}
+# ---------------- REFEREE CREWS ----------------
+out_crews = get_outliers(crew_summary,
+                         'avg_foul_diff_per_game', 'avg_to_diff_per_game',
+                         n=5, center=(0.0, 0.0))
+
+plt.figure(figsize=(8,5))
+sns.scatterplot(data=crew_summary,
+                x='avg_foul_diff_per_game', y='avg_to_diff_per_game',
+                size='games_officiated', sizes=(30, 300),
+                alpha=0.8, color=palette[3], legend=False)
+sns.scatterplot(data=out_crews,
+                x='avg_foul_diff_per_game', y='avg_to_diff_per_game',
+                size='games_officiated', sizes=(30, 300),
+                alpha=0.95, color=COLOR_OUTLIER, legend=False)
+
+annotate_quadrants(plt.gca(), x0=0.0, y0=0.0, fx=0.45, fy=0.45, fs=9)
+label_outliers(plt.gca(), out_crews,
+               'avg_foul_diff_per_game', 'avg_to_diff_per_game',
+               crew_name_col, dy_frac=0.025, fs=9)
+
+plt.title('Figure 8: Referee Crews\n Average Foul vs. Turnover Whistle Difference (Away - Home) per Game',
+          fontsize=14, pad=12)
+plt.xlabel('Avg Foul Difference (Away - Home) per Game', fontsize=12)
+plt.ylabel('Avg Turnover Whistle Difference (Away - Home) per Game', fontsize=12)
+plt.grid(False)
+plt.show()
+
+```
+
+## Choosing Number of Clusters
+
+```{python}
+sns.set_theme(style="white")
+
+# Refs  ----- features and clustering
+ref_features = ref_summary[['ref_label',
+                            'avg_foul_diff_away_home',
+                            'avg_turnover_diff_away_home',
+                            'games_officiated']].copy()
+ref_X = ref_features[['avg_foul_diff_away_home',
+                      'avg_turnover_diff_away_home',
+                      'games_officiated']].fillna(0.0)
+ref_X_scaled = StandardScaler().fit_transform(ref_X)
+ 
+# Crews ----- features and clustering
+crew_label_col = 'crew_combo' if 'crew_combo' in crew_summary.columns else 'crew_str'
+crew_features = crew_summary[[crew_label_col,
+                              'avg_foul_diff_per_game',
+                              'avg_to_diff_per_game',
+                              'games_officiated']].copy()
+crew_X = crew_features[['avg_foul_diff_per_game',
+                        'avg_to_diff_per_game',
+                        'games_officiated']].fillna(0.0)
+crew_X_scaled = StandardScaler().fit_transform(crew_X)
+
+k_grid = list(range(2, 10))
+
+# Refs ---- - Calinski-Harabasz scores
+ref_scores = []
+for k in k_grid:
+    km = KMeans(n_clusters=k, random_state=42, n_init=20)
+    lbl = km.fit_predict(ref_X_scaled)
+    ref_scores.append(calinski_harabasz_score(ref_X_scaled, lbl))
+
+# Crews ---- - Calinski-Harabasz scores
+crew_scores = []
+for k in k_grid:
+    km = KMeans(n_clusters=k, random_state=42, n_init=20)
+    lbl = km.fit_predict(crew_X_scaled)
+    crew_scores.append(calinski_harabasz_score(crew_X_scaled, lbl))
+
+
+# Plot CH curves as individual plots
+chosen_k_ref  = 6
+chosen_k_crew = 8
+```
+
+The chosen clusters are based on the Calinski-Harabasz (CH) curves for both individual referees and referee crews using the features previously described. The clusters chosen are the following:
+
+-   Individual Referee Clusters (k): 6 clusters. In Figure 8, the CH curve jumps sharply from k=2 to k=3 and then flattens, with a modest uptick around k≈6–7. That pattern suggests k=6 is enough separation to reveal structure without fragmenting into tiny cluster.
+
+-   Referee Crew Clusterss (k) : 8 clusters. In Figure 9, CH index keeps rising but shows a clear bend near k≈7–8, so 8 was chosen.
+
+```{python}
+# Calinski–Harabasz (Refs)
+plt.figure(figsize=(7, 5))
+plt.plot(k_grid, ref_scores, marker='o')
+ref_ch_at_choice = ref_scores[k_grid.index(chosen_k_ref)]
+plt.axvline(chosen_k_ref, ls='--', lw=1, color='gray')
+plt.scatter([chosen_k_ref], [ref_ch_at_choice], zorder=3)
+plt.text(chosen_k_ref, ref_ch_at_choice,
+         f'  chosen k={chosen_k_ref}\n  CH={ref_ch_at_choice:.1f}',
+         va='bottom', ha='left', fontsize=10)
+plt.title('Figure 8: Calinski–Harabasz (Individual Referees)')
+plt.xlabel('k'); plt.ylabel('CH score'); plt.grid(False)
+plt.tight_layout(); plt.show()
+
+# Calinski–Harabasz (Crews)
+plt.figure(figsize=(7, 5))
+plt.plot(k_grid, crew_scores, marker='o')
+crew_ch_at_choice = crew_scores[k_grid.index(chosen_k_crew)]
+plt.axvline(chosen_k_crew, ls='--', lw=1, color='gray')
+plt.scatter([chosen_k_crew], [crew_ch_at_choice], zorder=3)
+plt.text(chosen_k_crew, crew_ch_at_choice,
+         f'  chosen k={chosen_k_crew}\n  CH={crew_ch_at_choice:.1f}',
+         va='bottom', ha='left', fontsize=10)
+plt.title('Figure 9: Calinski–Harabasz (Crews)')
+plt.xlabel('k'); plt.ylabel('CH score'); plt.grid(False)
+plt.tight_layout(); plt.show()
+
+
+
+```
+
+## K-Means Results
+
+Two K-Means clustering were performed for Individual Referees and the Referee Crew Combinations. The features chosen were the average foul difference and average whistle turnover difference between away and home. PCAs plots were created to understand the variances explained by the features for the two different groups.
+
+The first principal component in both plots acts like a “strict-on-away” axis: it increases when both the average foul difference and the whistle turnover difference increase (Away − Home).
+
+The second component separates turnover-heavy behavior (higher turnover difference than foul difference) from foul-heavy behavior (the reverse). The 2D projections retain most signal (82% of variance for refs and 75% for crews), so positions are meaningful.
+
+### Individual Referee PCA
+
+Thhe 2D PCA projection in Figure 10 shows PC1 = 50.8% account for variation and PC2 accounted for 31.3% variation with k-means cluster of 6 and moderate silhouette score of 0.376. The PCA shows the referee population separates into six behavior groups defined by the signs and magnitudes of the Away–Home differentials:
+
+-   Cluster 0: Turnover-heavy on away (n = 4; games ≈ 4.0) Turnover differential clearly positive (+0.75), foul differential near zero (+0.08) This indicates a tendency to penalize ball-control violations on away teams more than personal fouls
+
+-   Cluster 1: Lenient on away, foul-driven (n = 5; games ≈ 2.2) Foul differential is negative (−1.06) and turnover differential ≈ 0 This implies systematically fewer fouls on away teams
+
+-   Cluster 2: Near-neutral, higher-volume (n = 7; mean games_officiated ≈ 17.7) Small, positive differentials (fouls ≈ +0.42; turnovers ≈ +0.37 per game) This cluster sits closest to the origin in PCA space and accounts for the bulk of exposure.
+
+-   Cluster 3: Strict on away, foul-driven (n = 3; games ≈ 3.7) Large foul differential (+4.08) with a smaller positive Turnover differential (+0.83) This is the strongest away-side tilt in the sample and primarily carried by fouls
+
+-   Cluster 4: Lenient on away, turnover-driven (n = 7; games ≈ 5.0) Turnover differential is negative (−0.67) with fouls ≈ 0 (−0.04). This indicates fewer whistle turnovers against away teams.
+
+-   Cluster 5: Extreme lenient outlier (n = 1; games = 1.0) Very large negatives (fouls ≈ −5.0, turnoverss ≈ −1.0). Given the single referee and minimal exposure. This cluster should be treated as an outlier rather than a stable pattern.
+
+The PCA space reveals a dominant neutral/moderate cluster with high exposure (cluster 2) and several smaller clusters that exhibit asymmetric tendencies: two “strict-on-away” profiles (turnover-heavy cluster 0; foul-heavy cluster 3) and two “lenient-on-away” profiles (foul-driven cluster 1; turnover-driven cluster 4).
+
+The most extreme leniency (cluster 5) reflects a singleton with very low sample size. Overall, the structure supports interpretable, non-pervasive heterogeneity in officiating behavior concentrated in a few, relatively low-volume groups.
+
+```{python}
+
+# Individual Referees --- KMeans clustering
+km_ref = KMeans(n_clusters=chosen_k_ref, random_state=42, n_init=20)
+ref_features['cluster'] = km_ref.fit_predict(ref_X_scaled)
+
+pca_ref = PCA(n_components=2, random_state=42)
+ref_pca = pca_ref.fit_transform(ref_X_scaled)
+v1, v2 = pca_ref.explained_variance_ratio_ * 100
+
+plt.figure(figsize=(7.2, 6))
+ax = sns.scatterplot(x=ref_pca[:,0], y=ref_pca[:,1],
+                     hue=ref_features['cluster'], palette="tab10",
+                     alpha=0.9, s=70, edgecolor="k", linewidth=0.4, legend=True)
+ax.set_title("Figure 10: Referee Clusters (PCA of different features)")
+ax.set_xlabel(f"PCA 1 ({v1:.1f}% var)")
+ax.set_ylabel(f"PCA 2 ({v2:.1f}% var)")
+ax.grid(False); ax.set_aspect("equal", adjustable="datalim")
+ax.legend(title="Cluster", loc="best", frameon=True, framealpha=0.9)
+plt.tight_layout(); plt.show()
+sil_ref = silhouette_score(ref_X_scaled, ref_features['cluster'])
+print(f"Individual crew model performance: chosen k: {chosen_k_ref},  silhouette: {sil_ref:.3f}")
+
+
+# ---- PCA loadings breaking out the axes
+def print_loadings(pca, feature_names, title):
+    L = pd.DataFrame(pca.components_, columns=feature_names, index=[f'PC{i+1}' for i in range(pca.n_components_)])
+
+print_loadings(pca_ref, ['avg_foul_diff_away_home','avg_turnover_diff_away_home','games_officiated'],
+               "REF PCA")
+
+# ---- Per-cluster means and sizes (REFS)
+ref_cluster_summary = (
+    ref_features
+    .groupby('cluster', as_index=False)[['avg_foul_diff_away_home','avg_turnover_diff_away_home','games_officiated']]
+    .mean()
+    .assign(n=lambda d: ref_features.groupby('cluster').size().values)
+    .sort_values('cluster'))
+print("\nTable 4: Referee clusters — feature means and sizes")
+print(ref_cluster_summary.round(2))
+
+
+
+
+```
+
+### Referee Crew PCA
+
+Figure 11 partitions crews into k = 8 clusters (silhouette ≈ 0.44) on the 2D PCA space (PC1 = 46.1% var; PC2 = 29.5% var). The clusters map cleanly to away–home whistle profiles and show greater dispersion on turnover-type calls than on personal fouls.
+
+Strict on away (foul-led):
+
+-   Cluster 4 (n=15) fouls difference ≈ +4.87, TO difference ≈ +0.53
+
+-   Custer 0 (n=9) balanced strictness fouls difference ≈ +2.56, TO difference ≈ +2.56
+
+-   Custer 7 (n=4) very strict fouls difference ≈ +9.00, TO difference ≈ +4.75
+
+Lenient on away:
+
+-   Cluster 3 (n=12) foul-lenient fouls difference ≈ −3.58, TO difference ≈ +0.17
+
+-   Cluster 2 (n=7) mild leniency on both fouls difference ≈ −0.71, TO difference ≈ −0.21
+
+-   Cluster 6 (n=1) extreme turnover-lenient fouls difference ≈ −1.00, TO difference ≈ −10.00 (clear outlier)
+
+Mixed profiles:
+
+-   Cluster 1 (n=7) foul-heavy on away but turnover-lenient fouls difference ≈ +0.43, TO difference ≈ −2.29
+
+-   Cluster 5 (n=3) foul-lenient but turnover-heavy on away fouls difference ≈ −4.00, TO difference ≈ +5.33
+
+The range in turnover differentials (−10 to +5.3) is wider than that for fouls (−4 to +9). This confirms that crew effects are more pronounced for ball-control/violation calls than for personal fouls. Most crews occupy a near-neutral diagonal ridge in PCA space, while a small number of clusters exhibit marked strict or lenient tendencies, including one extreme turnover-lenient outlier.
+
+```{python}
+
+# Crews --- KMeans clustering
+km_crew = KMeans(n_clusters=chosen_k_crew, random_state=42, n_init=20)
+crew_features['cluster'] = km_crew.fit_predict(crew_X_scaled)
+
+pca_crew = PCA(n_components=2, random_state=42)
+crew_pca = pca_crew.fit_transform(crew_X_scaled)
+cv1, cv2 = pca_crew.explained_variance_ratio_ * 100
+
+plt.figure(figsize=(7.2, 6))
+ax = sns.scatterplot(x=crew_pca[:,0], y=crew_pca[:,1],
+                     hue=crew_features['cluster'], palette="tab10",
+                     alpha=0.9, s=70, edgecolor="k", linewidth=0.4, legend=True)
+ax.set_title("Figure 11: Referee Crew Clusters (PCA of different features)")
+ax.set_xlabel(f"PCA 1 ({cv1:.1f}% var)")
+ax.set_ylabel(f"PCA 2 ({cv2:.1f}% var)")
+ax.grid(False); ax.set_aspect("equal", adjustable="datalim")
+ax.legend(title="Cluster", loc="best", frameon=True, framealpha=0.9)
+plt.tight_layout(); plt.show()
+
+sil_crew = silhouette_score(crew_X_scaled, crew_features['cluster'])
+print(f"Crew-level model performance: chosen k: {chosen_k_crew}, silhouette: {sil_crew:.3f}")
+
+# ----  PCA Break out (CREWS)
+
+print_loadings(pca_crew, ['avg_foul_diff_per_game','avg_to_diff_per_game','games_officiated'], "CREW PCA")
+
+# ---- Per-cluster means and sizes (CREWS)
+crew_cluster_summary = (
+    crew_features
+    .groupby('cluster', as_index=False)[['avg_foul_diff_per_game','avg_to_diff_per_game','games_officiated']]
+    .mean()
+    .assign(n=lambda d: crew_features.groupby('cluster').size().values)
+    .sort_values('cluster'))
+print("\nTable 5: Crew clusters — feature means and sizes")
+print(crew_cluster_summary.round(2))
+
+
+```
+
+## Conclusion
+
+Using principal component analysis (PCA) of Away–Home whistle differentials and k-means clustering (k = 6 for referees; k = 8 for crews), we find that officiating patterns are concentrated rather than pervasive. The two-dimensional PCA projections capture a meaningful share of variation (≈82% for referees; ≈75% for crews), and the cluster separation is moderate by silhouette score. Both of these support an interpretable structure without overfitting.
+
+At the crew level, most crews lie near neutrality, but a small subset occupies a “strict-on-away” region (e.g., fouls +2.6 to +9; turnovers +0.5 to +4.8). These crews exhibit tendencies that could plausibly amplify home-team win probability, although causal claims require confirmatory modeling. The crews can be seperated into four behavioral types: strict on away, foul-heavy on away, turnover-heavy on away, and lenient on away. Dispersion is greater for turnover-whistle differentials than for foul differentials, indicating that crew effects manifest more strongly in ball-control calls (e.g., travels, 3-seconds) than in personal fouls.
+
+At the individual-referee level, most officials cluster around zero on both dimensions, but several outliers are evident: two officials (e.g., Ref D, Ref V) display a strict-on-away profile; Ref B is foul-heavy on away; and Ref P is lenient on away. Observed asymmetries are driven by a small set of actors rather than the referee population at large.
+
+Overall, these findings suggest crew-specific and referee-specific tendencies rather than league-wide bias. Given data limitations (the dataset omits portions of a season and the current season), future work should extend coverage and test these patterns with inferential models (e.g., mixed-effects or hierarchical regressions of home wins and foul/turnover differentials with crew/ref effects and game-context controls) to establish robustness and practical impact.
+
+## References
+
+\[1\] WNBA Play-By-Play Dataset \[https://www.kaggle.com/datasets/brains14482/nba-playbyplay-and-shotdetails-data-19962021/data\]
+
+\[2\] PCA Break Out \[https://www.datacamp.com/tutorial/principal-component-analysis-in-python\]
+
+\[3\] K-Means and PCA \[https://365datascience.com/tutorials/python-tutorials/pca-k-means/\]
+
+\[4\] PCA Features \[https://drlee.io/the-ultimate-step-by-step-guide-to-data-mining-with-pca-and-kmeans-83a2bcfdba7d\]
+
+\[5\] MatPlot Bar Labeling \[https://www.geeksforgeeks.org/python/adding-value-labels-on-a-matplotlib-bar-chart/\]
