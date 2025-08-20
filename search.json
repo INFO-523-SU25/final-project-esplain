@@ -11,7 +11,7 @@
     "href": "presentation.html#motivation-research-question",
     "title": "Whistle Bias?",
     "section": "Motivation & Research Question",
-    "text": "Motivation & Research Question\nMotivation\nWith the WNBA’s rapid rise in popularity and visibility, this project is motivated by the increase in analytics and visibility we have in the sport.\nThis project evaluates the fairness of officiating by studying the following questions:\n\nDo home teams have significantly higher win rates under specific referee crews?\nWhen games are officiated by certain referee combinations, do they have higher or lower foul disparity?\nDo certain referees call more fouls on away teams?\n\nFocus Metrics: foul and turnover differentials called by each ref, and combination of refs."
+    "text": "Motivation & Research Question\nMotivation\nWith the WNBA’s rapid rise in popularity and visibility, this project is motivated by the increase in analytics and visibility we have in the sport.\nResearch Questions\nThis project evaluates the fairness of officiating by studying the following questions:\n\nDo home teams have significantly higher win rates under specific referee crews?\nWhen games are officiated by certain referee combinations, do they have higher or lower foul disparity?\nDo certain referees call more fouls on away teams?\n\nPrimary Metrics\nFoul and turnover differentials called by each ref, and combination of refs."
   },
   {
     "objectID": "presentation.html#dataset",
