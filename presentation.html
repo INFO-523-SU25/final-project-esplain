@@ -165,45 +165,21 @@ Amy Esplain
 <h3 id="primary-metrics">Primary Metrics</h3>
 <p>Foul and turnover differentials called by each ref, and combination of refs.</p>
 </section>
-<section id="dataset" class="slide level2 smaller">
-<h2>Dataset</h2>
+<section id="dataset-metrics" class="slide level2 smaller">
+<h2>Dataset &amp; Metrics</h2>
+<h3 id="dataset">Dataset</h3>
 <ul>
 <li>65 complete games from August 2022 to October 2024</li>
-<li>11 teams instead of 12 total teams</li>
-<li>27 unique referee IDs with an average of 3.05 referees per game</li>
-<li>Dataset is not complete due to the play-by-play nature and recent focus on analytics within WNBA</li>
-<li>Any insights drawn from this study is incomplete (proceed with caution!) <img data-src="images/Fig1_Ref_Count.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></li>
+<li>11 teams instead of 12 total teams with 27 unique referee IDs</li>
+<li>Dataset is incomplete therefore proceed with caution!</li>
 </ul>
-</section>
-<section id="referee-data" class="slide level2 smaller">
-<h2>Referee Data</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><img data-src="images/Individual_Ref_Stats.png"></p>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>Figure 3 shows average foul difference per game for each referee</li>
-<li>Figure 4 shows average whistle turnover difference per game for each referee</li>
-<li>Both figures sorted from largest to smallest</li>
-<li>Left side calls more fouls or turnovers on away team than the right side</li>
-<li>Referees were renamed to characters for ease of use</li>
-</ul>
-</div></div>
-</section>
-<section id="crew-data" class="slide level2 smaller">
-<h2>Crew Data</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><img data-src="images/crew_ref_stats1.png" class="quarto-figure quarto-figure-left"> <img data-src="images/crew_ref_stats2.png" class="quarto-figure quarto-figure-left"></p>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>Crew data is an aggregate of individual referee data but based on crew combinations</li>
-<li>Figure 5 shows average foul difference per game for each referee crew</li>
-<li>Figure 6 shows average whistle turnover difference per game for each referee crew</li>
-<li>Both figures sorted from largest to smallest</li>
-<li>Left side calls more fouls or turnovers on away team than the right side</li>
-</ul>
-</div></div>
+<h3 id="primary-metrics-1">Primary Metrics</h3>
+<p>Average difference (away - home) per game for:</p>
+<ol type="1">
+<li><p>Foul difference</p></li>
+<li><p>Whistle turnover difference</p></li>
+</ol>
+<p>Referee &amp; Referee crew level</p>
 </section>
 <section id="exploratory-analysis-individual-referees" class="slide level2 smaller">
 <h2>Exploratory Analysis: <br> Individual Referees</h2>
@@ -218,9 +194,7 @@ Amy Esplain
 <ul>
 <li><p>Most referees cluster near neutral (little difference between home vs.&nbsp;away)</p></li>
 <li><p>Ref D &amp; Ref V: strict on away (more fouls + more turnovers)</p></li>
-<li><p>Ref O: mild strict-on-away (higher turnovers, near-neutral fouls)</p></li>
-<li><p>Ref B: foul-heavy on away (more fouls, fewer turnovers)</p></li>
-<li><p>Ref P: lenient on away (fewer fouls + fewer turnovers).</p></li>
+<li><p>Ref P: lenient on away (fewer fouls + fewer turnovers)</p></li>
 </ul>
 </div></div>
 </section>
@@ -236,10 +210,9 @@ Amy Esplain
 </div><div class="column" style="width:40%;">
 <ul>
 <li><p>Most crews near neutral (balanced fouls/turnovers)</p></li>
-<li><p>Strict on away (top-right): H, K, N, C, M, V</p></li>
-<li><p>Foul-heavy on away: D, L, N (strong fouls, moderate turnovers)</p></li>
-<li><p>Turnover-heavy on away (top-left): G, J, N</p></li>
-<li><p>Lenient on away (bottom): C, H, V (fewer turnovers, neutral fouls)</p></li>
+<li><p>Strict on away (top-right)</p></li>
+<li><p>Turnover-heavy on away (top-left)</p></li>
+<li><p>Lenient on away (bottom) with fewer turnovers, neutral fouls</p></li>
 </ul>
 </div></div>
 </section></section>
@@ -280,25 +253,19 @@ Amy Esplain
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><img data-src="images/PCA_REF.png" class="quarto-figure quarto-figure-left" style="width:99.0%"> PCA retains 82% variance</p>
-<ul>
-<li>PC1 (50.8%): “Strict-on-away” axis <br> (↑ fouls + ↑ turnovers on away)<br>
-</li>
-<li>PC2 (31.3%): distinguishes turnover-heavy vs.&nbsp;foul-heavy behavior<br>
-</li>
-</ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li>Features used:
-<ul>
-<li>Average foul difference (Away − Home)</li>
-<li>Average turnover whistle difference (Away − Home)<br>
-</li>
-</ul></li>
 <li>Key Takeaways: Most referees cluster near neutral (cluster 2)
 <ul>
 <li>Strict-on-away patterns: Cluster 0 (turnover-heavy), Cluster 3 (foul-heavy)<br>
 </li>
 <li>Lenient-on-away patterns: Cluster 1 (foul-driven), Cluster 4 (turnover-driven)</li>
+</ul></li>
+<li>Features used:
+<ul>
+<li>Average foul difference (Away − Home)<br>
+</li>
+<li>Average turnover whistle difference (Away − Home)</li>
 </ul></li>
 </ul>
 </div></div>
@@ -308,29 +275,21 @@ Amy Esplain
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><img data-src="images/PCACREW.png" class="quarto-figure quarto-figure-left" style="width:99.0%"> PCA retains 75.6% variance</p>
-<ul>
-<li>PC1 (46.1%): “Strict-on-away” axis <br> (↑ fouls + ↑ turnovers on away)<br>
-</li>
-<li>PC2 (29.5%): distinguishes turnover-heavy vs.&nbsp;foul-heavy tendencies<br>
-</li>
-</ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li>Features used:
-<ul>
-<li>Average foul difference (Away − Home)<br>
-</li>
-<li>Average turnover whistle difference (Away − Home)</li>
-</ul></li>
-<li>Key Takeaways:
+<li>Key Takeaways: Crew effects stronger on turnovers than fouls
 <ul>
 <li>Strict-on-away: Clusters 0, 4, 7<br>
 </li>
 <li>Lenient-on-away: Clusters 2, 3, 6 (outlier)<br>
 </li>
-<li>Mixed profiles:* Clusters 1, 5<br>
+<li>Mixed profiles: Clusters 1, 5</li>
+</ul></li>
+<li>Features used:
+<ul>
+<li>Average foul difference (Away − Home)<br>
 </li>
-<li>Overall:* Crew effects stronger on turnovers than fouls</li>
+<li>Average turnover whistle difference (Away − Home)</li>
 </ul></li>
 </ul>
 </div></div>

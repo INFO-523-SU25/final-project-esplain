@@ -14,39 +14,25 @@
     "text": "Motivation & Research Question\nMotivation\nWith the WNBA’s rapid rise in popularity and visibility, this project is motivated by the increase in analytics and visibility we have in the sport.\nResearch Questions\nThis project evaluates the fairness of officiating by studying the following questions:\n\nDo home teams have significantly higher win rates under specific referee crews?\nWhen games are officiated by certain referee combinations, do they have higher or lower foul disparity?\nDo certain referees call more fouls on away teams?\n\nPrimary Metrics\nFoul and turnover differentials called by each ref, and combination of refs."
   },
   {
-    "objectID": "presentation.html#dataset",
-    "href": "presentation.html#dataset",
+    "objectID": "presentation.html#dataset-metrics",
+    "href": "presentation.html#dataset-metrics",
     "title": "Whistle Bias?",
-    "section": "Dataset",
-    "text": "Dataset\n\n65 complete games from August 2022 to October 2024\n11 teams instead of 12 total teams\n27 unique referee IDs with an average of 3.05 referees per game\nDataset is not complete due to the play-by-play nature and recent focus on analytics within WNBA\nAny insights drawn from this study is incomplete (proceed with caution!)"
-  },
-  {
-    "objectID": "presentation.html#referee-data",
-    "href": "presentation.html#referee-data",
-    "title": "Whistle Bias?",
-    "section": "Referee Data",
-    "text": "Referee Data\n\n\n\n\n\nFigure 3 shows average foul difference per game for each referee\nFigure 4 shows average whistle turnover difference per game for each referee\nBoth figures sorted from largest to smallest\nLeft side calls more fouls or turnovers on away team than the right side\nReferees were renamed to characters for ease of use"
-  },
-  {
-    "objectID": "presentation.html#crew-data",
-    "href": "presentation.html#crew-data",
-    "title": "Whistle Bias?",
-    "section": "Crew Data",
-    "text": "Crew Data\n\n\n \n\n\nCrew data is an aggregate of individual referee data but based on crew combinations\nFigure 5 shows average foul difference per game for each referee crew\nFigure 6 shows average whistle turnover difference per game for each referee crew\nBoth figures sorted from largest to smallest\nLeft side calls more fouls or turnovers on away team than the right side"
+    "section": "Dataset & Metrics",
+    "text": "Dataset & Metrics\nDataset\n\n65 complete games from August 2022 to October 2024\n11 teams instead of 12 total teams with 27 unique referee IDs\nDataset is incomplete therefore proceed with caution!\n\nPrimary Metrics\nAverage difference (away - home) per game for:\n\nFoul difference\nWhistle turnover difference\n\nReferee & Referee crew level"
   },
   {
     "objectID": "presentation.html#exploratory-analysis-individual-referees",
     "href": "presentation.html#exploratory-analysis-individual-referees",
     "title": "Whistle Bias?",
     "section": "Exploratory Analysis:  Individual Referees",
-    "text": "Exploratory Analysis:  Individual Referees\n\n\n\n\n\n\n\n\n\nMost referees cluster near neutral (little difference between home vs. away)\nRef D & Ref V: strict on away (more fouls + more turnovers)\nRef O: mild strict-on-away (higher turnovers, near-neutral fouls)\nRef B: foul-heavy on away (more fouls, fewer turnovers)\nRef P: lenient on away (fewer fouls + fewer turnovers)."
+    "text": "Exploratory Analysis:  Individual Referees\n\n\n\n\n\n\n\n\n\nMost referees cluster near neutral (little difference between home vs. away)\nRef D & Ref V: strict on away (more fouls + more turnovers)\nRef P: lenient on away (fewer fouls + fewer turnovers)"
   },
   {
     "objectID": "presentation.html#exploratory-analysis-referee-crew",
     "href": "presentation.html#exploratory-analysis-referee-crew",
     "title": "Whistle Bias?",
     "section": "Exploratory Analysis:  Referee Crew",
-    "text": "Exploratory Analysis:  Referee Crew\n\n\n\n\n\n\n\n\n\nMost crews near neutral (balanced fouls/turnovers)\nStrict on away (top-right): H, K, N, C, M, V\nFoul-heavy on away: D, L, N (strong fouls, moderate turnovers)\nTurnover-heavy on away (top-left): G, J, N\nLenient on away (bottom): C, H, V (fewer turnovers, neutral fouls)"
+    "text": "Exploratory Analysis:  Referee Crew\n\n\n\n\n\n\n\n\n\nMost crews near neutral (balanced fouls/turnovers)\nStrict on away (top-right)\nTurnover-heavy on away (top-left)\nLenient on away (bottom) with fewer turnovers, neutral fouls"
   },
   {
     "objectID": "presentation.html#choosing-clusters",
@@ -60,14 +46,14 @@
     "href": "presentation.html#k-means-pca-modeling-referee-level",
     "title": "Whistle Bias?",
     "section": "K-Means PCA Modeling: Referee-Level",
-    "text": "K-Means PCA Modeling: Referee-Level\n\n\n PCA retains 82% variance\n\nPC1 (50.8%): “Strict-on-away” axis  (↑ fouls + ↑ turnovers on away)\n\nPC2 (31.3%): distinguishes turnover-heavy vs. foul-heavy behavior\n\n\n\n\nFeatures used:\n\nAverage foul difference (Away − Home)\nAverage turnover whistle difference (Away − Home)\n\n\nKey Takeaways: Most referees cluster near neutral (cluster 2)\n\nStrict-on-away patterns: Cluster 0 (turnover-heavy), Cluster 3 (foul-heavy)\n\nLenient-on-away patterns: Cluster 1 (foul-driven), Cluster 4 (turnover-driven)"
+    "text": "K-Means PCA Modeling: Referee-Level\n\n\n PCA retains 82% variance\n\n\nKey Takeaways: Most referees cluster near neutral (cluster 2)\n\nStrict-on-away patterns: Cluster 0 (turnover-heavy), Cluster 3 (foul-heavy)\n\nLenient-on-away patterns: Cluster 1 (foul-driven), Cluster 4 (turnover-driven)\n\nFeatures used:\n\nAverage foul difference (Away − Home)\n\nAverage turnover whistle difference (Away − Home)"
   },
   {
     "objectID": "presentation.html#k-means-pca-modeling-crew-level",
     "href": "presentation.html#k-means-pca-modeling-crew-level",
     "title": "Whistle Bias?",
     "section": "K-Means PCA Modeling: Crew-Level",
-    "text": "K-Means PCA Modeling: Crew-Level\n\n\n PCA retains 75.6% variance\n\nPC1 (46.1%): “Strict-on-away” axis  (↑ fouls + ↑ turnovers on away)\n\nPC2 (29.5%): distinguishes turnover-heavy vs. foul-heavy tendencies\n\n\n\n\nFeatures used:\n\nAverage foul difference (Away − Home)\n\nAverage turnover whistle difference (Away − Home)\n\nKey Takeaways:\n\nStrict-on-away: Clusters 0, 4, 7\n\nLenient-on-away: Clusters 2, 3, 6 (outlier)\n\nMixed profiles:* Clusters 1, 5\n\nOverall:* Crew effects stronger on turnovers than fouls"
+    "text": "K-Means PCA Modeling: Crew-Level\n\n\n PCA retains 75.6% variance\n\n\nKey Takeaways: Crew effects stronger on turnovers than fouls\n\nStrict-on-away: Clusters 0, 4, 7\n\nLenient-on-away: Clusters 2, 3, 6 (outlier)\n\nMixed profiles: Clusters 1, 5\n\nFeatures used:\n\nAverage foul difference (Away − Home)\n\nAverage turnover whistle difference (Away − Home)"
   },
   {
     "objectID": "presentation.html#conclusion",
